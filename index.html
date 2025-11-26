@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS COUNCIL v2.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEXUS COUNCIL v2.1 (Mobile)</title>
     <style>
         :root {
             --bg-deep: #020204;
@@ -23,7 +23,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
+            overflow: hidden; /* Evita scroll en desktop */
             background-image: 
                 linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
@@ -35,7 +35,7 @@
             max-width: 1300px;
             height: 95vh;
             display: grid;
-            grid-template-columns: 320px 1fr;
+            grid-template-columns: 320px 1fr; /* Diseño Desktop por defecto */
             gap: 20px;
             padding: 20px;
             background: rgba(10, 10, 15, 0.95);
@@ -43,6 +43,7 @@
             box-shadow: 0 0 40px rgba(0, 243, 255, 0.1);
             border-radius: 12px;
             backdrop-filter: blur(5px);
+            box-sizing: border-box;
         }
 
         /* --- SIDEBAR --- */
@@ -71,6 +72,7 @@
             border-radius: 10px;
             overflow: hidden;
             position: relative;
+            flex-shrink: 0;
         }
 
         #avatar-image {
@@ -94,7 +96,7 @@
         
         select, button, input[type="range"] {
             width: 100%;
-            padding: 8px;
+            padding: 10px; /* Más grande para dedos */
             background: #111;
             border: 1px solid #444;
             color: var(--neon-blue);
@@ -102,19 +104,15 @@
             margin-bottom: 5px;
             cursor: pointer;
             box-sizing: border-box;
+            font-size: 0.9em;
         }
         
         button:hover { background: #222; border-color: var(--neon-blue); }
         button:disabled { border-color: #333; color: #555; cursor: not-allowed; }
 
         .btn-green { border-color: var(--neon-green); color: var(--neon-green); }
-        .btn-green:hover { background: rgba(0, 255, 157, 0.1); }
-        
         .btn-purple { border-color: var(--neon-purple); color: var(--neon-purple); }
-        .btn-purple:hover { background: rgba(188, 19, 254, 0.1); }
-
         .btn-red { border-color: var(--neon-red); color: var(--neon-red); font-weight: bold; }
-        .btn-red:hover { background: rgba(255, 0, 85, 0.2); box-shadow: 0 0 10px var(--neon-red); }
 
         #hardware-log { font-size: 0.7em; color: #666; margin-top: 5px; }
         #rounds-display { float: right; color: #fff; font-weight: bold; }
@@ -125,13 +123,14 @@
             flex-direction: column;
             gap: 15px;
             overflow: hidden;
+            position: relative;
         }
 
         #chat-window {
             flex-grow: 1;
             background: #050505;
             border: 1px solid #333;
-            padding: 20px;
+            padding: 15px;
             overflow-y: auto;
             font-size: 0.9em;
             line-height: 1.6;
@@ -142,356 +141,14 @@
         }
 
         .msg-entry {
-            padding: 12px;
+            padding: 10px;
             border-left: 3px solid;
             background: rgba(255, 255, 255, 0.03);
             animation: fadeIn 0.3s ease;
             white-space: pre-wrap;
+            word-wrap: break-word; /* Evita que textos largos rompan el móvil */
         }
         .msg-user { border-color: #fff; background: rgba(255,255,255,0.05); }
-        .msg-l1 { border-color: var(--neon-blue); color: #aee; }
-        .msg-l2 { border-color: var(--neon-purple); color: #eaf; }
-        .msg-l3 { border-color: var(--neon-green); color: #aea; }
-        .msg-sys { border-color: #666; color: #888; font-style: italic; font-size: 0.8em; }
-        .msg-final { border-color: #ffd700; color: #ffd700; border-width: 5px; background: rgba(255, 215, 0, 0.05); }
-
-        .agent-name { font-weight: bold; font-size: 0.8em; text-transform: uppercase; margin-bottom: 5px; display: block; opacity: 0.8; }
-
-        textarea {
-            width: 100%;
-            height: 70px;
-            background: #080808;
-            border: 1px solid #444;
-            color: #fff;
-            padding: 10px;
-            font-family: inherit;
-            resize: none;
-            box-sizing: border-box;
-            outline: none;
-        }
-        textarea:focus { border-color: var(--neon-blue); }
-
-        #progress-bar { width: 0%; height: 3px; background: var(--neon-blue); transition: width 0.3s; }
-
-        @keyframes pulseSpeak {
-            from { filter: brightness(1); transform: scale(1); }
-            to { filter: brightness(1.3); transform: scale(1.02); }
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-    </style>
-</head>
-<body>
-
-    <div class="console-container">
-        
-        <div class="sidebar">
-            <h1>NEXUS COUNCIL <span style="font-size:0.5em">v2.0</span></h1>
-            
-            <div class="avatar-box">
-                <img id="avatar-image" src="orquestador.jpg" onerror="this.src='https://via.placeholder.com/300x300/000/00F3FF?text=AVATAR+OFFLINE'">
-            </div>
-
-            <div class="control-group">
-                <label>1. PROTECCIÓN DE HARDWARE</label>
-                <button onclick="analizarHardware()">🖥️ Escanear Memoria GPU</button>
-                <div id="hardware-log">Estado: Esperando escaneo...</div>
-            </div>
-
-            <div class="control-group">
-                <label>2. SELECCIÓN DE CEREBRO (1 a la vez)</label>
-                <select id="model-selector" onchange="resetEngine()">
-                    <option value="Llama-3.2-1B-Instruct-q4f16_1-MLC">Llama 3.2 1B (Rápido/Ligero)</option>
-                    <option value="TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC">TinyLlama 1.1B (Muy Bajo Consumo)</option>
-                    <option value="gemma-2b-it-q4f16_1-MLC">Gemma 2B (Google - Equilibrado)</option>
-                    <option value="Qwen2-1.5B-Instruct-q4f16_1-MLC">Qwen 2 1.5B (Bueno en lógica)</option>
-                    <option value="Phi-3-mini-4k-instruct-q4f16_1-MLC">Phi-3 Mini (Microsoft - Potente)</option>
-                </select>
-                <button id="btn-load" class="btn-green" onclick="cargarModelo()">⬇️ Cargar / Liberar Memoria</button>
-                <div id="status-text" style="font-size:0.7em; color:#fff; margin-top:5px">Motor Inactivo</div>
-                <div id="progress-bar"></div>
-            </div>
-
-            <div class="control-group">
-                <label>3. CONFIGURACIÓN DE DEBATE</label>
-                <label>Etapas: <span id="rounds-display">5</span></label>
-                <input type="range" id="rounds-input" min="2" max="99" value="5" oninput="document.getElementById('rounds-display').innerText = this.value">
-                
-                <button id="btn-debate" class="btn-purple" disabled onclick="iniciarDebate()">🌀 Iniciar Debate</button>
-                <button id="btn-stop" class="btn-red" disabled onclick="detenerDebate()">🛑 PARADA DE EMERGENCIA</button>
-            </div>
-            
-            <button id="btn-simple" disabled onclick="consultaSimple()">⚡ Consulta Simple (1 Turno)</button>
-        </div>
-
-        <div class="main-panel">
-            <div id="chat-window">
-                <div class="msg-entry msg-sys">
-                    SISTEMA: Panel de Control Listo.<br>
-                    > Escanea tu hardware primero.<br>
-                    > Selecciona un modelo y cárgalo.<br>
-                    > Define las rondas (2-99) y lanza el debate.
-                </div>
-            </div>
-            <textarea id="user-input" placeholder="Escribe el tema complejo a debatir aquí..."></textarea>
-        </div>
-
-    </div>
-
-    <script type="module">
-        import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm";
-
-        // Elementos UI
-        const ui = {
-            chat: document.getElementById('chat-window'),
-            input: document.getElementById('user-input'),
-            status: document.getElementById('status-text'),
-            bar: document.getElementById('progress-bar'),
-            avatar: document.getElementById('avatar-image'),
-            hwLog: document.getElementById('hardware-log'),
-            btnLoad: document.getElementById('btn-load'),
-            btnSimple: document.getElementById('btn-simple'),
-            btnDebate: document.getElementById('btn-debate'),
-            btnStop: document.getElementById('btn-stop'),
-            selector: document.getElementById('model-selector'),
-            roundsInput: document.getElementById('rounds-input')
-        };
-
-        let engine = null;
-        let abortController = null; // Variable para controlar la parada
-        let isProcessing = false;
-
-        // --- 1. ESCÁNER DE HARDWARE SEGURO ---
-        window.analizarHardware = async function() {
-            ui.hwLog.innerText = "Analizando...";
-            if (!navigator.gpu) {
-                ui.hwLog.innerHTML = "<span style='color:red'>Sin WebGPU.</span>";
-                return;
-            }
-            try {
-                const adapter = await navigator.gpu.requestAdapter();
-                const mb = adapter.limits.maxBufferSize / (1024 * 1024);
-                let rec = "TinyLlama";
-                if (mb > 1000) rec = "Llama 3.2 1B";
-                if (mb > 2000) rec = "Phi-3 / Gemma";
-                ui.hwLog.innerHTML = `GPU OK.<br>Buffer: ${Math.round(mb)}MB.<br>Recomendado: ${rec}`;
-            } catch (e) {
-                ui.hwLog.innerText = "Error lectura GPU.";
-            }
-        };
-
-        // --- 2. GESTIÓN DE MODELOS (SEGURIDAD DE MEMORIA) ---
-        window.resetEngine = function() {
-            // No recargamos inmediatamente para no bloquear el UI
-            ui.btnSimple.disabled = true;
-            ui.btnDebate.disabled = true;
-            ui.btnLoad.disabled = false;
-            ui.btnLoad.innerText = "⬇️ Cargar Nuevo Modelo";
-            ui.status.innerText = "Modelo cambiado. Pulsa cargar.";
-            ui.avatar.classList.remove('active');
-        };
-
-        window.cargarModelo = async function() {
-            // Protección: Si ya hay un motor, intentar descargarlo (liberar memoria)
-            if (engine) {
-                ui.status.innerText = "Liberando memoria anterior...";
-                engine.unload(); // Liberamos explícitamente
-                engine = null;
-            }
-
-            ui.btnLoad.disabled = true;
-            ui.status.innerText = "Iniciando carga...";
-            const modelId = ui.selector.value;
-
-            try {
-                if (navigator.storage && navigator.storage.persist) await navigator.storage.persist();
-
-                const initProgressCallback = (report) => {
-                    ui.bar.style.width = `${report.progress * 100}%`;
-                    if(report.text.includes("Loading")) ui.status.innerText = `Cargando (${Math.round(report.progress * 100)}%)...`;
-                    else ui.status.innerText = report.text;
-                };
-
-                engine = await CreateMLCEngine(modelId, { initProgressCallback });
-
-                ui.status.innerText = "✅ Motor Activo";
-                ui.avatar.classList.add('active');
-                ui.btnSimple.disabled = false;
-                ui.btnDebate.disabled = false;
-                ui.btnLoad.innerText = "Recargar / Cambiar";
-                ui.btnLoad.disabled = false;
-
-            } catch (err) {
-                ui.status.innerText = "Error: " + err.message;
-                ui.btnLoad.disabled = false;
-            }
-        };
-
-        // --- 3. FUNCIONES DE UI ---
-        function addMsg(role, text, type) {
-            const div = document.createElement('div');
-            div.className = `msg-entry msg-${type}`;
-            div.innerHTML = `<span class="agent-name">${role}</span>${text}`;
-            ui.chat.appendChild(div);
-            // Auto-scroll
-            requestAnimationFrame(() => ui.chat.scrollTop = ui.chat.scrollHeight);
-        }
-
-        // --- 4. DETENER PROCESO ---
-        window.detenerDebate = function() {
-            if (abortController) {
-                abortController.abort();
-                addMsg("SISTEMA", "🛑 PROCESO DETENIDO POR EL USUARIO.", "sys");
-                isProcessing = false;
-                ui.btnStop.disabled = true;
-                ui.avatar.classList.remove('speaking');
-                
-                // Forzar conclusión rápida si se detiene
-                generarConclusion("El debate fue interrumpido, pero basado en lo discutido...");
-            }
-        };
-
-        // --- 5. LÓGICA DE DEBATE (TURNO POR TURNO) ---
-        window.iniciarDebate = async function() {
-            const topic = ui.input.value;
-            const rounds = parseInt(ui.roundsInput.value);
-            
-            if (!topic) return;
-            if (!engine) { alert("Carga un modelo primero"); return; }
-            if (isProcessing) return;
-
-            ui.input.value = "";
-            isProcessing = true;
-            abortController = new AbortController(); // Nuevo controlador de parada
-            
-            // Estado UI
-            ui.btnDebate.disabled = true;
-            ui.btnSimple.disabled = true;
-            ui.btnLoad.disabled = true;
-            ui.btnStop.disabled = false; // Habilitar botón de parada
-            ui.avatar.classList.add('speaking');
-            
-            addMsg("USUARIO", `Tema: ${topic} (${rounds} Etapas)`, "user");
-
-            // Roles Virtuales
-            const agentes = [
-                { id: "L1 (ANALISTA)", prompt: "Eres un analista lógico. Presenta datos objetivos.", css: "l1" },
-                { id: "L2 (CRÍTICO)", prompt: "Eres un crítico escéptico. Encuentra fallas y riesgos.", css: "l2" },
-                { id: "L3 (SYNTH)", prompt: "Eres un mediador. Busca puntos medios y soluciones.", css: "l3" }
-            ];
-
-            let historial = `TEMA: ${topic}\n`;
-
-            try {
-                for (let i = 1; i <= rounds; i++) {
-                    // Verificar si se pulsó Stop
-                    if (abortController.signal.aborted) break;
-
-                    const agente = agentes[(i - 1) % 3];
-                    ui.status.innerText = `Ronda ${i}/${rounds}: ${agente.id} procesando...`;
-
-                    // Contexto limitado para ahorrar memoria (últimos 1000 caracteres)
-                    const contextoBreve = historial.length > 2000 ? "..." + historial.slice(-2000) : historial;
-
-                    const systemPrompt = `
-                        ${agente.prompt}
-                        Debate actual sobre: "${topic}".
-                        Ronda ${i} de ${rounds}.
-                        Historial reciente: ${contextoBreve}
-                        
-                        Instrucción: Da tu opinión breve (max 60 palabras) complementando o refutando lo anterior.
-                    `;
-
-                    // Generación (Turno único para no quemar GPU)
-                    const chunks = await engine.chat.completions.create({
-                        messages: [
-                            { role: "system", content: systemPrompt },
-                            { role: "user", content: "Tu turno." }
-                        ],
-                        temperature: 0.7,
-                        max_tokens: 150,
-                    });
-
-                    const respuesta = chunks.choices[0].message.content;
-                    
-                    if (abortController.signal.aborted) break;
-
-                    addMsg(`${agente.id} [Ronda ${i}]`, respuesta, agente.css);
-                    historial += `\n${agente.id}: ${respuesta}`;
-                    
-                    // Pausa para enfriar un poco la UI
-                    await new Promise(r => setTimeout(r, 800));
-                }
-
-                if (!abortController.signal.aborted) {
-                    await generarConclusion(historial);
-                }
-
-            } catch (err) {
-                if (err.name !== 'AbortError') {
-                    addMsg("ERROR", err.message, "l2");
-                }
-            } finally {
-                // Restaurar estado UI
-                isProcessing = false;
-                ui.avatar.classList.remove('speaking');
-                ui.btnDebate.disabled = false;
-                ui.btnSimple.disabled = false;
-                ui.btnLoad.disabled = false;
-                ui.btnStop.disabled = true;
-                ui.status.innerText = "En espera.";
-                abortController = null;
-            }
-        };
-
-        // --- 6. CONCLUSIÓN FINAL ---
-        async function generarConclusion(historialDebate) {
-            ui.status.innerText = "Generando Conclusión Final...";
-            addMsg("SISTEMA", "Analizando todo el debate para conclusión final...", "sys");
-
-            try {
-                const contextoFinal = historialDebate.length > 3000 ? "..." + historialDebate.slice(-3000) : historialDebate;
-                
-                const chunks = await engine.chat.completions.create({
-                    messages: [
-                        { role: "system", content: "Eres el Juez Supremo. Lee el siguiente debate y genera una conclusión final definitiva y accionable de un párrafo." },
-                        { role: "user", content: contextoFinal }
-                    ],
-                    temperature: 0.5,
-                    max_tokens: 300,
-                });
-                
-                addMsg("CONCLUSIÓN FINAL", chunks.choices[0].message.content, "final");
-
-            } catch (e) {
-                addMsg("SISTEMA", "No se pudo generar la conclusión final.", "sys");
-            }
-        }
-
-        // --- 7. CONSULTA SIMPLE ---
-        window.consultaSimple = async function() {
-            const topic = ui.input.value;
-            if (!topic) return;
-            if (!engine) { alert("Carga modelo"); return; }
-            
-            ui.input.value = "";
-            ui.btnSimple.disabled = true;
-            ui.avatar.classList.add('speaking');
-            addMsg("USUARIO", topic, "user");
-
-            try {
-                const chunks = await engine.chat.completions.create({
-                    messages: [{ role: "user", content: topic }],
-                    temperature: 0.6,
-                });
-                addMsg("IA", chunks.choices[0].message.content, "l1");
-            } catch (e) {
-                addMsg("ERROR", e.message, "l2");
-            } finally {
-                ui.btnSimple.disabled = false;
-                ui.avatar.classList.remove('speaking');
-            }
-        };
-    </script>
-</body>
-</html>
+        .msg-role-1 { border-color: var(--neon-blue); color: #aee; }
+        .msg-role-2 { border-color: var(--neon-purple); color: #eaf; }
+        .msg-role-3 { border
