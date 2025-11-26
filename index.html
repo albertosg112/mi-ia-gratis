@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi IA Local</title>
+  <style>
+    body { font-family: sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f0f2f5; }
+    h1 { color: #1a202c; text-align: center; }
+    .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+    textarea { width: 100%; height: 100px; padding: 10px; margin: 15px 0; border: 2px solid #cbd5e0; border-radius: 6px; font-family: inherit; }
+    button { background-color: #3182ce; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; width: 100%; }
+    button:hover { background-color: #2c5282; }
+    button:disabled { background-color: #a0aec0; cursor: wait; }
+    #estado { margin-bottom: 15px; padding: 10px; border-radius: 6px; font-size: 14px; text-align: center; background-color: #fffaf0; color: #c05621; border: 1px solid #fbd38d; }
+    #respuesta { margin-top: 20px; padding: 15px; background-color: #f7fafc; border-left: 4px solid #3182ce; min-height: 50px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🧠 Mi Propia IA (Local)</h1>
+    <p style="text-align: center; color: #4a5568;">Esta IA vive en tu navegador. No envía datos a servidores externos.</p>
+    
+    <div id="estado">⏳ Iniciando motor... espera un momento.</div>
+
+    <textarea id="pregunta" placeholder="Escribe tu pregunta aquí..."></textarea>
+    <button id="btn-enviar" onclick="preguntar()" disabled>Cargando Cerebro...</button>
+    
+    <div id="respuesta">Esperando tu pregunta...</div>
+  </div>
+
+  <script type="module">
+    // Importamos la librería WebLLM directamente de internet
+    import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm";
+
+    // Variables para controlar la pantalla
+    const cajaEstado = document.getElementById('estado');
+    const boton = document.getElementById('btn-enviar');
+    const cajaRespuesta = document.getElementById('respuesta');
+    
+    // Configuración: Usamos Llama 3.2 (versión ligera de 1GB)
+    const MODELO = "Llama-3.2-1B-Instruct-q4f16_1-MLC";
+    let cerebroIA; // Aquí guardaremos la IA cuando cargue
+
+    // Función que se ejecuta apenas abres la página
+    async function iniciar() {
+      try {
+        // Configuramos una función para ver el progreso de descarga
+        const verProgreso = (reporte) => {
+          cajaEstado.innerText = `📥 Descargando: ${reporte.text}`;
+        };
+
+        // Creamos la IA
+        cajaEstado.innerText = "⏳ Preparando Llama 3.2...";
+        cerebroIA = await CreateMLCEngine(MODELO, { initProgressCallback: verProgreso });
+
+        // Si llega aquí, todo salió bien
+        cajaEstado.innerText = "✅ IA Lista para usar. (Funciona offline)";
+        cajaEstado.style.backgroundColor = "#c6f6d5";
+        cajaEstado.style.color = "#22543d";
+        cajaEstado.style.borderColor = "#9ae6b4";
+        
+        boton.disabled = false;
+        boton.innerText = "Preguntar a la IA";
+        
+      } catch (error) {
+        cajaEstado.innerText = "❌ Error: " + error.message;
+        console.error(error);
+      }
+    }
+
+    // Hacemos que la función 'preguntar' sea accesible para el botón
+    window.preguntar = async function() {
+      const textoPregunta = document.getElementById('pregunta').value;
+      if (!textoPregunta) return; // Si no hay texto, no hacemos nada
+
+      // Cambiamos la interfaz para mostrar que piensa
+      boton.disabled = true;
+      boton.innerText = "Pensando...";
+      cajaRespuesta.innerText = "🤔 Generando respuesta...";
+
+      try {
+        // Le enviamos el mensaje a la IA
+        const respuesta = await cerebroIA.chat.completion({
+          messages: [{ role: "user", content: textoPregunta }],
+          n: 1,
+          temperature: 0.7, // Creatividad
+        });
+
+        // Mostramos el resultado
+        cajaRespuesta.innerText = respuesta.choices[0].message.content;
+      } catch (error) {
+        cajaRespuesta.innerText = "Error: " + error.message;
+      } finally {
+        // Reactivamos el botón
+        boton.disabled = false;
+        boton.innerText = "Preguntar a la IA";
+      }
+    };
+
+    // Arrancamos todo
+    iniciar();
+  </script>
+</body>
+</html>
