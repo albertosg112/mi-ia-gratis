@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEXUS COUNCIL v2.1 (Mobile)</title>
+    <title>NEXUS HIVE v3.0 :: Multi-Loader</title>
     <style>
         :root {
             --bg-deep: #020204;
@@ -11,6 +11,7 @@
             --neon-purple: #bc13fe;
             --neon-green: #00ff9d;
             --neon-red: #ff0055;
+            --neon-yellow: #ffe600;
             --font-tech: 'Courier New', monospace;
         }
 
@@ -23,107 +24,142 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Evita scroll en desktop */
+            overflow: hidden;
             background-image: 
-                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
             background-size: 30px 30px;
         }
 
         .console-container {
-            width: 95%;
-            max-width: 1300px;
-            height: 95vh;
+            width: 98%;
+            max-width: 1400px;
+            height: 98vh;
             display: grid;
-            grid-template-columns: 320px 1fr; /* Diseño Desktop por defecto */
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: 350px 1fr; /* Panel Izquierdo | Chat Derecho */
+            gap: 15px;
+            padding: 15px;
             background: rgba(10, 10, 15, 0.95);
             border: 1px solid var(--neon-blue);
-            box-shadow: 0 0 40px rgba(0, 243, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
             border-radius: 12px;
-            backdrop-filter: blur(5px);
             box-sizing: border-box;
         }
 
-        /* --- SIDEBAR --- */
+        /* --- SIDEBAR (GESTOR DE MODELOS) --- */
         .sidebar {
             border-right: 1px solid #333;
-            padding-right: 20px;
+            padding-right: 15px;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px;
             overflow-y: auto;
         }
 
         h1 {
             color: var(--neon-blue);
-            font-size: 1.4em;
-            margin: 0 0 10px 0;
+            font-size: 1.2em;
+            margin: 0 0 5px 0;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+            letter-spacing: 1px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
         }
 
         .avatar-box {
-            width: 100%;
-            height: 180px;
-            border: 2px solid #333;
-            border-radius: 10px;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+            border-radius: 50%;
             overflow: hidden;
+            border: 2px solid #333;
             position: relative;
-            flex-shrink: 0;
         }
 
         #avatar-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%);
+            width: 100%; height: 100%; object-fit: cover; filter: grayscale(100%);
             transition: 0.3s;
         }
-        #avatar-image.active { filter: grayscale(0%); box-shadow: inset 0 0 20px var(--neon-blue); }
+        #avatar-image.active { filter: grayscale(0%); box-shadow: inset 0 0 15px var(--neon-blue); border-color: var(--neon-blue); }
         #avatar-image.speaking { animation: pulseSpeak 0.2s infinite alternate; }
 
         .control-group {
-            background: #0a0a0a;
-            padding: 12px;
+            background: #080808;
+            padding: 10px;
             border: 1px solid #333;
             border-radius: 5px;
         }
         
-        label { color: #888; font-size: 0.75em; display: block; margin-bottom: 5px; text-transform: uppercase; }
+        label { color: #888; font-size: 0.7em; display: block; margin-bottom: 5px; text-transform: uppercase; font-weight: bold; }
         
-        select, button, input[type="range"] {
+        select {
             width: 100%;
-            padding: 10px; /* Más grande para dedos */
-            background: #111;
-            border: 1px solid #444;
+            padding: 8px;
+            background: #000;
+            border: 1px solid var(--neon-blue);
             color: var(--neon-blue);
             font-family: inherit;
             margin-bottom: 5px;
             cursor: pointer;
-            box-sizing: border-box;
-            font-size: 0.9em;
+            outline: none;
+            font-size: 0.8em;
         }
-        
-        button:hover { background: #222; border-color: var(--neon-blue); }
-        button:disabled { border-color: #333; color: #555; cursor: not-allowed; }
 
-        .btn-green { border-color: var(--neon-green); color: var(--neon-green); }
-        .btn-purple { border-color: var(--neon-purple); color: var(--neon-purple); }
-        .btn-red { border-color: var(--neon-red); color: var(--neon-red); font-weight: bold; }
+        /* Botones Generales */
+        button {
+            width: 100%;
+            padding: 8px;
+            background: #111;
+            border: 1px solid #444;
+            color: #aaa;
+            font-family: inherit;
+            margin-bottom: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.8em;
+            transition: 0.2s;
+        }
+        button:hover:not(:disabled) { background: #222; color: #fff; border-color: #fff; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        #hardware-log { font-size: 0.7em; color: #666; margin-top: 5px; }
-        #rounds-display { float: right; color: #fff; font-weight: bold; }
+        .btn-add { border-color: var(--neon-yellow); color: var(--neon-yellow); }
+        .btn-start-dl { border-color: var(--neon-green); color: var(--neon-green); font-weight: bold; }
+        .btn-debate { border-color: var(--neon-purple); color: var(--neon-purple); }
+        .btn-stop { border-color: var(--neon-red); color: var(--neon-red); }
+
+        /* COLA DE DESCARGAS */
+        #download-queue {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px dashed #333;
+            background: #000;
+        }
+        .queue-item {
+            padding: 5px;
+            border-bottom: 1px solid #222;
+            font-size: 0.75em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .queue-item.pending { color: #888; }
+        .queue-item.downloading { color: var(--neon-yellow); animation: blink 1s infinite; }
+        .queue-item.done { color: var(--neon-green); }
+        .queue-remove { color: var(--neon-red); cursor: pointer; font-weight: bold; margin-left: 5px; }
+
+        #status-text { font-size: 0.7em; color: #fff; margin-top: 5px; min-height: 1.2em; }
+        #progress-bar { width: 0%; height: 4px; background: var(--neon-green); transition: width 0.3s; margin-top: 5px; }
 
         /* --- MAIN PANEL --- */
         .main-panel {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px;
             overflow: hidden;
-            position: relative;
         }
 
         #chat-window {
@@ -133,11 +169,10 @@
             padding: 15px;
             overflow-y: auto;
             font-size: 0.9em;
-            line-height: 1.6;
+            line-height: 1.5;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            scroll-behavior: smooth;
+            gap: 10px;
         }
 
         .msg-entry {
@@ -146,9 +181,392 @@
             background: rgba(255, 255, 255, 0.03);
             animation: fadeIn 0.3s ease;
             white-space: pre-wrap;
-            word-wrap: break-word; /* Evita que textos largos rompan el móvil */
         }
-        .msg-user { border-color: #fff; background: rgba(255,255,255,0.05); }
-        .msg-role-1 { border-color: var(--neon-blue); color: #aee; }
-        .msg-role-2 { border-color: var(--neon-purple); color: #eaf; }
-        .msg-role-3 { border
+        /* Colores de Roles */
+        .msg-user { border-color: #fff; }
+        .msg-l1 { border-color: var(--neon-blue); color: #aee; }
+        .msg-l2 { border-color: var(--neon-purple); color: #eaf; }
+        .msg-l3 { border-color: var(--neon-yellow); color: #feebc8; }
+        .msg-sys { border-color: #444; color: #666; font-style: italic; font-size: 0.8em; border:none; text-align: center; }
+        .msg-final { border-color: var(--neon-green); color: var(--neon-green); background: rgba(0, 255, 157, 0.05); }
+
+        .input-area {
+            display: grid;
+            grid-template-columns: 1fr 80px;
+            gap: 10px;
+            height: 60px;
+        }
+
+        textarea {
+            background: #080808;
+            border: 1px solid #444;
+            color: #fff;
+            padding: 10px;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            font-size: 14px;
+        }
+        textarea:focus { border-color: var(--neon-blue); }
+
+        .btn-go {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        @keyframes pulseSpeak { from { transform: scale(1); } to { transform: scale(1.05); } }
+        @keyframes blink { 50% { opacity: 0.5; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* MÓVIL */
+        @media screen and (max-width: 800px) {
+            body { overflow-y: auto; align-items: flex-start; }
+            .console-container { display: flex; flex-direction: column; height: auto; min-height: 100vh; border: none; }
+            .sidebar { border-right: none; border-bottom: 1px solid #333; max-height: 450px; }
+            .main-panel { height: 500px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="console-container">
+        
+        <div class="sidebar">
+            <h1>NEXUS HIVE <span style="font-size:0.5em">v3.0</span></h1>
+            
+            <div class="avatar-box">
+                <img id="avatar-image" src="orquestador.jpg" onerror="this.src='https://via.placeholder.com/100/000/00F3FF?text=AI'">
+            </div>
+
+            <div class="control-group">
+                <label>1. GESTOR DE MODELOS (Multi-Carga)</label>
+                
+                <select id="model-selector">
+                    <option value="Llama-3.2-1B-Instruct-q4f16_1-MLC">Llama 3.2 1B (Recomendado)</option>
+                    <option value="TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC">TinyLlama (Muy Rápido)</option>
+                    <option value="gemma-2b-it-q4f16_1-MLC">Gemma 2B (Google)</option>
+                    <option value="Qwen2-1.5B-Instruct-q4f16_1-MLC">Qwen 2 1.5B (Lógica)</option>
+                    <option value="Phi-3-mini-4k-instruct-q4f16_1-MLC">Phi-3 Mini (Potente)</option>
+                </select>
+
+                <div style="display:flex; gap:5px">
+                    <button class="btn-add" onclick="addToQueue()">[+] Añadir a Cola</button>
+                    <button onclick="clearQueue()">Borrar Lista</button>
+                </div>
+
+                <label style="margin-top:10px">COLA DE DESCARGA:</label>
+                <ul id="download-queue">
+                    <li class="queue-item pending" style="justify-content:center">-- Lista vacía --</li>
+                </ul>
+
+                <button id="btn-start-dl" class="btn-start-dl" onclick="processQueue()" disabled>⬇️ INICIAR DESCARGAS</button>
+                
+                <div id="status-text">Inactivo</div>
+                <div id="progress-bar"></div>
+            </div>
+
+            <div class="control-group">
+                <label>2. CEREBRO ACTIVO (Para Debatir)</label>
+                <select id="active-selector" onchange="setActiveModel()">
+                    <option value="" disabled selected>-- Descarga modelos primero --</option>
+                </select>
+                <button id="btn-load-active" onclick="loadActiveModel()" disabled>⚡ Cargar para Usar</button>
+            </div>
+
+            <div class="control-group">
+                <label>3. CONTROL DE MISIÓN</label>
+                <label>Rondas: <span id="rounds-val">4</span></label>
+                <input type="range" id="rounds-input" min="2" max="20" value="4" oninput="document.getElementById('rounds-val').innerText = this.value">
+                
+                <div style="display:flex; gap:5px">
+                    <button id="btn-debate" class="btn-debate" disabled onclick="startDebate()">🌀 Debate</button>
+                    <button id="btn-stop" class="btn-stop" disabled onclick="stopDebate()">🛑 Stop</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-panel">
+            <div id="chat-window">
+                <div class="msg-entry msg-sys">
+                    SISTEMA DE DESCARGA SECUENCIAL LISTO.<br>
+                    1. Añade modelos a la cola ([+]).<br>
+                    2. Dale a "Iniciar Descargas" para guardarlos en Caché.<br>
+                    3. Selecciona uno en "Cerebro Activo" para empezar a debatir.
+                </div>
+            </div>
+            <div class="input-area">
+                <textarea id="user-input" placeholder="Tema de debate..."></textarea>
+                <button id="btn-go" class="btn-go" onclick="startDebate()">GO</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm";
+
+        const ui = {
+            queueList: document.getElementById('download-queue'),
+            status: document.getElementById('status-text'),
+            bar: document.getElementById('progress-bar'),
+            btnStartDl: document.getElementById('btn-start-dl'),
+            activeSelector: document.getElementById('active-selector'),
+            btnLoadActive: document.getElementById('btn-load-active'),
+            btnDebate: document.getElementById('btn-debate'),
+            btnStop: document.getElementById('btn-stop'),
+            btnGo: document.getElementById('btn-go'),
+            chat: document.getElementById('chat-window'),
+            input: document.getElementById('user-input'),
+            avatar: document.getElementById('avatar-image'),
+            roundsInput: document.getElementById('rounds-input')
+        };
+
+        let queue = [];
+        let downloadedModels = new Set(); // Para rastrear qué ya bajamos
+        let engine = null;
+        let abortController = null;
+        let isProcessing = false;
+
+        // --- GESTIÓN DE COLA ---
+        window.addToQueue = function() {
+            const select = document.getElementById('model-selector');
+            const modelId = select.value;
+            const modelName = select.options[select.selectedIndex].text;
+
+            // Evitar duplicados en la cola
+            if (queue.some(item => item.id === modelId)) return;
+
+            queue.push({ id: modelId, name: modelName, status: 'pending' });
+            renderQueue();
+            ui.btnStartDl.disabled = false;
+        };
+
+        window.clearQueue = function() {
+            queue = [];
+            renderQueue();
+            ui.btnStartDl.disabled = true;
+        };
+
+        function renderQueue() {
+            ui.queueList.innerHTML = "";
+            if (queue.length === 0) {
+                ui.queueList.innerHTML = '<li class="queue-item pending" style="justify-content:center">-- Lista vacía --</li>';
+                return;
+            }
+            queue.forEach((item, index) => {
+                let statusIcon = '⏳';
+                let cssClass = 'pending';
+                if (item.status === 'downloading') { statusIcon = '⬇️'; cssClass = 'downloading'; }
+                if (item.status === 'done') { statusIcon = '✅'; cssClass = 'done'; }
+
+                const li = document.createElement('li');
+                li.className = `queue-item ${cssClass}`;
+                li.innerHTML = `
+                    <span>${statusIcon} ${item.name.split(' ')[0]}</span>
+                    ${item.status === 'pending' ? `<span class="queue-remove" onclick="removeFromQueue(${index})">✖</span>` : ''}
+                `;
+                ui.queueList.appendChild(li);
+            });
+        }
+
+        window.removeFromQueue = function(index) {
+            queue.splice(index, 1);
+            renderQueue();
+            if (queue.length === 0) ui.btnStartDl.disabled = true;
+        };
+
+        // --- PROCESADOR DE COLA (Descarga Secuencial) ---
+        window.processQueue = async function() {
+            ui.btnStartDl.disabled = true; // Bloquear botón
+            
+            // Asegurar persistencia una vez
+            if (navigator.storage && navigator.storage.persist) await navigator.storage.persist();
+
+            for (let i = 0; i < queue.length; i++) {
+                const item = queue[i];
+                if (item.status === 'done') continue; // Saltar si ya está
+
+                // 1. Actualizar UI
+                item.status = 'downloading';
+                renderQueue();
+                ui.status.innerText = `Descargando ${item.name}...`;
+
+                try {
+                    // 2. Si hay un motor cargado, lo descargamos primero para liberar RAM
+                    if (engine) {
+                        await engine.unload();
+                        engine = null;
+                    }
+
+                    // 3. Iniciar Carga (Esto descarga a caché)
+                    const initProgressCallback = (report) => {
+                        ui.bar.style.width = `${report.progress * 100}%`;
+                        ui.status.innerText = `[${i+1}/${queue.length}] ${report.text}`;
+                    };
+
+                    // Creamos el motor solo para forzar la descarga
+                    const tempEngine = await CreateMLCEngine(item.id, { initProgressCallback });
+                    
+                    // 4. Descarga completada -> Liberar inmediatamente
+                    await tempEngine.unload();
+                    
+                    // 5. Marcar como hecho
+                    item.status = 'done';
+                    downloadedModels.add(item.id);
+                    updateActiveSelector(item.id, item.name); // Añadir a la lista de "Listos para usar"
+
+                } catch (err) {
+                    console.error(err);
+                    item.status = 'error';
+                    ui.status.innerText = "Error descarga.";
+                }
+                renderQueue();
+            }
+
+            ui.status.innerText = "✅ Cola completada. Selecciona 'Cerebro Activo'.";
+            ui.bar.style.width = "0%";
+        };
+
+        function updateActiveSelector(id, name) {
+            // Si es la primera vez, limpiamos el placeholder
+            if (ui.activeSelector.options[0].disabled) {
+                ui.activeSelector.innerHTML = "";
+            }
+            // Verificar si ya existe en el select
+            for (let opt of ui.activeSelector.options) {
+                if (opt.value === id) return;
+            }
+            const option = document.createElement('option');
+            option.value = id;
+            option.text = name;
+            ui.activeSelector.appendChild(option);
+            ui.btnLoadActive.disabled = false;
+        }
+
+        // --- CARGAR MODELO PARA USAR (Run) ---
+        window.loadActiveModel = async function() {
+            const modelId = ui.activeSelector.value;
+            if (!modelId) return;
+
+            ui.btnLoadActive.disabled = true;
+            ui.status.innerText = "Cargando en RAM...";
+            
+            if (engine) { await engine.unload(); engine = null; }
+
+            try {
+                engine = await CreateMLCEngine(modelId, {
+                    initProgressCallback: (rep) => ui.status.innerText = rep.text
+                });
+                ui.status.innerText = "🟢 SISTEMA ONLINE";
+                ui.avatar.classList.add('active');
+                ui.btnDebate.disabled = false;
+                ui.btnGo.disabled = false;
+                ui.btnLoadActive.disabled = false;
+                ui.btnLoadActive.innerText = "Recargar";
+            } catch (e) {
+                ui.status.innerText = "Error carga: " + e.message;
+                ui.btnLoadActive.disabled = false;
+            }
+        };
+
+        // --- LÓGICA DE DEBATE (Auto-Roles) ---
+        window.stopDebate = function() {
+            if (abortController) abortController.abort();
+            addMsg("SISTEMA", "🛑 DETENIDO.", "msg-sys");
+        };
+
+        window.startDebate = async function() {
+            const topic = ui.input.value;
+            const rounds = parseInt(ui.roundsInput.value);
+            if (!topic || !engine) return;
+
+            ui.input.value = "";
+            isProcessing = true;
+            abortController = new AbortController();
+            
+            ui.btnDebate.disabled = true;
+            ui.btnGo.disabled = true;
+            ui.btnStop.disabled = false;
+            ui.avatar.classList.add('speaking');
+
+            // Roles Automáticos
+            const roles = determinarRoles(topic);
+            addMsg("USUARIO", topic, "msg-user");
+            addMsg("ORQUESTADOR", `Invocando expertos: ${roles.map(r=>r.name).join(', ')}`, "msg-sys");
+
+            let historial = `Tema: ${topic}\n`;
+
+            try {
+                for (let i = 1; i <= rounds; i++) {
+                    if (abortController.signal.aborted) break;
+                    const role = roles[(i - 1) % 3];
+                    ui.status.innerText = `${role.name} escribiendo...`;
+
+                    const systemPrompt = `${role.prompt} Estás en un debate sobre "${topic}". Historial: ${historial.slice(-800)}. Responde brevemente (40 palabras).`;
+                    
+                    const chunks = await engine.chat.completions.create({
+                        messages: [{role:"system", content:systemPrompt}, {role:"user", content:"Tu turno."}],
+                        temperature: 0.7, max_tokens: 100
+                    });
+                    
+                    const resp = chunks.choices[0].message.content;
+                    if (abortController.signal.aborted) break;
+
+                    addMsg(role.name, resp, role.css);
+                    historial += `\n${role.name}: ${resp}`;
+                    await new Promise(r => setTimeout(r, 600));
+                }
+
+                if (!abortController.signal.aborted) {
+                    ui.status.innerText = "Concluyendo...";
+                    const final = await engine.chat.completions.create({
+                        messages: [{role:"system", content:"Resume y concluye."}, {role:"user", content:historial}]
+                    });
+                    addMsg("VERDICTO", final.choices[0].message.content, "msg-final");
+                }
+
+            } catch (err) {
+                if (err.name !== 'AbortError') addMsg("ERROR", err.message, "msg-sys");
+            } finally {
+                isProcessing = false;
+                ui.avatar.classList.remove('speaking');
+                ui.btnDebate.disabled = false;
+                ui.btnGo.disabled = false;
+                ui.btnStop.disabled = true;
+                ui.status.innerText = "Listo";
+            }
+        };
+
+        // Helper Roles
+        function determinarRoles(p) {
+            p = p.toLowerCase();
+            if (p.includes("dios")||p.includes("moral")) return [
+                {name:"FILÓSOFO", prompt:"Analiza ética.", css:"msg-l1"},
+                {name:"CIENTÍFICO", prompt:"Solo datos.", css:"msg-l2"},
+                {name:"TEÓLOGO", prompt:"Espiritualidad.", css:"msg-l3"}
+            ];
+            if (p.includes("bitcoin")||p.includes("precio")) return [
+                {name:"ANALISTA", prompt:"Riesgos.", css:"msg-l1"},
+                {name:"HODLER", prompt:"Optimista.", css:"msg-l2"},
+                {name:"REGULADOR", prompt:"Leyes.", css:"msg-l3"}
+            ];
+            return [
+                {name:"LÓGICO", prompt:"Hechos.", css:"msg-l1"},
+                {name:"CRÍTICO", prompt:"Riesgos.", css:"msg-l2"},
+                {name:"FUTURISTA", prompt:"Visiones.", css:"msg-l3"}
+            ];
+        }
+
+        function addMsg(role, text, type) {
+            const div = document.createElement('div');
+            div.className = `msg-entry ${type}`;
+            div.innerHTML = `<span class="agent-name">${role}</span>${text}`;
+            ui.chat.appendChild(div);
+            requestAnimationFrame(() => ui.chat.scrollTop = ui.chat.scrollHeight);
+        }
+    </script>
+</body>
+</html>
