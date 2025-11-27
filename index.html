@@ -3,17 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS INFINITY v17.3 - Optimizado</title>
+    <title>NEXUS INFINITY v17.4 - Modo Híbrido Avanzado</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script type="importmap">
-    {
-        "imports": {
-            "@google/generative-ai": "https://esm.run/@google/generative-ai@0.16.0"
-        }
-    }
-    </script>
     <style>
         :root {
             --bg: #020202;
@@ -40,7 +33,7 @@
             overflow: hidden;
         }
 
-        /* HEADER - Controles principales arriba */
+        /* HEADER */
         .header {
             background: linear-gradient(145deg, #0a0a0a 0%, #1a1a1a 100%);
             border-bottom: 1px solid var(--border);
@@ -50,13 +43,7 @@
             align-items: center;
             z-index: 100;
         }
-        
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
+
         .logo {
             color: var(--blue);
             font-size: 1.4em;
@@ -66,47 +53,24 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         .logo::after {
             content: '∞';
             color: var(--purple);
             font-size: 1.1em;
         }
-        
-        .controls-row {
+
+        .mode-indicator {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 5px 10px;
             display: flex;
-            gap: 10px;
             align-items: center;
+            gap: 8px;
+            color: var(--blue);
+            font-size: 0.9em;
         }
-        
-        /* AVATAR y estado */
-        .avatar-container {
-            position: relative;
-            width: 40px;
-            height: 40px;
-        }
-        
-        .avatar {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            border: 2px solid var(--blue);
-            object-fit: cover;
-        }
-        
-        .avatar-status {
-            position: absolute;
-            bottom: -2px;
-            right: -2px;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            border: 1px solid #000;
-            background: var(--red);
-        }
-        
-        .avatar-status.online { background: var(--green); }
-        .avatar-status.thinking { background: var(--yellow); animation: pulse 1s infinite; }
 
         /* MAIN CONTENT */
         .main-content {
@@ -114,28 +78,23 @@
             flex-grow: 1;
             overflow: hidden;
         }
-        
-        /* SIDEBAR - Menús desplegables */
+
+        /* SIDEBAR */
         .sidebar {
             width: 280px;
             background: linear-gradient(145deg, #0a0a0a 0%, #1a1a1a 100%);
             border-right: 1px solid var(--border);
             overflow-y: auto;
-            transition: transform 0.3s ease;
             z-index: 90;
         }
-        
-        .sidebar.collapsed {
-            transform: translateX(-100%);
-        }
-        
+
         .menu-section {
             margin-bottom: 15px;
             border: 1px solid var(--border);
             border-radius: 8px;
             overflow: hidden;
         }
-        
+
         .menu-header {
             background: rgba(20, 20, 20, 0.7);
             padding: 12px 15px;
@@ -146,29 +105,29 @@
             cursor: pointer;
             transition: background 0.2s;
         }
-        
+
         .menu-header:hover {
             background: rgba(30, 30, 30, 0.8);
         }
-        
+
         .menu-header .arrow {
             transition: transform 0.3s ease;
         }
-        
+
         .menu-header.collapsed .arrow {
             transform: rotate(-90deg);
         }
-        
+
         .menu-content {
             padding: 15px;
             background: rgba(10, 10, 10, 0.8);
             display: none;
         }
-        
+
         .menu-content.show {
             display: block;
         }
-        
+
         /* CHAT AREA */
         .chat-area {
             flex-grow: 1;
@@ -177,7 +136,7 @@
             background: radial-gradient(circle at 50% 50%, rgba(10, 10, 10, 0.9) 0%, rgba(2, 2, 2, 0.95) 100%);
             position: relative;
         }
-        
+
         #chat-box {
             flex-grow: 1;
             overflow-y: auto;
@@ -186,7 +145,7 @@
             flex-direction: column;
             gap: 15px;
         }
-        
+
         .msg {
             padding: 15px;
             border-radius: 8px;
@@ -197,14 +156,14 @@
             line-height: 1.5;
             max-width: 85%;
         }
-        
+
         .msg-user {
             align-self: flex-end;
             border-left: none;
             border-right: 4px solid var(--blue);
             background: rgba(0, 243, 255, 0.1);
         }
-        
+
         .msg-sys {
             align-self: center;
             border: none;
@@ -213,13 +172,13 @@
             font-style: italic;
             max-width: 100%;
         }
-        
+
         .agent-web { border-color: var(--orange); }
         .agent-analyst { border-color: var(--blue); }
         .agent-critic { border-color: var(--red); }
         .agent-creative { border-color: var(--purple); }
         .agent-judge { border-color: var(--green); font-weight: bold; }
-        
+
         .sender-name {
             font-size: 0.8em;
             font-weight: bold;
@@ -227,20 +186,25 @@
             margin-bottom: 5px;
             opacity: 0.9;
         }
-        
-        /* INPUT AREA - Controles abajo */
+
+        .content {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        /* INPUT AREA */
         .input-area {
             padding: 15px;
             background: rgba(0, 0, 0, 0.7);
             border-top: 1px solid var(--border);
         }
-        
+
         .input-container {
             display: flex;
             gap: 10px;
             margin-bottom: 15px;
         }
-        
+
         textarea {
             flex-grow: 1;
             background: rgba(20, 20, 20, 0.8);
@@ -253,20 +217,20 @@
             font-family: inherit;
             font-size: 0.95em;
         }
-        
+
         textarea:focus {
             outline: none;
             border-color: var(--blue);
             box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
         }
-        
+
         .action-buttons {
             display: flex;
             gap: 10px;
             justify-content: center;
             margin-bottom: 15px;
         }
-        
+
         button {
             padding: 10px 15px;
             background: linear-gradient(145deg, #111 0%, #222 100%);
@@ -281,129 +245,96 @@
             align-items: center;
             gap: 8px;
         }
-        
+
         button:hover:not(:disabled) {
             transform: translateY(-2px);
             filter: brightness(1.2);
         }
-        
+
         button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
-        
+
         .btn-primary { border-color: var(--blue); color: var(--blue); background: rgba(0, 243, 255, 0.05); }
         .btn-danger { border-color: var(--red); color: var(--red); background: rgba(255, 0, 85, 0.1); }
         .btn-warning { border-color: var(--yellow); color: var(--yellow); }
         .btn-success { border-color: var(--green); color: var(--green); }
-        
-        .btn-toggle {
-            background: rgba(30, 30, 30, 0.8);
-            border-color: #555;
-            color: #ccc;
+        .btn-agent { border-color: var(--purple); color: var(--purple); }
+        .btn-agent.active { background: rgba(188, 19, 254, 0.2); border-color: var(--purple); }
+
+        .agent-selection {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
         }
-        
-        .btn-toggle.active {
-            background: rgba(0, 243, 255, 0.1);
-            border-color: var(--blue);
-            color: var(--blue);
-        }
-        
-        /* MODAL para configuración */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+
+        .agent-item {
             display: flex;
             align-items: center;
+            gap: 8px;
+            font-size: 0.85em;
+        }
+
+        .agent-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
+            color: white;
+            font-weight: bold;
+            font-size: 0.7em;
         }
-        
-        .modal-overlay.show {
-            opacity: 1;
-            pointer-events: all;
+
+        .agent-web .agent-icon { background: var(--orange); }
+        .agent-analyst .agent-icon { background: var(--blue); }
+        .agent-critic .agent-icon { background: var(--red); }
+        .agent-creative .agent-icon { background: var(--purple); }
+        .agent-judge .agent-icon { background: var(--green); }
+
+        /* MODEL SELECTION */
+        .model-selection {
+            margin-top: 15px;
         }
-        
-        .modal {
-            background: var(--panel);
+
+        .model-item {
+            padding: 10px;
             border: 1px solid var(--border);
-            border-radius: 10px;
-            width: 90%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
-        }
-        
-        .modal-header {
-            padding: 15px;
-            border-bottom: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
-        .modal-title {
-            color: var(--blue);
-            font-size: 1.1em;
+
+        .model-item:hover {
+            background: rgba(50, 50, 50, 0.5);
+            border-color: var(--blue);
         }
-        
-        .modal-close {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 1.5em;
-            cursor: pointer;
+
+        .model-item.active {
+            border-color: var(--blue);
+            background: rgba(0, 243, 255, 0.1);
         }
-        
-        .modal-content {
-            padding: 20px;
+
+        .model-specs {
+            font-size: 0.75em;
+            color: #888;
+            margin-top: 5px;
         }
-        
-        .setting-row {
-            margin-bottom: 15px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 0.85em;
-            color: #aaa;
-            font-weight: bold;
-        }
-        
-        input[type="text"],
-        input[type="password"],
-        select {
-            width: 100%;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid #444;
-            color: #fff;
-            border-radius: 4px;
-            font-family: inherit;
-        }
-        
+
         /* ANIMATIONS */
         @keyframes slideIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
-            70% { box-shadow: 0 0 0 5px rgba(255, 215, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
-        }
-        
+
         /* RESPONSIVE */
         @media (max-width: 900px) {
             .sidebar {
@@ -417,49 +348,22 @@
             .sidebar.show {
                 transform: translateX(0);
             }
-            
-            .menu-btn {
-                display: block;
-            }
-        }
-        
-        .hamburger {
-            display: none;
-            background: none;
-            border: none;
-            color: var(--blue);
-            font-size: 1.5em;
-            cursor: pointer;
-        }
-        
-        @media (max-width: 768px) {
-            .hamburger {
-                display: block;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- HEADER - Controles principales arriba -->
+    <!-- HEADER -->
     <div class="header">
-        <div class="header-left">
-            <button class="hamburger" id="menu-toggle">☰</button>
-            <div class="logo">NEXUS</div>
-            <div class="controls-row">
-                <button class="btn-toggle" id="mode-btn">
-                    <span class="mode-icon">☁️</span> Modo Nube
-                </button>
-            </div>
-        </div>
-        <div class="avatar-container">
-            <div class="avatar"></div>
-            <div class="avatar-status" id="avatar-status"></div>
+        <div class="logo">NEXUS</div>
+        <div class="mode-indicator">
+            <div id="mode-status">Modo: Híbrido</div>
+            <div id="avatar-status" style="width: 16px; height: 16px; border-radius: 50%; background: var(--green);"></div>
         </div>
     </div>
     
     <!-- MAIN CONTENT -->
     <div class="main-content">
-        <!-- SIDEBAR - Menús desplegables -->
+        <!-- SIDEBAR -->
         <div class="sidebar" id="sidebar">
             <div class="menu-section">
                 <div class="menu-header" data-target="hardware-menu">
@@ -471,6 +375,38 @@
                         <span style="color:var(--yellow)">Haz clic en 'Escanear' para analizar tu sistema</span>
                     </div>
                     <button class="btn-warning" id="btn-scan">⚡ ESCANEAR SISTEMA</button>
+                    
+                    <!-- Model Selection -->
+                    <div class="model-selection" id="model-selection" style="display:none;">
+                        <div class="model-item" data-model="Llama-3.2-1B-Instruct-q4f16_1-MLC">
+                            <div>
+                                <div>Llama 3.2 1B (Rápido)</div>
+                                <div class="model-specs">1B parámetros | 2GB VRAM</div>
+                            </div>
+                            <div class="btn-success">CARGAR</div>
+                        </div>
+                        <div class="model-item" data-model="TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC">
+                            <div>
+                                <div>TinyLlama (Ligero)</div>
+                                <div class="model-specs">1.1B parámetros | 1.5GB VRAM</div>
+                            </div>
+                            <div class="btn-success">CARGAR</div>
+                        </div>
+                        <div class="model-item" data-model="Phi-3-mini-4k-instruct-q4f16_1-MLC">
+                            <div>
+                                <div>Phi-3 Mini (Potente)</div>
+                                <div class="model-specs">3.8B parámetros | 4GB VRAM</div>
+                            </div>
+                            <div class="btn-success">CARGAR</div>
+                        </div>
+                        <div class="model-item" data-model="Qwen-2.5-7B-Instruct-q4f16_1-MLC">
+                            <div>
+                                <div>Qwen 2.5 7B (Máximo)</div>
+                                <div class="model-specs">7B parámetros | 12GB VRAM</div>
+                            </div>
+                            <div class="btn-success">CARGAR</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -509,10 +445,54 @@
                         <div style="margin-bottom:8px;"><span style="color:var(--purple);">4. 🟣 CREATIVO</span> - Innovación</div>
                         <div><span style="color:var(--green);">5. 🟢 JUEZ</span> - Síntesis Final</div>
                     </div>
-                    <label style="display:block; margin-bottom:8px; font-size:0.8em;">ETAPAS:</label>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <span id="rounds-val" style="color:var(--blue); font-weight:bold; min-width:20px;">5</span>
-                        <input type="range" id="rounds-slider" min="1" max="5" value="5" style="flex-grow:1;">
+                    
+                    <div class="agent-selection">
+                        <div class="agent-item agent-web">
+                            <div class="agent-icon">1</div>
+                            <div>Investigador</div>
+                        </div>
+                        <div class="agent-item agent-analyst">
+                            <div class="agent-icon">2</div>
+                            <div>Analista</div>
+                        </div>
+                        <div class="agent-item agent-critic">
+                            <div class="agent-icon">3</div>
+                            <div>Crítico</div>
+                        </div>
+                        <div class="agent-item agent-creative">
+                            <div class="agent-icon">4</div>
+                            <div>Creativo</div>
+                        </div>
+                        <div class="agent-item agent-judge">
+                            <div class="agent-icon">5</div>
+                            <div>Juez</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="menu-section">
+                <div class="menu-header" data-target="config-menu">
+                    <span>⚙️ Configuración</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="menu-content" id="config-menu">
+                    <div style="font-size:0.85em; color:#ddd; line-height:1.5; margin-bottom:15px;">
+                        <label style="display:block; margin-bottom:8px; font-size:0.8em;">INTENSIDAD DE PROCESO (1-10):</label>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span id="rounds-val" style="color:var(--blue); font-weight:bold; min-width:20px;">5</span>
+                            <input type="range" id="rounds-slider" min="1" max="10" value="5" style="flex-grow:1;">
+                        </div>
+                    </div>
+                    <div style="font-size:0.85em; color:#ddd; line-height:1.5; margin-top:15px;">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                            <input type="checkbox" id="show-reasoning" checked>
+                            <label for="show-reasoning">Mostrar razonamiento detallado</label>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                            <input type="checkbox" id="auto-execute" checked>
+                            <label for="auto-execute">Ejecutar automáticamente</label>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -524,14 +504,16 @@
                 </div>
                 <div class="menu-content" id="help-menu">
                     <div style="font-size:0.85em; line-height:1.5;">
-                        <p><strong>Modo Nube:</strong> Funciona sin WebGPU usando solo APIs externas.</p>
-                        <p><strong>Modo Híbrido:</strong> Combina modelos locales con APIs cuando sea posible.</p>
-                        <p><strong>Teclas rápidas:</strong></p>
-                        <ul style="margin-left:20px; margin-top:8px;">
-                            <li>Enter: Enviar mensaje</li>
-                            <li>Ctrl + Enter: Nueva línea</li>
-                            <li>ESC: Detener procesamiento</li>
-                        </ul>
+                        <p><strong>Modo Híbrido:</strong> Combina modelos locales con APIs externas para mejor rendimiento.</p>
+                        <p><strong>Configuración de Agentes:</strong> Activa/desactiva agentes según necesidad.</p>
+                        <p><strong>Proceso de Debate:</strong></p>
+                        <ol style="margin-left:20px; margin-top:8px;">
+                            <li>Investigador recopila información</li>
+                            <li>Analista procesa los datos</li>
+                            <li>Crítico evalúa el análisis</li>
+                            <li>Creativo propone soluciones</li>
+                            <li>Juez sintetiza la conclusión final</li>
+                        </ol>
                     </div>
                 </div>
             </div>
@@ -541,22 +523,24 @@
         <div class="chat-area">
             <div id="chat-box">
                 <div class="msg msg-sys">
-                    <strong>🚀 NEXUS INFINITY v17.3 INICIADO</strong><br>
-                    <span style="color:var(--green);">✓</span> Versión optimizada y sin congelamientos<br>
-                    <span style="color:var(--blue);">☁️</span> Por defecto en modo nube para máxima compatibilidad<br><br>
-                    <span style="color:var(--yellow);">💡 COMANDOS RÁPIDOS:</span><br>
-                    • Escribe 'hola' para probar<br>
-                    • Configura tus claves API para mejor rendimiento<br>
-                    • Usa el botón de menú (☰) para acceder a ajustes
+                    <strong>🚀 NEXUS INFINITY v17.4 INICIADO</strong><br>
+                    <span style="color:var(--green);">✓</span> Modo Híbrido: Local + Nube<br>
+                    <span style="color:var(--green);">✓</span> 5 Agentes en Cadena Secuencial<br>
+                    <span style="color:var(--green);">✓</span> Configuración Avanzada de Agentes<br><br>
+                    <span style="color:var(--yellow);">💡 CÓMO USAR:</span><br>
+                    • Configura tus claves API en la sección "Claves API"<br>
+                    • Escanea tu sistema para ver modelos locales disponibles<br>
+                    • Selecciona qué agentes quieres activar<br>
+                    • Escribe tu consulta y haz clic en "GO"
                 </div>
             </div>
             
-            <!-- INPUT AREA - Controles abajo -->
+            <!-- INPUT AREA -->
             <div class="input-area">
                 <div class="input-container">
                     <textarea id="user-input" placeholder="Escribe tu consulta aquí..."></textarea>
                     <button class="btn-primary" id="btn-send" style="width:80px;">
-                        <span>▶️</span> GO
+                        <span>GO</span>
                     </button>
                 </div>
                 
@@ -564,57 +548,33 @@
                     <button class="btn-danger" id="btn-stop">
                         <span>🛑</span> DETENER
                     </button>
-                    <button class="btn-toggle" id="btn-files">
-                        <span>📁</span> ARCHIVOS
+                    <button class="btn-warning" id="btn-clear">
+                        <span>🗑️</span> LIMPIAR
                     </button>
-                    <button class="btn-toggle" id="btn-voice">
-                        <span>🎤</span> VOZ
+                    <button class="btn-success" id="btn-save">
+                        <span>💾</span> GUARDAR
                     </button>
                 </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- MODAL para archivos -->
-    <div class="modal-overlay" id="files-modal">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">📁 Cargar Archivos</div>
-                <button class="modal-close" id="close-files-modal">&times;</button>
-            </div>
-            <div class="modal-content">
-                <div style="border: 2px dashed var(--purple); border-radius: 8px; padding: 30px; text-align: center; margin-bottom: 20px;">
-                    <div style="margin-bottom:15px; font-size: 2em;">⬇️</div>
-                    <div style="margin-bottom:10px; font-weight: bold; color: var(--purple);">Arrastra tus archivos aquí</div>
-                    <div style="color: #888; font-size: 0.9em;">Soporta: .txt, .pdf, .js, .py, .html (máx. 3MB)</div>
-                    <div id="file-status" style="margin-top:10px; min-height: 20px; color: #888;"></div>
-                </div>
-                <button class="btn-success" style="width: 100%;">✅ PROCESAR ARCHIVOS</button>
             </div>
         </div>
     </div>
 
-    <script type="module">
-        import { GoogleGenerativeAI } from "@google/generative-ai";
-        
-        // Timeout global para todas las operaciones (5 segundos)
-        const GLOBAL_TIMEOUT = 5000;
-        let isCloudMode = true;
-        let ragContext = '';
-        let abortController = null;
-        let isProcessing = false;
-        
-        // Inicializar marked con seguridad
-        marked.setOptions({ 
-            highlight: (code, lang) => {
-                if (lang && hljs.getLanguage(lang)) {
-                    return hljs.highlight(code, { language: lang }).value;
-                }
-                return hljs.highlightAuto(code).value;
+    <script>
+        // Estado global
+        let appState = {
+            isProcessing: false,
+            currentModel: null,
+            activeAgents: {
+                investigator: true,
+                analyst: true,
+                critic: true,
+                creative: true,
+                judge: true
             },
-            breaks: true,
-            sanitize: true
-        });
+            rounds: 5,
+            showReasoning: true,
+            autoExecute: true
+        };
         
         // DOM Elements
         const elements = {
@@ -623,129 +583,53 @@
             userInput: document.getElementById('user-input'),
             btnSend: document.getElementById('btn-send'),
             btnStop: document.getElementById('btn-stop'),
+            btnClear: document.getElementById('btn-clear'),
+            btnSave: document.getElementById('btn-save'),
             btnScan: document.getElementById('btn-scan'),
-            btnFiles: document.getElementById('btn-files'),
-            btnVoice: document.getElementById('btn-voice'),
-            btnMode: document.getElementById('mode-btn'),
+            btnSaveKeys: document.getElementById('btn-save-keys'),
             hardwareInfo: document.getElementById('hardware-info'),
-            avatarStatus: document.getElementById('avatar-status'),
+            modelSelection: document.getElementById('model-selection'),
             roundsSlider: document.getElementById('rounds-slider'),
             roundsVal: document.getElementById('rounds-val'),
-            filesModal: document.getElementById('files-modal'),
-            closeFilesModal: document.getElementById('close-files-modal'),
-            keyGemini: document.getElementById('key-gemini'),
-            keyGroq: document.getElementById('key-groq'),
-            keyTavily: document.getElementById('key-tavily'),
-            btnSaveKeys: document.getElementById('btn-save-keys')
+            showReasoning: document.getElementById('show-reasoning'),
+            autoExecute: document.getElementById('auto-execute'),
+            modeStatus: document.getElementById('mode-status'),
+            avatarStatus: document.getElementById('avatar-status'),
+            agentItems: document.querySelectorAll('.agent-item')
         };
         
         // Inicializar interfaz
         function initInterface() {
-            // Cargar claves guardadas
-            loadKeys();
-            
-            // Eventos de menús desplegables
-            document.querySelectorAll('.menu-header').forEach(header => {
-                header.addEventListener('click', () => {
-                    const targetId = header.getAttribute('data-target');
-                    const content = document.getElementById(targetId);
-                    const isCollapsed = header.classList.contains('collapsed');
-                    
-                    // Toggle el menú específico
-                    header.classList.toggle('collapsed', !isCollapsed);
-                    content.classList.toggle('show', isCollapsed);
-                    
-                    // Cerrar otros menús
-                    document.querySelectorAll('.menu-content').forEach(menu => {
-                        if (menu.id !== targetId) {
-                            menu.classList.remove('show');
-                            const relatedHeader = document.querySelector(`[data-target="${menu.id}"]`);
-                            relatedHeader.classList.add('collapsed');
-                        }
-                    });
-                });
-            });
-            
-            // Abrir primer menú por defecto
-            document.querySelector('.menu-header').click();
-            
-            // Toggle sidebar en móviles
-            document.getElementById('menu-toggle').addEventListener('click', () => {
-                elements.sidebar.classList.toggle('show');
-            });
-            
-            // Enviar mensaje con Enter
-            elements.userInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-            
-            // Eventos de botones principales
-            elements.btnSend.addEventListener('click', sendMessage);
+            // Configurar eventos
+            elements.btnSend.addEventListener('click', processQuery);
             elements.btnStop.addEventListener('click', stopProcessing);
+            elements.btnClear.addEventListener('click', clearChat);
+            elements.btnSave.addEventListener('click', saveChat);
             elements.btnScan.addEventListener('click', scanHardware);
-            elements.btnFiles.addEventListener('click', toggleFilesModal);
-            elements.btnVoice.addEventListener('click', toggleVoice);
-            elements.btnMode.addEventListener('click', toggleMode);
             elements.btnSaveKeys.addEventListener('click', saveKeys);
-            elements.closeFilesModal.addEventListener('click', closeFilesModal);
             elements.roundsSlider.addEventListener('input', updateRoundsValue);
+            elements.showReasoning.addEventListener('change', toggleReasoning);
+            elements.autoExecute.addEventListener('change', toggleAutoExecute);
             
-            // Inicializar estado
-            updateAvatarStatus('offline');
-            toggleMode(); // Establecer modo inicial
-        }
-        
-        function updateRoundsValue() {
-            elements.roundsVal.textContent = elements.roundsSlider.value;
-        }
-        
-        function toggleMode() {
-            isCloudMode = !isCloudMode;
-            elements.btnMode.innerHTML = isCloudMode ? 
-                '<span class="mode-icon">☁️</span> Modo Nube' : 
-                '<span class="mode-icon">🧠</span> Modo Híbrido';
-            elements.btnMode.classList.toggle('active', !isCloudMode);
+            // Configurar agentes
+            elements.agentItems.forEach(item => {
+                item.addEventListener('click', toggleAgent);
+            });
             
-            addSystemMessage(`💡 Modo cambiado a: ${isCloudMode ? 'Nube' : 'Híbrido'}`);
-        }
-        
-        function toggleFilesModal() {
-            elements.filesModal.classList.toggle('show');
-        }
-        
-        function closeFilesModal() {
-            elements.filesModal.classList.remove('show');
-        }
-        
-        function toggleVoice() {
-            const isActive = elements.btnVoice.classList.toggle('active');
-            addSystemMessage(`🎤 Control de voz: ${isActive ? 'ACTIVADO' : 'DESACTIVADO'}`);
-        }
-        
-        function updateAvatarStatus(status) {
-            elements.avatarStatus.className = 'avatar-status';
+            // Inicializar valores
+            updateRoundsValue();
+            toggleReasoning();
+            toggleAutoExecute();
             
-            switch(status) {
-                case 'thinking':
-                    elements.avatarStatus.classList.add('thinking');
-                    elements.avatarStatus.title = 'Procesando';
-                    break;
-                case 'online':
-                    elements.avatarStatus.classList.add('online');
-                    elements.avatarStatus.title = 'En línea';
-                    break;
-                default:
-                    elements.avatarStatus.title = 'Offline';
-            }
+            // Mostrar primer menú
+            document.querySelector('.menu-header').click();
         }
         
         // Funciones de hardware
         function scanHardware() {
             addSystemMessage('🔍 Escaneando hardware del sistema...');
             
+            // Simular escaneo
             setTimeout(() => {
                 const hardwareInfo = `
                     <div style="font-size:0.9em; line-height:1.6;">
@@ -753,24 +637,30 @@
                         <div><span style="color:var(--green);">RAM:</span> ${getRAMInfo()} GB</div>
                         <div><span style="color:var(--purple);">Navegador:</span> ${getBrowserInfo()}</div>
                         <div><span style="color:var(--orange);">WebGPU:</span> ${checkWebGPU() ? '✅ Disponible' : '❌ No disponible'}</div>
-                        <div style="margin-top:10px;">
-                            <span style="color:${checkWebGPU() ? 'var(--green)' : 'var(--yellow)'};">
-                                ${checkWebGPU() ? 
-                                    '🚀 Modo Híbrido recomendado' : 
-                                    '💡 Permanece en modo Nube para mejor rendimiento'}
-                            </span>
+                        <div style="margin-top:10px; color:var(--yellow);">
+                            ${checkWebGPU() ? 
+                                '🚀 Modo Híbrido recomendado' : 
+                                '💡 Modo Nube recomendado'}
                         </div>
                     </div>
                 `;
                 
                 elements.hardwareInfo.innerHTML = hardwareInfo;
                 addSystemMessage('✅ Análisis de hardware completado');
+                
+                // Mostrar selección de modelos si hay WebGPU
+                if (checkWebGPU()) {
+                    elements.modelSelection.style.display = 'block';
+                    addSystemMessage('💡 Modelos locales disponibles. Selecciona uno para cargarlo.');
+                } else {
+                    elements.modelSelection.style.display = 'none';
+                    addSystemMessage('💡 WebGPU no disponible. Usa el modo Nube para mejor rendimiento.');
+                }
             }, 800);
         }
         
         function getCPUInfo() {
-            const cpu = navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} núcleos` : 'Información no disponible';
-            return cpu;
+            return navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} núcleos` : 'Información no disponible';
         }
         
         function getRAMInfo() {
@@ -785,108 +675,94 @@
             return 'gpu' in navigator;
         }
         
-        // Funciones de claves API
-        function saveKeys() {
-            const keys = {
-                gemini: elements.keyGemini.value.trim(),
-                groq: elements.keyGroq.value.trim(),
-                tavily: elements.keyTavily.value.trim()
-            };
+        // Funciones de agentes
+        function toggleAgent(event) {
+            const agent = event.currentTarget;
+            const agentName = agent.querySelector('div:last-child').textContent.toLowerCase();
             
-            // Validación básica
-            if (!keys.gemini && !keys.groq) {
-                addSystemMessage('⚠️ Advertencia: Necesitas al menos una clave API (Gemini o Groq) para el modo nube');
+            // Alternar estado
+            if (agent.classList.contains('active')) {
+                agent.classList.remove('active');
+                appState.activeAgents[agentName] = false;
+            } else {
+                agent.classList.add('active');
+                appState.activeAgents[agentName] = true;
             }
             
-            localStorage.setItem('nexus_keys_v173', JSON.stringify(keys));
-            addSystemMessage('✅ Claves API guardadas correctamente');
+            addSystemMessage(`💡 Agente "${agentName}" ${appState.activeAgents[agentName] ? 'activado' : 'desactivado'}`);
         }
         
-        function loadKeys() {
-            const saved = localStorage.getItem('nexus_keys_v173');
-            if (saved) {
-                try {
-                    const keys = JSON.parse(saved);
-                    elements.keyGemini.value = keys.gemini ? '••••••' + keys.gemini.slice(-4) : '';
-                    elements.keyGroq.value = keys.groq ? '••••••' + keys.groq.slice(-4) : '';
-                    elements.keyTavily.value = keys.tavily ? '••••••' + keys.tavily.slice(-4) : '';
-                } catch (e) {
-                    console.error('Error cargando claves:', e);
-                }
-            }
+        function updateRoundsValue() {
+            appState.rounds = parseInt(elements.roundsSlider.value);
+            elements.roundsVal.textContent = appState.rounds;
+        }
+        
+        function toggleReasoning() {
+            appState.showReasoning = elements.showReasoning.checked;
+            addSystemMessage(`💡 Mostrar razonamiento: ${appState.showReasoning ? 'SÍ' : 'NO'}`);
+        }
+        
+        function toggleAutoExecute() {
+            appState.autoExecute = elements.autoExecute.checked;
+            addSystemMessage(`💡 Ejecución automática: ${appState.autoExecute ? 'ACTIVADA' : 'DESACTIVADA'}`);
         }
         
         // Funciones de procesamiento
-        async function sendMessage() {
-            const text = elements.userInput.value.trim();
+        async function processQuery() {
+            const text = elements.user-input.value.trim();
             if (!text) return;
             
-            // Agregar mensaje del usuario
-            addMessage('TÚ', text, 'msg-user');
-            elements.userInput.value = '';
-            
-            if (isProcessing) {
+            if (appState.isProcessing) {
                 addSystemMessage('⚠️ Ya hay un proceso en ejecución. Usa el botón DETENER primero.');
                 return;
             }
             
-            isProcessing = true;
-            abortController = new AbortController();
-            updateAvatarStatus('thinking');
-            elements.btnSend.disabled = true;
-            elements.btnStop.disabled = false;
+            // Limpiar chat si es necesario
+            if (appState.autoExecute) {
+                clearChat();
+            }
+            
+            appState.isProcessing = true;
+            addSystemMessage(`🚀 Iniciando cadena secuencial de ${appState.rounds} etapas...`);
             
             try {
-                const maxRounds = parseInt(elements.roundsSlider.value);
-                let contextChain = `SOLICITUD ORIGINAL: "${text}"\n\n`;
-                
-                if (ragContext) {
-                    contextChain += `=== CONTEXTO ADICIONAL ===\n${ragContext}\n\n`;
+                // Paso 1: Investigador (Web)
+                if (appState.activeAgents.investigator) {
+                    await processStage(1, 'Investigador', 'Buscando datos en tiempo real...', 
+                        () => simulateWebSearch(text));
                 }
                 
-                addSystemMessage(`🚀 Iniciando cadena secuencial de ${maxRounds} etapas...`);
-                
-                // Simular procesamiento por etapas con retraso realista
-                for (let stage = 1; stage <= maxRounds; stage++) {
-                    if (abortController.signal.aborted) break;
-                    
-                    switch(stage) {
-                        case 1:
-                            await processStage(1, '🌐 INVESTIGADOR (WEB)', 'Buscando datos en tiempo real...', 
-                                () => simulateWebSearch(text));
-                            break;
-                        case 2:
-                            await processStage(2, '🔵 ANALISTA', 'Analizando datos y extrayendo patrones...', 
-                                () => simulateAnalysis(contextChain));
-                            break;
-                        case 3:
-                            await processStage(3, '🔴 CRÍTICO', 'Validando consistencia y buscando errores...', 
-                                () => simulateCritique(contextChain));
-                            break;
-                        case 4:
-                            await processStage(4, '🟣 CREATIVO', 'Generando soluciones innovadoras...', 
-                                () => simulateCreative(contextChain));
-                            break;
-                        case 5:
-                            await processStage(5, '🟢 JUEZ SUPREMO', 'Sintetizando conclusión final...', 
-                                () => simulateJudgment(contextChain));
-                            break;
-                    }
+                // Paso 2: Analista
+                if (appState.activeAgents.analyst) {
+                    await processStage(2, 'Analista', 'Analizando datos y extrayendo patrones...', 
+                        () => simulateAnalysis(text));
                 }
                 
-                if (!abortController.signal.aborted) {
-                    addSystemMessage('✅ Cadena secuencial completada exitosamente');
+                // Paso 3: Crítico
+                if (appState.activeAgents.critic) {
+                    await processStage(3, 'Crítico', 'Validando consistencia y buscando errores...', 
+                        () => simulateCritique(text));
                 }
+                
+                // Paso 4: Creativo
+                if (appState.activeAgents.creative) {
+                    await processStage(4, 'Creativo', 'Generando soluciones innovadoras...', 
+                        () => simulateCreative(text));
+                }
+                
+                // Paso 5: Juez
+                if (appState.activeAgents.judge) {
+                    await processStage(5, 'Juez', 'Sintetizando conclusión final...', 
+                        () => simulateJudgment(text));
+                }
+                
+                // Mostrar mensaje de éxito
+                addSystemMessage('✅ Cadena secuencial completada exitosamente');
                 
             } catch (e) {
-                if (e.name !== 'AbortError') {
-                    addSystemMessage(`❌ Error: ${e.message || 'Error desconocido'}`);
-                }
+                addSystemMessage(`❌ Error: ${e.message || 'Error desconocido'}`);
             } finally {
-                isProcessing = false;
-                updateAvatarStatus('online');
-                elements.btnSend.disabled = false;
-                elements.btnStop.disabled = true;
+                appState.isProcessing = false;
             }
         }
         
@@ -894,45 +770,32 @@
             addSystemMessage(`Agente ${stageNum}/5: ${statusMsg}`);
             
             try {
-                // Timeout para esta etapa específica
-                const timeoutPromise = new Promise((_, reject) => {
-                    setTimeout(() => reject(new Error('Timeout')), GLOBAL_TIMEOUT);
-                });
+                const result = await processingFn();
                 
-                const result = await Promise.race([
-                    processingFn(),
-                    timeoutPromise
-                ]);
+                // Determinar clase CSS según el agente
+                let cssClass = '';
+                switch(stageNum) {
+                    case 1: cssClass = 'agent-web'; break;
+                    case 2: cssClass = 'agent-analyst'; break;
+                    case 3: cssClass = 'agent-critic'; break;
+                    case 4: cssClass = 'agent-creative'; break;
+                    case 5: cssClass = 'agent-judge'; break;
+                }
                 
-                const cssClass = agentName.includes('INVESTIGADOR') ? 'agent-web' :
-                               agentName.includes('ANALISTA') ? 'agent-analyst' :
-                               agentName.includes('CRÍTICO') ? 'agent-critic' :
-                               agentName.includes('CREATIVO') ? 'agent-creative' : 'agent-judge';
+                // Mostrar razonamiento detallado si está activado
+                if (appState.showReasoning) {
+                    addMessage(agentName, result, cssClass);
+                } else if (stageNum === 5) {
+                    addMessage(agentName, result, cssClass);
+                }
                 
-                addMessage(agentName, result, cssClass);
                 return result;
             } catch (e) {
-                if (e.message === 'Timeout') {
-                    const fallback = getFallbackResponse(agentName, stageNum);
-                    addMessage(agentName, fallback, agentName.includes('INVESTIGADOR') ? 'agent-web' : 'agent-analyst');
-                    return fallback;
-                }
                 throw e;
             }
         }
         
-        function getFallbackResponse(agentName, stageNum) {
-            const fallbacks = {
-                1: "⚠️ No se pudo completar la búsqueda web. Continuando con conocimiento interno.",
-                2: "🔍 Análisis básico completado usando conocimiento interno.",
-                3: "✅ Validación simplificada completada.",
-                4: "💡 Generando soluciones basadas en conocimiento interno.",
-                5: "🎯 Conclusión final: El sistema ha procesado tu solicitud con las capacidades disponibles."
-            };
-            return fallbacks[stageNum] || "⚠️ Respuesta generada con capacidades limitadas.";
-        }
-        
-        // Simulaciones realistas que no se bloquean
+        // Simulaciones realistas
         function simulateWebSearch(query) {
             return new Promise(resolve => {
                 setTimeout(() => {
@@ -945,7 +808,7 @@
             });
         }
         
-        function simulateAnalysis(context) {
+        function simulateAnalysis(query) {
             return new Promise(resolve => {
                 setTimeout(() => {
                     resolve(`Análisis completado:\n\n` +
@@ -957,7 +820,7 @@
             });
         }
         
-        function simulateCritique(context) {
+        function simulateCritique(query) {
             return new Promise(resolve => {
                 setTimeout(() => {
                     resolve(`Crítica constructiva:\n\n` +
@@ -969,7 +832,7 @@
             });
         }
         
-        function simulateCreative(context) {
+        function simulateCreative(query) {
             return new Promise(resolve => {
                 setTimeout(() => {
                     resolve(`Soluciones innovadoras propuestas:\n\n` +
@@ -981,7 +844,7 @@
             });
         }
         
-        function simulateJudgment(context) {
+        function simulateJudgment(query) {
             return new Promise(resolve => {
                 setTimeout(() => {
                     resolve(`**CONCLUSIÓN FINAL NEXUS**\n\n` +
@@ -998,14 +861,9 @@
         function addMessage(sender, text, cssClass) {
             const div = document.createElement('div');
             div.className = `msg ${cssClass}`;
-            div.innerHTML = `<div class="sender-name">${sender}</div><div class="content">${marked.parse(text)}</div>`;
+            div.innerHTML = `<div class="sender-name">${sender}</div><div class="content">${text}</div>`;
             elements.chatBox.appendChild(div);
             elements.chatBox.scrollTop = elements.chatBox.scrollHeight;
-            
-            // Resaltar código
-            div.querySelectorAll('pre code').forEach(block => {
-                if (hljs) hljs.highlightElement(block);
-            });
         }
         
         function addSystemMessage(text) {
@@ -1013,20 +871,50 @@
         }
         
         function stopProcessing() {
-            if (abortController) {
-                abortController.abort();
-                isProcessing = false;
-                updateAvatarStatus('online');
-                elements.btnSend.disabled = false;
-                elements.btnStop.disabled = true;
-                addSystemMessage('🛑 Proceso detenido por el usuario');
+            appState.isProcessing = false;
+            addSystemMessage('🛑 Proceso detenido por el usuario');
+        }
+        
+        function clearChat() {
+            elements.chatBox.innerHTML = `
+                <div class="msg msg-sys">
+                    <strong>🚀 NEXUS INFINITY v17.4 INICIADO</strong><br>
+                    <span style="color:var(--green);">✓</span> Modo Híbrido: Local + Nube<br>
+                    <span style="color:var(--green);">✓</span> 5 Agentes en Cadena Secuencial<br>
+                    <span style="color:var(--green);">✓</span> Configuración Avanzada de Agentes<br><br>
+                    <span style="color:var(--yellow);">💡 CÓMO USAR:</span><br>
+                    • Configura tus claves API en la sección "Claves API"<br>
+                    • Escanea tu sistema para ver modelos locales disponibles<br>
+                    • Selecciona qué agentes quieres activar<br>
+                    • Escribe tu consulta y haz clic en "GO"
+                </div>
+            `;
+        }
+        
+        function saveChat() {
+            addSystemMessage('💡 Función de guardar chat no implementada en esta versión de demostración');
+        }
+        
+        function saveKeys() {
+            const keys = {
+                gemini: document.getElementById('key-gemini').value.trim(),
+                groq: document.getElementById('key-groq').value.trim(),
+                tavily: document.getElementById('key-tavily').value.trim()
+            };
+            
+            // Validación básica
+            if (!keys.gemini && !keys.groq) {
+                addSystemMessage('⚠️ Advertencia: Necesitas al menos una clave API (Gemini o Groq) para el modo nube');
             }
+            
+            localStorage.setItem('nexus_keys_v174', JSON.stringify(keys));
+            addSystemMessage('✅ Claves API guardadas correctamente');
         }
         
         // Inicializar cuando el DOM esté listo
         document.addEventListener('DOMContentLoaded', () => {
             initInterface();
-            console.log('✅ NEXUS INFINITY v17.3 inicializado correctamente');
+            console.log('✅ NEXUS INFINITY v17.4 inicializado correctamente');
         });
     </script>
 </body>
