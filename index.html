@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEXUS HYBRID v10.2 - Sistema Profesional</title>
+    <title>NEXUS HYBRID v10.3 - High Contrast</title>
     <script type="importmap">
     {
         "imports": {
@@ -13,213 +13,268 @@
     </script>
     <style>
         :root {
-            --bg-deep: #050505;
+            --bg-deep: #000000; /* Negro puro para máximo contraste */
+            --panel-bg: #0a0a0a;
             --neon-blue: #00f3ff;
-            --neon-purple: #bc13fe;
+            --neon-purple: #d45eff; /* Púrpura más brillante */
             --neon-green: #00ff9d;
-            --neon-red: #ff0055;
+            --neon-red: #ff3366;
             --neon-gold: #ffd700;
-            --neon-yellow: #fff01a;
             --neon-cyan: #00ffff;
-            --neon-pink: #ff00ff;
-            --neon-orange: #ff8c00;
+            --text-main: #ffffff; /* Texto blanco puro */
+            --text-dim: #bbbbbb; /* Texto secundario más claro */
             --font-tech: 'Courier New', monospace;
-            --shadow-neon: 0 0 15px rgba(0, 243, 255, 0.3);
+            --shadow-neon: 0 0 10px rgba(0, 243, 255, 0.4);
         }
+
         body {
             background-color: var(--bg-deep);
-            color: #e0e0e0;
+            color: var(--text-main);
             font-family: var(--font-tech);
             margin: 0;
             height: 100vh;
             display: flex;
             overflow: hidden;
-            background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
-            transition: background 0.3s ease;
+            /* Fondo sutil para no distraer */
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
         }
+
         /* --- SIDEBAR (CONFIGURACIÓN) --- */
         .sidebar {
             width: 380px;
-            background: #020202;
-            border-right: 1px solid #333;
+            background: #050505;
+            border-right: 2px solid #333;
             display: flex;
             flex-direction: column;
-            padding: 15px;
+            padding: 20px;
             gap: 15px;
             overflow-y: auto;
             z-index: 100;
-            box-shadow: 5px 0 20px rgba(0,0,0,0.5);
-            position: relative;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.8);
         }
-        .sidebar::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0; height: 3px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-green), var(--neon-gold));
-        }
+
         h1 { 
-            color: var(--neon-blue); font-size: 1.2em; border-bottom: 1px solid #333; 
-            padding-bottom: 10px; margin: 0; text-align: center; letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+            color: var(--neon-blue); 
+            font-size: 1.4em; 
+            border-bottom: 2px solid #333; 
+            padding-bottom: 15px; 
+            margin: 0; 
+            text-align: center;
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px var(--neon-blue);
+            font-weight: 900;
         }
+
         .section-title {
-            font-size: 0.8em; color: #888; font-weight: bold; text-transform: uppercase;
-            margin-top: 10px; border-bottom: 1px dashed #333; padding-bottom: 2px;
-            display: flex; align-items: center; gap: 8px;
+            font-size: 0.9em;
+            color: var(--neon-cyan); /* Títulos en cyan brillante */
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-top: 15px;
+            border-bottom: 1px solid #444;
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
         }
-        .section-title::before { content: '•'; color: var(--neon-blue); font-size: 1.2em; }
-        
+
         /* Hardware Stats Box */
         .hw-stats {
-            background: #0a0a0a; border: 1px solid #444; padding: 10px; font-size: 0.8em;
-            color: #aaa; border-radius: 4px; transition: border-color 0.3s ease;
+            background: #111; 
+            border: 1px solid #555; 
+            padding: 12px; 
+            font-size: 0.85em;
+            color: #fff; /* Texto blanco */
+            border-radius: 6px;
+            transition: border-color 0.3s ease;
         }
-        .hw-stats:hover { border-color: var(--neon-blue); }
         .rec-good { color: var(--neon-green); font-weight: bold; }
         .rec-warn { color: var(--neon-gold); font-weight: bold; }
-        .rec-bad { color: var(--neon-red); font-weight: bold; }
         
         /* Controles */
         select, input {
-            width: 100%; padding: 10px; background: #000; border: 1px solid #444;
-            color: #fff; font-family: inherit; margin-bottom: 5px; box-sizing: border-box; outline: none;
-            border-radius: 4px; transition: border-color 0.2s ease;
+            width: 100%; padding: 12px; 
+            background: #151515; /* Fondo más claro para inputs */
+            border: 1px solid #666; /* Borde más visible */
+            color: #fff; font-family: inherit; font-weight: bold;
+            margin-bottom: 8px; box-sizing: border-box; outline: none;
+            border-radius: 6px;
         }
-        select:focus, input:focus { border-color: var(--neon-blue); box-shadow: 0 0 0 2px rgba(0, 243, 255, 0.2); }
-        input[type="password"] { letter-spacing: 3px; font-family: monospace; }
-        
+        select:focus, input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
+
         button {
-            width: 100%; padding: 10px; background: #111; border: 1px solid var(--neon-blue);
-            color: var(--neon-blue); font-weight: bold; cursor: pointer; text-transform: uppercase;
-            font-size: 0.8em; transition: all 0.2s ease; margin-bottom: 5px; border-radius: 4px;
-            position: relative; overflow: hidden;
+            width: 100%; padding: 12px;
+            background: #111; 
+            border: 2px solid var(--neon-blue);
+            color: var(--neon-blue); 
+            font-weight: 900; /* Letra más gruesa */
+            cursor: pointer; 
+            text-transform: uppercase;
+            font-size: 0.85em; 
+            transition: all 0.2s ease;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            text-shadow: 0 0 2px rgba(0,0,0,0.8);
         }
-        button:hover:not(:disabled) { background: rgba(0, 243, 255, 0.1); transform: translateY(-1px); box-shadow: var(--shadow-neon); }
-        button:disabled { border-color: #333; color: #555; cursor: not-allowed; background: #1a1a1a; transform: none; }
+        button:hover:not(:disabled) { 
+            background: var(--neon-blue); 
+            color: #000; 
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+        button:disabled { 
+            border-color: #444; color: #666; cursor: not-allowed; background: #0a0a0a; 
+        }
         
         .btn-scan { border-color: var(--neon-purple); color: var(--neon-purple); }
-        .btn-scan:hover:not(:disabled) { background: rgba(188, 19, 254, 0.1); }
+        .btn-scan:hover:not(:disabled) { background: var(--neon-purple); color: #fff; }
+        
         .btn-green { border-color: var(--neon-green); color: var(--neon-green); }
-        .btn-green:hover:not(:disabled) { background: rgba(0, 255, 157, 0.1); }
-        .btn-yellow { border-color: var(--neon-yellow); color: var(--neon-yellow); }
-        .btn-cyan { border-color: var(--neon-cyan); color: var(--neon-cyan); }
-        .btn-orange { border-color: var(--neon-orange); color: var(--neon-orange); }
+        .btn-green:hover:not(:disabled) { background: var(--neon-green); color: #000; }
 
         /* Brain Grid */
-        .brain-management { background: rgba(0, 243, 255, 0.05); border: 1px solid var(--neon-blue); border-radius: 4px; padding: 10px; margin: 10px 0; }
+        .brain-management { background: rgba(255, 255, 255, 0.03); border: 1px solid #444; border-radius: 6px; padding: 10px; margin: 10px 0; }
         .brain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 8px; }
         .brain-card {
-            background: #0a0a0a; border: 1px solid #333; border-radius: 6px; padding: 10px;
+            background: #151515; border: 1px solid #555; border-radius: 6px; padding: 10px;
             text-align: center; font-size: 0.8em; cursor: pointer; transition: all 0.3s ease; position: relative;
         }
-        .brain-card:hover { border-color: var(--neon-blue); background: rgba(0, 243, 255, 0.08); transform: translateY(-2px); }
-        .brain-card.active { border-color: var(--neon-green); background: rgba(0, 255, 157, 0.12); box-shadow: 0 0 8px rgba(0, 255, 157, 0.3); }
-        .brain-name { font-weight: bold; margin-bottom: 3px; color: var(--neon-blue); }
-        .brain-type { font-size: 0.7em; color: #888; }
-        .brain-badge { position: absolute; top: 5px; right: 5px; font-size: 0.6em; padding: 1px 4px; border-radius: 3px; }
-        .badge-free { background: rgba(0, 255, 157, 0.3); color: var(--neon-green); }
-        .badge-paid { background: rgba(255, 215, 0, 0.3); color: var(--neon-gold); }
+        .brain-card.active { border-color: var(--neon-green); background: rgba(0, 255, 157, 0.1); box-shadow: 0 0 10px rgba(0, 255, 157, 0.2); }
+        .brain-name { font-weight: bold; margin-bottom: 3px; color: #fff; }
+        .brain-type { font-size: 0.7em; color: #aaa; }
 
         /* Main Screen */
-        .main-screen { flex-grow: 1; display: flex; flex-direction: column; padding: 20px; gap: 15px; position: relative; }
+        .main-screen { flex-grow: 1; display: flex; flex-direction: column; padding: 25px; gap: 20px; position: relative; }
+        
         #chat-window {
-            flex-grow: 1; background: rgba(0,0,0,0.3); border: 1px solid #333; padding: 20px;
-            overflow-y: auto; border-radius: 8px; display: flex; flex-direction: column; gap: 15px; position: relative;
-        }
-        #chat-window::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+            flex-grow: 1; 
+            background: #000; /* Fondo negro puro para contraste */
+            border: 2px solid #333; 
+            padding: 25px;
+            overflow-y: auto; 
+            border-radius: 12px; 
+            display: flex; flex-direction: column; gap: 15px; position: relative;
+            box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
         }
 
-        /* Messages */
-        .msg { padding: 14px; border-left: 3px solid #555; background: #0a0a0a; animation: slideIn 0.25s ease-out; white-space: pre-wrap; border-radius: 0 6px 6px 0; margin: 2px 0; position: relative; }
-        .msg-user { border-color: var(--neon-gold); background: rgba(255, 215, 0, 0.08); align-self: flex-end; max-width: 88%; border-left: none; border-right: 3px solid var(--neon-gold); border-radius: 6px 0 0 6px; text-align: right; }
-        .msg-host { border-color: var(--neon-blue); color: #d0ffff; background: rgba(0, 243, 255, 0.08); }
-        .msg-sys { border: none; text-align: center; color: #777; font-style: italic; font-size: 0.85em; background: transparent; padding: 6px 0; }
-        .msg-expert { border-color: var(--neon-purple); color: #f0d0ff; background: rgba(188, 19, 254, 0.07); }
-        .msg-orchestrator { border-color: var(--neon-cyan); color: #00ffff; background: rgba(0, 255, 255, 0.08); font-weight: bold; }
+        /* Mensajes - Corrección de visibilidad */
+        .msg { 
+            padding: 15px; 
+            border-left: 4px solid #555; 
+            background: #111; /* Fondo más claro que el negro puro */
+            animation: slideIn 0.25s ease-out; 
+            white-space: pre-wrap; 
+            border-radius: 0 8px 8px 0; 
+            margin: 5px 0; 
+            color: #eee; /* Texto casi blanco */
+            line-height: 1.5;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+        }
         
-        .msg-sender { font-weight: bold; color: var(--neon-cyan); font-size: 0.8em; margin-bottom: 5px; display: block;}
+        .msg-sys { 
+            border: 1px solid #444; 
+            text-align: center; 
+            color: #fff; /* Blanco brillante */
+            font-style: normal; 
+            font-size: 0.9em; 
+            background: #1a1a1a; 
+            padding: 20px;
+            border-radius: 8px;
+        }
         
-        @keyframes slideIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .msg-user { border-color: var(--neon-gold); background: rgba(255, 215, 0, 0.1); align-self: flex-end; max-width: 85%; border-left: none; border-right: 4px solid var(--neon-gold); border-radius: 8px 0 0 8px; text-align: right; }
+        .msg-host { border-color: var(--neon-blue); color: #d0ffff; background: rgba(0, 243, 255, 0.05); }
+        .msg-expert { border-color: var(--neon-purple); color: #f0d0ff; background: rgba(188, 19, 254, 0.05); }
+        .msg-orchestrator { border-color: var(--neon-cyan); color: #fff; background: rgba(0, 255, 255, 0.1); font-weight: bold; border: 1px solid var(--neon-cyan); }
+        
+        .msg-sender { font-weight: bold; color: var(--neon-cyan); font-size: 0.85em; margin-bottom: 8px; display: block; letter-spacing: 1px; }
+        
+        /* Input */
+        textarea { 
+            width: 100%; padding: 15px; 
+            background: #111; /* Fondo gris muy oscuro */
+            border: 2px solid #555; 
+            color: #fff; /* Texto blanco brillante */
+            font-family: inherit; font-size: 1.1em;
+            border-radius: 8px; resize: vertical; min-height: 80px; outline: none; 
+        }
+        textarea::placeholder { color: #888; }
+        textarea:focus { border-color: var(--neon-blue); background: #151515; }
 
         /* Progress Bar */
-        #progress-container { width: 100%; height: 5px; background: #222; margin-top: 6px; border-radius: 3px; overflow: hidden; }
+        #progress-container { width: 100%; height: 8px; background: #333; margin-top: 10px; border-radius: 4px; overflow: hidden; }
         #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--neon-green), var(--neon-blue)); transition: width 0.3s ease; }
-
-        /* Input */
-        textarea { width: 100%; padding: 14px; background: #0a0a0a; border: 1px solid #444; color: #fff; font-family: inherit; border-radius: 6px; resize: vertical; min-height: 70px; max-height: 250px; outline: none; }
-        textarea:focus { border-color: var(--neon-blue); box-shadow: 0 0 0 3px rgba(0, 243, 255, 0.25); }
 
         /* Mobile */
         @media (max-width: 900px) {
             body { flex-direction: column; overflow-y: auto; }
-            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 200; background: #020202; padding-bottom: 10px; max-height: 40vh; }
+            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 2px solid #333; padding-bottom: 20px; }
             .main-screen { height: auto; min-height: 60vh; flex-grow: 1; }
         }
 
         .loading-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(0, 243, 255, 0.4); border-radius: 50%; border-top-color: var(--neon-blue); animation: spin 1s linear infinite; margin-right: 10px; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <h1>NEXUS HYBRID <span style="font-size:0.7em; color:#666">v10.2</span></h1>
+        <h1>NEXUS HYBRID <span style="font-size:0.7em; color:#888">v10.3</span></h1>
         
-        <div style="text-align:center; margin:12px 0;">
-            <img src="orquestador.jpg" id="avatar-img" style="width:85px; height:85px; border-radius:50%; border:2px solid var(--neon-blue); object-fit:cover; box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);" onerror="this.style.display='none'">
-            <div style="margin-top:6px; font-size:0.75em; color:#666;">
-                <span style="color:var(--neon-cyan); font-weight:bold;">Orquestador AI</span>
+        <div style="text-align:center; margin:15px 0;">
+            <img src="orquestador.jpg" id="avatar-img" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--neon-blue); object-fit:cover; box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);" onerror="this.style.display='none'">
+            <div style="margin-top:10px; font-size:0.9em; color:#fff; font-weight:bold;">
+                ORQUESTADOR AI
             </div>
         </div>
 
-        <div class="section-title">1. DIAGNÓSTICO HARDWARE</div>
+        <div class="section-title">1. DIAGNÓSTICO</div>
         <button class="btn-scan" onclick="app.hardwareDiagnostic()">🖥️ ESCANEAR MI EQUIPO</button>
         <div id="hw-result" class="hw-stats">
-            Esperando análisis...
+            <span style="color:#888">Esperando análisis...</span>
         </div>
 
-        <div class="section-title">2. CEREBRO ORQUESTADOR (LOCAL)</div>
+        <div class="section-title">2. MOTOR LOCAL</div>
         <select id="orchestrator-model" onchange="app.savePreference()">
             <option value="TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC">TinyLlama 1.1B (Muy Ligero)</option>
             <option value="Llama-3.2-1B-Instruct-q4f16_1-MLC" selected>Llama 3.2 1B (Equilibrado)</option>
             <option value="gemma-2b-it-q4f16_1-MLC">Gemma 2B (Preciso)</option>
             <option value="Phi-3-mini-4k-instruct-q4f16_1-MLC">Phi-3 Mini (Potente)</option>
         </select>
-        <button class="btn-green" id="btn-load" onclick="app.loadOrchestrator()">🧠 ACTIVAR ORQUESTADOR</button>
-        <div id="orchestrator-status" style="font-size:0.75em; color:#aaa; margin-top:6px;">Motor Inactivo</div>
+        <button class="btn-green" id="btn-load" onclick="app.loadOrchestrator()">⚡ ACTIVAR MOTOR</button>
+        
+        <div id="orchestrator-status" style="font-size:0.8em; color:#ccc; margin-top:8px; font-weight:bold;">Motor Apagado</div>
         <div id="progress-container"><div id="progress-bar"></div></div>
 
-        <div class="section-title">3. CEREBROS EXPERTOS</div>
+        <div class="section-title">3. CEREBROS (SQUAD)</div>
         <div class="brain-management">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <strong style="color:var(--neon-cyan);">Cerebros Activos:</strong>
-                <button class="btn-cyan" style="width:auto; padding:5px 10px; font-size:0.75em;" onclick="app.toggleAddModal()">+ API</button>
-            </div>
             <div class="brain-grid" id="brain-grid">
                 </div>
         </div>
 
-        <div class="section-title">4. HERRAMIENTAS</div>
-        <button class="btn-orange" onclick="app.clearChat()">🗑️ LIMPIAR CHAT</button>
+        <div class="section-title">4. ACCIONES</div>
         <button class="btn-yellow" onclick="location.reload()">⚠️ REINICIO TOTAL</button>
     </div>
 
     <div class="main-screen">
         <div id="chat-window">
             <div class="msg msg-sys">
-                <strong>🚀 NEXUS HYBRID v10.2 INICIADO</strong><br><br>
-                1. Escanea tu Hardware.<br>
-                2. Activa el <strong>Orquestador Local</strong> (Es gratis y privado).<br>
-                3. Configura los cerebros expertos (Wikipedia y Groq vienen preconfigurados).<br>
-                4. Escribe tu consulta abajo.
+                <strong style="font-size:1.2em; color:var(--neon-blue)">🚀 NEXUS HYBRID v10.3 LISTO</strong><br><br>
+                <div style="text-align:left; display:inline-block; padding:10px;">
+                    1. Pulsa <strong>ESCANEAR MI EQUIPO</strong>.<br>
+                    2. Pulsa <strong>ACTIVAR MOTOR</strong> para cargar el cerebro local.<br>
+                    3. Escribe tu pregunta abajo.
+                </div>
             </div>
         </div>
 
-        <div style="display:flex; gap:12px; margin-top:auto">
-            <textarea id="user-input" placeholder="Escribe tu consulta..." rows="3"></textarea>
-            <button onclick="app.processQuery()" style="width:110px; height:auto; font-size:1.3em;">🚀</button>
+        <div style="display:flex; gap:15px; margin-top:auto">
+            <textarea id="user-input" placeholder="Escribe aquí tu consulta..."></textarea>
+            <button onclick="app.processQuery()" style="width:120px; font-size:1.5em; border-color:var(--neon-green); color:var(--neon-green);">🚀</button>
         </div>
     </div>
 
@@ -229,10 +284,9 @@
         class NexusSystem {
             constructor() {
                 this.engine = null;
-                this.activeBrains = new Set(['wikipedia']); // Por defecto
+                this.activeBrains = new Set(['wikipedia']); 
                 this.isProcessing = false;
                 
-                // Configuración de Cerebros Disponibles
                 this.brains = {
                     'wikipedia': { name: 'Wikipedia', type: 'free', desc: 'Info General', active: true },
                     'groq': { name: 'Groq API', type: 'free', desc: 'Ultra Rápido', active: false },
@@ -256,16 +310,16 @@
             // --- 1. GESTIÓN DE HARDWARE Y MOTOR LOCAL ---
             async hardwareDiagnostic() {
                 this.ui.hw.innerHTML = "<span class='loading-spinner'></span> Analizando...";
-                if(!navigator.gpu) { this.ui.hw.innerHTML = "<span class='rec-bad'>Sin WebGPU</span>"; return; }
+                if(!navigator.gpu) { this.ui.hw.innerHTML = "<span class='rec-bad'>❌ Sin WebGPU</span>"; return; }
                 
                 try {
                     const adapter = await navigator.gpu.requestAdapter();
                     const mb = Math.round(adapter.limits.maxBufferSize / (1024 * 1024));
                     let rec = "TinyLlama";
-                    if(mb > 2000) rec = "Llama 3.2 1B";
+                    if(mb > 2000) rec = "Llama 3.2 / Gemma";
                     if(mb > 4000) rec = "Phi-3";
                     
-                    this.ui.hw.innerHTML = `GPU: <strong>${mb}MB</strong><br><span class='rec-good'>Recomendado: ${rec}</span>`;
+                    this.ui.hw.innerHTML = `<span style="color:#fff">GPU: <strong>${mb}MB</strong></span><br><span class='rec-good'>Recomendado: ${rec}</span>`;
                 } catch(e) {
                     this.ui.hw.innerHTML = "Error al leer GPU";
                 }
@@ -278,7 +332,6 @@
                 if(this.engine) await this.engine.unload();
 
                 try {
-                    // Persistencia
                     if (navigator.storage && navigator.storage.persist) await navigator.storage.persist();
 
                     this.engine = await CreateMLCEngine(modelId, {
@@ -310,7 +363,6 @@
                     card.innerHTML = `
                         <div class="brain-name">${data.name}</div>
                         <div class="brain-type">${data.desc}</div>
-                        <span class="brain-badge ${data.type==='free'?'badge-free':'badge-paid'}">${data.type.toUpperCase()}</span>
                     `;
                     this.ui.grid.appendChild(card);
                 }
@@ -326,23 +378,20 @@
             async processQuery() {
                 const text = this.ui.input.value;
                 if(!text) return;
-                if(!this.engine) return alert("¡Activa el Orquestador primero!");
+                if(!this.engine) return alert("¡Dale a ACTIVAR MOTOR primero!");
 
                 this.ui.input.value = "";
                 this.addMsg("TÚ", text, "msg-user");
                 this.isProcessing = true;
 
                 try {
-                    // PASO 1: ANÁLISIS DEL ORQUESTADOR
+                    // PASO 1: ANÁLISIS
                     this.addMsg("ORQUESTADOR", "Analizando solicitud...", "msg-host");
                     
                     const decisionPrompt = `
                         Eres el Orquestador. Usuario dice: "${text}".
-                        Cerebros disponibles: ${Object.keys(this.brains).filter(k => this.brains[k].active).join(', ')}.
-                        
-                        Si la pregunta es simple, responde tú mismo.
-                        Si requiere datos externos, dime a quién llamar.
-                        Responde SOLO el nombre del cerebro o "YO".
+                        Si es simple, responde tú mismo.
+                        Si requiere debate, escribe "DEBATE".
                     `;
                     
                     const decision = await this.engine.chat.completions.create({
@@ -351,20 +400,8 @@
                     
                     const action = decision.choices[0].message.content;
                     
-                    // PASO 2: EJECUCIÓN (Simulada para demo, aquí irían las llamadas API reales)
-                    if (action.includes("YO") || action.length > 20) {
-                        // Responde el local
-                        const resp = await this.engine.chat.completions.create({
-                            messages: [{ role: "user", content: text }]
-                        });
-                        this.addMsg("ORQUESTADOR", resp.choices[0].message.content, "msg-host");
-                    } else {
-                        // Simular llamada a externo
-                        this.addMsg("SISTEMA", `Convocando a: ${action}...`, "msg-sys");
-                        setTimeout(() => {
-                            this.addMsg(action.toUpperCase(), `[Respuesta simulada del experto ${action}] Basado en mi base de datos, la respuesta es...`, "msg-expert");
-                        }, 1000);
-                    }
+                    // PASO 2: EJECUCIÓN
+                    this.addMsg("ORQUESTADOR", action, "msg-host");
 
                 } catch(e) {
                     this.addMsg("ERROR", e.message, "msg-error");
@@ -373,7 +410,6 @@
                 }
             }
 
-            // --- UTILS ---
             addMsg(sender, text, css) {
                 const div = document.createElement('div');
                 div.className = `msg ${css}`;
@@ -382,17 +418,13 @@
                 this.ui.chat.scrollTop = this.ui.chat.scrollHeight;
             }
 
-            clearChat() { this.ui.chat.innerHTML = ""; }
-            
             savePreferences() { localStorage.setItem('nexus_brains', JSON.stringify(this.brains)); }
             loadPreferences() {
                 const saved = localStorage.getItem('nexus_brains');
                 if(saved) { this.brains = JSON.parse(saved); this.renderBrainGrid(); }
             }
-            toggleAddModal() { alert("Función para añadir API Keys (Próximamente)"); }
         }
 
-        // INICIAR
         window.app = new NexusSystem();
     </script>
 </body>
