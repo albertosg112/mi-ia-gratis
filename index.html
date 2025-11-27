@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>NEXUS HYBRID v10.1</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEXUS HYBRID v10.2 - Sistema Estable</title>
     <style>
         :root {
             --bg-deep: #050505;
@@ -14,16 +14,12 @@
             --neon-gold: #ffd700;
             --neon-yellow: #fff01a;
             --neon-cyan: #00ffff;
-            --neon-pink: #ff00ff;
-            --neon-orange: #ff8c00;
             --font-tech: 'Courier New', monospace;
-            --shadow-neon: 0 0 15px rgba(0, 243, 255, 0.3);
         }
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+
+        /* CORRECCIÓN VISUAL CRÍTICA */
+        * { box-sizing: border-box; } 
+
         body {
             background-color: var(--bg-deep);
             color: #e0e0e0;
@@ -31,12 +27,14 @@
             margin: 0;
             height: 100vh;
             display: flex;
-            overflow: hidden;
+            overflow: hidden; /* Evita scroll doble */
             background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
-            transition: background 0.3s ease;
         }
+
+        /* SIDEBAR ESTABILIZADA */
         .sidebar {
             width: 380px;
+            min-width: 380px; /* Evita que se aplaste */
             background: #020202;
             border-right: 1px solid #333;
             display: flex;
@@ -46,44 +44,18 @@
             overflow-y: auto;
             z-index: 100;
             box-shadow: 5px 0 20px rgba(0,0,0,0.5);
-            position: relative;
+            height: 100vh;
         }
-        .sidebar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-green), var(--neon-gold));
-        }
-        h1 {
-            color: var(--neon-blue);
-            font-size: 1.2em;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-            margin: 0;
-            text-align: center;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-        }
+
         .section-title {
             font-size: 0.8em;
             color: #888;
             font-weight: bold;
-            text-transform: uppercase;
-            margin-top: 10px;
             border-bottom: 1px dashed #333;
             padding-bottom: 2px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin-top: 10px;
         }
-        .section-title::before {
-            content: '•';
-            color: var(--neon-blue);
-            font-size: 1.2em;
-        }
+
         .hw-stats {
             background: #0a0a0a;
             border: 1px solid #444;
@@ -91,1008 +63,298 @@
             font-size: 0.8em;
             color: #aaa;
             border-radius: 4px;
-            transition: border-color 0.3s ease;
-        }
-        .hw-stats:hover {
-            border-color: var(--neon-blue);
         }
         .rec-good { color: var(--neon-green); font-weight: bold; }
         .rec-warn { color: var(--neon-gold); font-weight: bold; }
-        .rec-bad { color: var(--neon-red); font-weight: bold; }
+
         select, input, textarea {
-            width: 100%;
-            padding: 10px;
-            background: #000;
-            border: 1px solid #444;
-            color: #fff;
-            font-family: inherit;
-            margin-bottom: 5px;
-            box-sizing: border-box;
+            width: 100%; padding: 10px;
+            background: #000; border: 1px solid #444;
+            color: #fff; font-family: inherit;
+            margin-bottom: 5px; border-radius: 4px;
             outline: none;
-            border-radius: 4px;
-            transition: border-color 0.2s ease;
         }
-        select:focus, input:focus, textarea:focus {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 0 2px rgba(0, 243, 255, 0.2);
-        }
-        input[type="password"] {
-            letter-spacing: 3px;
-            font-family: monospace;
-        }
+        select:focus, input:focus { border-color: var(--neon-blue); }
+
         button {
-            width: 100%;
-            padding: 10px;
-            background: #111;
+            width: 100%; padding: 10px;
+            background: #111; 
             border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
+            color: var(--neon-blue); 
             font-weight: bold;
-            cursor: pointer;
+            cursor: pointer; 
             text-transform: uppercase;
-            font-size: 0.8em;
-            transition: all 0.2s ease;
-            margin-bottom: 5px;
+            font-size: 0.8em; 
             border-radius: 4px;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s;
         }
-        button::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(0, 243, 255, 0.2), transparent);
-            transform: rotate(30deg);
-            transition: all 0.6s;
-        }
-        button:hover:not(:disabled)::after {
-            left: 100%;
-        }
-        button:hover:not(:disabled) {
-            background: rgba(0, 243, 255, 0.1);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-neon);
+        button:hover:not(:disabled) { 
+            background: rgba(0, 243, 255, 0.1); 
         }
         button:disabled {
-            border-color: #333;
-            color: #555;
-            cursor: not-allowed;
-            background: #1a1a1a;
-            transform: none;
+            border-color: #333; color: #555; cursor: not-allowed;
         }
-        .btn-scan {
-            border-color: var(--neon-purple);
-            color: var(--neon-purple);
-        }
-        .btn-scan:hover:not(:disabled) {
-            background: rgba(188, 19, 254, 0.1);
-        }
-        .btn-green {
-            border-color: var(--neon-green);
-            color: var(--neon-green);
-        }
-        .btn-green:hover:not(:disabled) {
-            background: rgba(0, 255, 157, 0.1);
-        }
-        .btn-yellow {
-            border-color: var(--neon-yellow);
-            color: var(--neon-yellow);
-        }
-        .btn-yellow:hover:not(:disabled) {
-            background: rgba(255, 240, 26, 0.1);
-        }
-        .btn-cyan {
-            border-color: var(--neon-cyan);
-            color: var(--neon-cyan);
-        }
-        .btn-cyan:hover:not(:disabled) {
-            background: rgba(0, 255, 255, 0.1);
-        }
-        .btn-pink {
-            border-color: var(--neon-pink);
-            color: var(--neon-pink);
-        }
-        .btn-pink:hover:not(:disabled) {
-            background: rgba(255, 0, 255, 0.1);
-        }
-        .btn-orange {
-            border-color: var(--neon-orange);
-            color: var(--neon-orange);
-        }
-        .btn-orange:hover:not(:disabled) {
-            background: rgba(255, 140, 0, 0.1);
-        }
-        .api-config {
-            border: 1px solid #333;
-            border-radius: 4px;
-            padding: 12px;
-            margin-bottom: 10px;
-            background: #0a0a0a;
-            position: relative;
-        }
-        .api-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .api-type {
-            font-size: 0.7em;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        .api-free {
-            background: rgba(0, 255, 157, 0.3);
-            color: var(--neon-green);
-            border: 1px solid var(--neon-green);
-        }
-        .api-paid {
-            background: rgba(255, 215, 0, 0.2);
-            color: var(--neon-gold);
-            border: 1px solid var(--neon-gold);
-        }
-        .api-remove {
-            color: var(--neon-red);
-            cursor: pointer;
-            font-weight: bold;
-            position: absolute;
-            top: 5px;
-            right: 5px;
-        }
-        .api-limits {
-            font-size: 0.7em;
-            color: #aaa;
-            margin-top: 5px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .api-usage {
-            background: rgba(0, 243, 255, 0.1);
-            border-radius: 4px;
-            padding: 2px 5px;
-            margin-top: 3px;
-            font-size: 0.7em;
-        }
-        .api-usage-bar {
-            height: 4px;
-            background: #222;
-            border-radius: 2px;
-            margin-top: 2px;
-            overflow: hidden;
-        }
-        .api-usage-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-green), var(--neon-yellow), var(--neon-red));
-            border-radius: 2px;
-            transition: width 0.3s ease;
-        }
-        .brain-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 6px;
-            border: 1px solid #333;
-        }
-        .brain-active {
-            background: var(--neon-green);
-            box-shadow: 0 0 5px var(--neon-green);
-            border-color: var(--neon-green);
-        }
-        .brain-inactive {
-            background: #444;
-            border-color: #555;
-        }
-        .brain-debating {
-            background: var(--neon-purple);
-            box-shadow: 0 0 8px var(--neon-purple);
-            border-color: var(--neon-purple);
-            animation: pulse 1.5s infinite;
-        }
-        .brain-thinking {
-            background: var(--neon-cyan);
-            box-shadow: 0 0 6px var(--neon-cyan);
-            border-color: var(--neon-cyan);
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 5px currentColor; opacity: 0.7; }
-            50% { box-shadow: 0 0 15px currentColor; opacity: 1; }
-            100% { box-shadow: 0 0 5px currentColor; opacity: 0.7; }
-        }
-        .debate-panel {
-            border: 1px solid var(--neon-purple);
-            border-radius: 6px;
-            padding: 12px;
-            background: rgba(188, 19, 254, 0.07);
-            margin: 10px 0;
-            position: relative;
-        }
-        .debate-header {
-            color: var(--neon-purple);
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding-bottom: 5px;
-            border-bottom: 1px dashed rgba(188, 19, 254, 0.5);
-        }
-        .debate-status {
-            font-size: 0.8em;
-            color: #ccc;
-            margin-left: 20px;
-        }
-        .brain-participant {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin: 4px 0 4px 15px;
-            padding: 3px 0;
-            font-size: 0.85em;
-            transition: all 0.2s ease;
-        }
-        .brain-participant:hover {
-            background: rgba(0, 243, 255, 0.1);
-            border-radius: 3px;
-            padding-left: 5px;
-        }
-        .brain-name {
-            font-weight: bold;
-            color: var(--neon-cyan);
-        }
-        .brain-role {
-            font-size: 0.75em;
-            color: #aaa;
-            margin-left: 5px;
-        }
-        .cost-monitor {
-            background: rgba(255, 215, 0, 0.08);
-            border: 1px solid var(--neon-gold);
-            border-radius: 4px;
-            padding: 10px;
-            margin: 10px 0;
-        }
-        .cost-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-        .cost-title {
-            font-weight: bold;
-            color: var(--neon-gold);
-        }
-        .cost-value {
-            font-weight: bold;
-            font-size: 1.1em;
-        }
-        .cost-free { color: var(--neon-green); }
-        .cost-low { color: var(--neon-yellow); }
-        .cost-medium { color: var(--neon-orange); }
-        .cost-high { color: var(--neon-red); }
-        .cost-details {
-            font-size: 0.8em;
-            color: #aaa;
-            margin-top: 3px;
-        }
-        .brain-management {
-            background: rgba(0, 243, 255, 0.05);
-            border: 1px solid var(--neon-blue);
-            border-radius: 4px;
-            padding: 10px;
-            margin: 10px 0;
-        }
-        .brain-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 8px;
-            margin-top: 8px;
-        }
-        .brain-card {
-            background: #0a0a0a;
-            border: 1px solid #333;
-            border-radius: 6px;
-            padding: 10px;
-            text-align: center;
-            font-size: 0.8em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .brain-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .brain-card:hover::before {
-            opacity: 1;
-        }
-        .brain-card:hover {
-            border-color: var(--neon-blue);
-            background: rgba(0, 243, 255, 0.08);
-            transform: translateY(-2px);
-        }
-        .brain-card.active {
-            border-color: var(--neon-green);
-            background: rgba(0, 255, 157, 0.12);
-            box-shadow: 0 0 8px rgba(0, 255, 157, 0.3);
-        }
-        .brain-card.active::before {
-            opacity: 1;
-            background: linear-gradient(90deg, var(--neon-green), var(--neon-yellow));
-        }
-        .brain-name {
-            font-weight: bold;
-            margin-bottom: 3px;
-            color: var(--neon-blue);
-        }
-        .brain-type {
-            font-size: 0.7em;
-            color: #888;
-        }
-        .brain-badge {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            font-size: 0.6em;
-            padding: 1px 4px;
-            border-radius: 3px;
-        }
-        .badge-free {
-            background: rgba(0, 255, 157, 0.3);
-            color: var(--neon-green);
-        }
-        .badge-paid {
-            background: rgba(255, 215, 0, 0.3);
-            color: var(--neon-gold);
-        }
+
+        .btn-scan { border-color: var(--neon-purple); color: var(--neon-purple); }
+        .btn-green { border-color: var(--neon-green); color: var(--neon-green); }
+
+        /* PANTALLA PRINCIPAL FLEXIBLE */
         .main-screen {
             flex-grow: 1;
             display: flex;
             flex-direction: column;
-            padding: 15px;
-            gap: 15px;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
             position: relative;
         }
+
         #chat-window {
-            flex-grow: 1;
+            flex: 1; /* Ocupa todo el espacio disponible */
             background: rgba(0,0,0,0.3);
             border: 1px solid #333;
             padding: 20px;
             overflow-y: auto;
             border-radius: 8px;
+            margin-bottom: 15px;
             display: flex;
             flex-direction: column;
             gap: 15px;
-            position: relative;
         }
-        #chat-window::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
-        }
-        .msg {
-            padding: 14px;
-            border-left: 3px solid #555;
-            background: #0a0a0a;
-            animation: slideIn 0.25s ease-out;
-            white-space: pre-wrap;
-            border-radius: 0 6px 6px 0;
-            position: relative;
-            transition: all 0.3s ease;
-            margin: 2px 0;
-        }
-        .msg:hover {
-            transform: translateX(6px);
-            background: #0d0d0d;
-            z-index: 10;
-        }
-        .msg-user {
-            border-color: var(--neon-gold);
-            background: rgba(255, 215, 0, 0.08);
-            align-self: flex-end;
-            max-width: 88%;
-            border-left: none;
-            border-right: 3px solid var(--neon-gold);
-            border-radius: 6px 0 0 6px;
-        }
-        .msg-host {
-            border-color: var(--neon-blue);
-            color: #d0ffff;
-            background: rgba(0, 243, 255, 0.08);
-        }
-        .msg-sys {
-            border: none;
-            text-align: center;
-            color: #777;
-            font-style: italic;
-            font-size: 0.85em;
-            background: transparent;
-            padding: 6px 0;
-            margin: 5px 0;
-        }
-        .msg-decision {
-            border-color: var(--neon-gold);
-            color: var(--neon-gold);
-            background: rgba(255, 215, 0, 0.07);
-            font-weight: bold;
-        }
-        .msg-expert {
-            border-color: var(--neon-purple);
-            color: #f0d0ff;
-            background: rgba(188, 19, 254, 0.07);
-        }
-        .msg-error {
-            border-color: var(--neon-red);
-            color: var(--neon-red);
-            background: rgba(255, 0, 85, 0.08);
-        }
-        .msg-free-api {
-            border-color: var(--neon-yellow);
-            color: #fff0cc;
-            background: rgba(255, 240, 26, 0.07);
-        }
-        .msg-debate {
-            border-color: var(--neon-pink);
-            color: #ffb6c1;
-            background: rgba(255, 0, 255, 0.07);
-        }
-        .msg-orchestrator {
-            border-color: var(--neon-cyan);
-            color: #00ffff;
-            background: rgba(0, 255, 255, 0.08);
-            font-weight: bold;
-        }
-        .msg-synthesis {
-            border-color: var(--neon-green);
-            background: rgba(0, 255, 157, 0.07);
-            color: #00ffcc;
-        }
-        .msg-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
-        }
-        .msg-sender {
-            font-weight: bold;
-            color: var(--neon-cyan);
-        }
-        .msg-timestamp {
-            font-size: 0.7em;
-            color: #666;
-        }
-        .msg-content {
+
+        .msg { 
+            padding: 12px; 
+            background: #0a0a0a; 
+            border-radius: 4px; 
+            max-width: 90%;
             word-wrap: break-word;
-            overflow-wrap: break-word;
-            max-width: 100%;
-            line-height: 1.4;
         }
-        .msg-actions {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            opacity: 0.8;
-            transition: opacity 0.3s ease;
+        .msg-user { 
+            align-self: flex-end; 
+            background: rgba(255, 215, 0, 0.1); 
+            border-right: 3px solid var(--neon-gold);
         }
-        .msg:hover .msg-actions {
-            opacity: 1;
+        .msg-host { 
+            align-self: flex-start; 
+            border-left: 3px solid var(--neon-blue);
         }
-        .msg-action {
-            font-size: 0.85em;
-            color: var(--neon-blue);
-            cursor: pointer;
-            text-decoration: underline;
-            transition: color 0.2s ease;
-        }
-        .msg-action:hover {
-            color: var(--neon-green);
-        }
-        .msg-source {
-            font-size: 0.8em;
-            color: #888;
-            margin-top: 8px;
-            padding-top: 5px;
-            border-top: 1px dashed #333;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(8px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        #progress-container {
-            width: 100%;
-            height: 5px;
-            background: #222;
-            margin-top: 6px;
-            border-radius: 3px;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
-        }
-        #progress-bar {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, var(--neon-green), var(--neon-blue), var(--neon-purple));
-            transition: width 0.3s ease;
-            border-radius: 3px;
-            box-shadow: 0 0 5px rgba(0, 243, 255, 0.5);
-        }
-        textarea {
-            width: 100%;
-            padding: 14px;
-            background: #0a0a0a;
-            border: 1px solid #444;
-            color: #fff;
-            font-family: inherit;
-            border-radius: 6px;
-            resize: vertical;
-            min-height: 70px;
-            max-height: 250px;
-            transition: all 0.3s ease;
-            line-height: 1.5;
-        }
-        textarea:focus {
-            border-color: var(--neon-blue);
-            box-shadow: 0 0 0 3px rgba(0, 243, 255, 0.25);
-            outline: none;
-        }
-        textarea::placeholder {
-            color: #666;
-            opacity: 1;
-        }
-        @media (max-width: 900px) {
-            body {
-                flex-direction: column;
-                overflow-y: auto;
-            }
-            .sidebar {
-                width: 100%;
-                height: auto;
-                border-right: none;
-                border-bottom: 1px solid #333;
-                padding-bottom: 20px;
-                position: sticky;
-                top: 0;
-                z-index: 200;
-                background: #020202;
-            }
-            .main-screen {
-                height: auto;
-                min-height: 350px;
-                flex-grow: 1;
-            }
-            #chat-window {
-                min-height: 350px;
-            }
-            button {
-                font-size: 0.8em;
-                padding: 9px;
-            }
-            .section-title {
-                font-size: 0.85em;
-            }
-        }
-        @media (max-width: 480px) {
-            .sidebar {
-                padding: 12px;
-                font-size: 0.9em;
-            }
-            h1 {
-                font-size: 1.05em;
-            }
-            textarea {
-                min-height: 60px;
-                font-size: 0.95em;
-            }
-            .msg {
-                padding: 10px;
-                font-size: 0.9em;
-            }
-            .brain-card {
-                padding: 8px;
-                font-size: 0.75em;
-            }
-            .debate-panel {
-                padding: 8px;
-            }
-            .section-title {
-                font-size: 0.75em;
-            }
-        }
-        .cache-indicator {
-            font-size: 0.7em;
-            color: var(--neon-green);
-            margin-top: 3px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .learning-badge {
-            background: rgba(255, 140, 0, 0.2);
-            border: 1px solid var(--neon-orange);
-            color: var(--neon-orange);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.7em;
-            margin-left: 5px;
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal-content {
-            background: #0a0a0a;
-            border: 2px solid var(--neon-blue);
-            border-radius: 8px;
-            width: 90%;
-            max-width: 600px;
-            padding: 25px;
-            box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);
-            position: relative;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        .modal-title {
-            color: var(--neon-blue);
-            margin-top: 0;
-            border-bottom: 1px solid #333;
-            padding-bottom: 10px;
-        }
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            color: var(--neon-red);
-            cursor: pointer;
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            margin-top: 20px;
-            border-top: 1px solid #333;
-            padding-top: 15px;
-        }
+        .msg-sys { color: #777; font-style: italic; text-align: center; background: none; border: none; align-self: center;}
+        .msg-error { border-color: var(--neon-red); color: var(--neon-red); background: rgba(255,0,0,0.1); }
+
+        /* UTILIDADES */
         .loading-spinner {
             display: inline-block;
-            width: 14px;
-            height: 14px;
+            width: 12px; height: 12px;
             border: 2px solid rgba(0, 243, 255, 0.4);
             border-radius: 50%;
             border-top-color: var(--neon-blue);
             animation: spin 1s linear infinite;
-            margin-right: 10px;
-            vertical-align: middle;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        .orchestrator-badge {
-            background: linear-gradient(45deg, var(--neon-cyan), var(--neon-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: bold;
-            text-shadow: 0 0 6px rgba(0, 255, 255, 0.6);
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        #progress-container { width: 100%; height: 4px; background: #222; margin-top: 5px; border-radius: 2px; }
+        #progress-bar { width: 0%; height: 100%; background: var(--neon-green); transition: width 0.3s; }
+
+        /* RESPONSIVE */
+        @media (max-width: 800px) {
+            body { flex-direction: column; overflow: auto; }
+            .sidebar { width: 100%; height: auto; min-width: 0; padding-bottom: 20px; }
+            .main-screen { height: 600px; }
         }
     </style>
 </head>
 <body>
+
     <div class="sidebar">
-        <h1>NEXUS HYBRID <span style="font-size:0.7em; color:#666">v10.1</span></h1>
-        <div style="text-align:center; margin:12px 0; position: relative;">
-            <div class="loading-spinner" style="display:none;" id="avatar-spinner"></div>
-            <img src="orquestador.jpg" id="avatar-img"
-                style="width:85px; height:85px; border-radius:50%; border:2px solid var(--neon-blue); object-fit:cover; transition: transform 0.3s ease; box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);"
-                onerror="this.style.display='none'; document.getElementById('avatar-spinner').style.display='inline-block'">
-            <div style="margin-top:6px; font-size:0.75em; color:#666;">
-                <span style="color:var(--neon-cyan); font-weight:bold;">Orquestador AI</span>
-                <span class="learning-badge">Auto-aprendizaje</span>
-            </div>
-        </div>
-        <div class="section-title">1. DIAGNÓSTICO HARDWARE</div>
-        <button class="btn-scan" onclick="hardwareDiagnostic()">🖥️ ESCANEAR MI EQUIPO</button>
+        <h1 style="color:var(--neon-blue); text-align:center; margin:0;">NEXUS <span style="font-size:0.7em">v10.2</span></h1>
+        
+        <div class="section-title">1. DIAGNÓSTICO GPU</div>
+        <button class="btn-scan" onclick="hardwareDiagnostic()">🖥️ VERIFICAR HARDWARE</button>
         <div id="hw-result" class="hw-stats">
-            <div class="loading-spinner" style="display:inline-block; margin-right:5px;"></div>
-            <span>Analizando hardware...</span>
+            <span>Esperando análisis...</span>
         </div>
-        <div class="section-title">2. CEREBRO ORQUESTADOR <span class="orchestrator-badge">(Llama-3-8B)</span></div>
-        <select id="orchestrator-model" onchange="saveOrchestratorPreference()">
-            <option value="TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC">TinyLlama 1.1B (Ultra Ligero)</option>
+
+        <div class="section-title">2. CEREBRO (MODELO)</div>
+        <select id="orchestrator-model">
+            <option value="TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" selected>TinyLlama 1.1B (Súper Rápido)</option>
             <option value="Llama-3.2-1B-Instruct-q4f16_1-MLC">Llama 3.2 1B (Equilibrado)</option>
-            <option value="gemma-2b-it-q4f16_1-MLC">Gemma 2B (Preciso)</option>
-            <option value="Phi-3-mini-4k-instruct-q4f16_1-MLC">Phi-3 Mini 4K (Potente)</option>
-            <option value="Llama-3-8B-Instruct-q4f32_1-MLC" selected>Llama 3 8B (Máxima Potencia)</option>
+            <option value="gemma-2b-it-q4f16_1-MLC">Gemma 2B (Google)</option>
+            <option value="Llama-3-8B-Instruct-q4f32_1-MLC">Llama 3 8B (Potente - Requiere mucha GPU)</option>
         </select>
-        <button class="btn-green" id="btn-orchestrator" onclick="loadOrchestrator()">🧠 ACTIVAR ORQUESTADOR</button>
-        <div id="orchestrator-status" style="font-size:0.75em; color:#aaa; margin-top:6px; min-height:22px">
-            <span class="loading-spinner" style="display:inline-block; margin-right:5px;"></span>
-            <span>Orquestador inactivo</span>
-        </div>
+        
+        <button class="btn-green" id="btn-orchestrator" onclick="loadOrchestrator()">🧠 ACTIVAR CEREBRO</button>
+        
+        <div id="orchestrator-status" style="font-size:0.75em; color:#aaa; margin-top:5px;">Inactivo</div>
         <div id="progress-container"><div id="progress-bar"></div></div>
-        <div class="section-title">3. CEREBROS EXPERTOS <span style="color:var(--neon-green); font-size:0.8em;">(2/100)</span></div>
-        <div class="brain-management">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <div>
-                    <strong style="color:var(--neon-cyan);">🧠 Cerebros Activos:</strong>
-                    <span style="color:#888; font-size:0.85em; margin-left:5px;">(2/100)</span>
-                </div>
-                <button class="btn-cyan" style="width:auto; padding:5px 10px; font-size:0.75em;" onclick="showAddBrainModal()">+ AÑADIR</button>
-            </div>
-            <div class="brain-grid" id="brain-grid">
-                <div class="brain-card active" data-brain="wikipedia">
-                    <div class="brain-name">Wikipedia</div>
-                    <div class="brain-type">GRATIS</div>
-                    <div class="brain-capabilities">Información general</div>
-                    <span class="brain-badge badge-free">✓</span>
-                </div>
-                <div class="brain-card active" data-brain="groq-free">
-                    <div class="brain-name">Groq Free</div>
-                    <div class="brain-type">GRATIS</div>
-                    <div class="brain-capabilities">Respuestas rápidas</div>
-                    <span class="brain-badge badge-free">✓</span>
-                </div>
-            </div>
-        </div>
-        <div class="section-title">4. MONITOREO DE COSTOS</div>
-        <div class="cost-monitor">
-            <div class="cost-header">
-                <div class="cost-title">💰 ESTADO MENSUAL</div>
-                <div class="cost-value cost-free" id="cost-value">GRATIS</div>
-            </div>
-            <div class="cost-details">
-                <div>UsageId GRATIS: <span id="free-usage">0</span>/1000 peticiones</div>
-                <div>Costo PAGO: <span id="paid-cost">$0.00</span></div>
-                <div class="cache-indicator">
-                    <span class="loading-spinner" style="width:10px; height:10px; margin:0;"></span>
-                    <span>Auto-optimización: <span id="optimization-level">Alta</span></span>
-                </div>
-            </div>
-        </div>
-        <div class="section-title">5. CONFIGURACIÓN AVANZADA</div>
-        <button class="btn-yellow" onclick="optimizeBrainUsage()">⚡ OPTIMIZAR USO (GRATIS primero)</button>
-        <button class="btn-orange" onclick="clearBrainCache()">🗑️ LIMPIAR CACHÉ</button>
-        <div style="font-size:0.75em; color:#888; margin-top:8px; line-height:1.4;">
-            🔄 El sistema aprende de tus preferencias y optimiza automáticamente el uso de cerebros GRATIS para minimizar costos.
+
+        <div class="section-title">3. CONFIGURACIÓN</div>
+        <div style="font-size:0.8em; color:#666;">
+            Si el navegador se congela, recarga y usa "TinyLlama".
         </div>
     </div>
+
     <div class="main-screen">
         <div id="chat-window">
             <div class="msg msg-sys">
-                <strong>🚀 ¡BIENVENIDO A NEXUS HYBRID v10.1!</strong><br><br>
-                <strong>🧠 SISTEMA DE INTELIGENCIA COLECTIVA AVANZADO</strong><br><br>
-                <div style="background: rgba(0, 243, 255, 0.1); border-left: 3px solid var(--neon-cyan); padding: 10px; margin: 10px 0; border-radius: 0 4px 4px 0;">
-                    <strong>✅ NUEVAS FUNCIONALIDADES:</strong><br>
-                    • <span style="color:var(--neon-green);">✅ APIs GRATUITAS COMPLETAS:</span> Wikipedia, Groq Free, Hugging Face<br>
-                    • <span style="color:var(--neon-gold);">💰 GESTIÓN INTELIGENTE DE COSTOS:</span> Monitoreo en tiempo real<br>
-                    • <span style="color:var(--neon-purple);">🔄 DEBATE ENTRE CEREBROS:</span> Sistema de discusión automática<br>
-                    • <span style="color:var(--neon-blue);">⚡ AUTO-OPTIMIZACIÓN:</span> Aprende de tus preferencias<br>
-                    • <span style="color:var(--neon-orange);">📊 LÍMITES DE USO:</span> Control de APIs gratuitas<br>
-                    • <span style="color:var(--neon-pink);">🧠 HASTA 100 CEREBROS:</span> Escalabilidad total
-                </div>
-                <strong>🎯 FLUJO INTELIGENTE:</strong><br>
-                1️⃣ <span style="color:var(--neon-cyan);">Orquestador</span> analiza tu consulta<br>
-                2️⃣ Selecciona los <span style="color:var(--neon-green);">cerebros GRATIS</span> más relevantes primero<br>
-                3️⃣ Si es necesario, activa <span style="color:var(--neon-gold);">cerebros de PAGO</span><br>
-                4️⃣ Los cerebros <span style="color:var(--neon-purple);">debaten</span> entre sí<br>
-                5️⃣ Orquestador <span style="color:var(--neon-green);">sintetiza</span> la mejor respuesta<br><br>
-                <strong>💡 EJEMPLOS DE CONSULTAS:</strong><br>
-                • "¿Qué es la fusión nuclear y cómo funciona?" (Wikipedia + Groq Free)<br>
-                • "Análisis de sentimiento para mi negocio" (Hugging Face + OpenAI)<br>
-                • "Debate: Python vs JavaScript para IA" (Múltiples cerebros)<br>
-                • "Conversión de monedas en tiempo real" (APIs gratuitas)<br><br>
-                <em style="color:#888; font-size:0.9em;">
-                    ✨ <strong>Consejo:</strong> Usa el botón "OPTIMIZAR USO" para priorizar siempre cerebros GRATIS. El sistema aprende de tus patrones de uso para ahorrar costos automáticamente.
-                </em>
-            </div>
-            <div class="debate-panel">
-                <div class="debate-header">
-                    🧠 <span>Sistema de Debate Multi-Cerebro</span>
-                    <div class="debate-status">
-                        <span class="brain-indicator brain-active"></span>
-                        <span style="color:var(--neon-green);">Listo</span>
-                    </div>
-                </div>
-                <div class="brain-participant">
-                    <span class="brain-indicator brain-active"></span>
-                    <span class="brain-name">Orquestador</span>
-                    <span class="brain-role">(Llama 3 8B)</span>
-                </div>
-                <div class="brain-participant">
-                    <span class="brain-indicator brain-active"></span>
-                    <span class="brain-name">Wikipedia</span>
-                    <span class="brain-role">(GRATIS)</span>
-                </div>
-                <div class="brain-participant">
-                    <span class="brain-indicator brain-active"></span>
-                    <span class="brain-name">Groq Free</span>
-                    <span class="brain-role">(GRATIS - 100/día)</span>
-                </div>
-                <div class="brain-participant">
-                    <span class="brain-indicator brain-inactive"></span>
-                    <span class="brain-name">Hugging Face</span>
-                    <span class="brain-role">(GRATIS)</span>
-                </div>
+                🚀 <strong>SISTEMA INICIADO</strong><br>
+                1. Haz clic en "Verificar Hardware" primero.<br>
+                2. Si tienes buena tarjeta gráfica, elige Llama 3.<br>
+                3. Si tienes PC básica, deja TinyLlama.<br>
+                4. Pulsa "Activar Cerebro".
             </div>
         </div>
-        <div style="display:flex; gap:12px; margin-top:auto">
-            <textarea id="user-input" placeholder="Escribe tu consulta... Ej: '¿Cuáles son las ventajas de la energía solar frente a la nuclear?' o 'Debate: ¿Es mejor invertir en acciones o en bienes raíces?'" 
-                      onkeydown="handleInputKeydown(event)" rows="3"></textarea>
-            <button onclick="processQuery()" style="width:110px; height:auto; font-size:1.3em; display:flex; align-items:center; justify-content:center;">
-                <span>🚀</span>
-            </button>
-        </div>
-        <div style="font-size:0.75em; color:#666; text-align:right; margin-top:6px; display:flex; justify-content:space-between;">
-            <span class="cache-indicator">
-                <span style="color:var(--neon-green);">🧠 CACHE:</span> 
-                <span id="cache-status">Activo (0 consultas)</span>
-            </span>
-            <span id="char-count" style="min-width:80px;">0/2000 caracteres</span>
+
+        <div style="display:flex; gap:10px;">
+            <textarea id="user-input" placeholder="Escribe aquí..." rows="2"></textarea>
+            <button onclick="processQuery()" style="width:80px; font-size:1.5em;">→</button>
         </div>
     </div>
-    <!-- Modal simplificado para móviles (opcional, ya está visible en móvil por defecto) -->
-    <div id="add-brain-modal" class="modal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-            <h3 class="modal-title">🧠 AÑADIR NUEVO CEREBRO</h3>
-            <p style="color:#888; margin:15px 0;">Esta función está disponible en futuras versiones.</p>
-            <div class="modal-footer">
-                <button class="btn-scan" onclick="closeModal()">Cerrar</button>
-            </div>
-        </div>
-    </div>
+
     <script type="module">
         import { CreateMLCEngine } from "https://esm.run/@mlc-ai/web-llm";
 
-        class NexusHybridSystem {
-            constructor() {
-                this.messageHistory = [];
-                this.isProcessing = false;
-                this.brainCache = new Map();
-                this.setupUI();
-            }
-            setupUI() {
-                this.ui = {
-                    userInput: document.getElementById('user-input'),
-                    charCount: document.getElementById('char-count'),
-                    chatWindow: document.getElementById('chat-window')
-                };
-                this.ui.userInput.addEventListener('input', () => {
-                    const count = this.ui.userInput.value.length;
-                    this.ui.charCount.textContent = `${count}/2000 caracteres`;
-                    this.ui.charCount.style.color = count > 2000 ? 'var(--neon-red)' : '#666';
-                });
-            }
-            sanitizeInput(input) {
-                if (typeof input !== 'string') return '';
-                return input
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#039;');
-            }
-            addMessage(sender, content, type = 'msg-host') {
-                const timestamp = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-                const sanitizedContent = this.sanitizeInput(content);
-                const msgDiv = document.createElement('div');
-                msgDiv.className = `msg ${type}`;
-                msgDiv.innerHTML = `
-                    <div class="msg-header">
-                        <div class="msg-sender">${this.sanitizeInput(sender)}</div>
-                        <div class="msg-timestamp">${timestamp}</div>
-                    </div>
-                    <div class="msg-content">${sanitizedContent}</div>
+        let engine = null;
+        let isProcessing = false;
+
+        // --- DIAGNÓSTICO DE HARDWARE MEJORADO Y SEGURO ---
+        window.hardwareDiagnostic = async function() {
+            const resultDiv = document.getElementById('hw-result');
+            resultDiv.innerHTML = '<div class="loading-spinner"></div> Analizando...';
+
+            try {
+                if (!navigator.gpu) {
+                    throw new Error("WebGPU no detectado en este navegador.");
+                }
+
+                // Timeout de seguridad por si se cuelga
+                const adapterPromise = navigator.gpu.requestAdapter();
+                const timeoutPromise = new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error("Tiempo agotado. GPU no responde.")), 4000)
+                );
+
+                const adapter = await Promise.race([adapterPromise, timeoutPromise]);
+                
+                if (!adapter) throw new Error("No se encontró adaptador gráfico.");
+
+                const info = await adapter.requestAdapterInfo ? await adapter.requestAdapterInfo() : { device: 'GPU Genérica' };
+                const mbBuffer = Math.round(adapter.limits.maxBufferSize / (1024 * 1024));
+
+                let color = "var(--neon-gold)";
+                let status = "⚠️ GPU Básica";
+                
+                if (mbBuffer > 2000) { color = "var(--neon-green)"; status = "✅ GPU Compatible"; }
+                
+                resultDiv.innerHTML = `
+                    <div style="color:${color}; font-weight:bold;">${status}</div>
+                    <div style="font-size:0.9em;">${info.device || 'GPU Detectada'}</div>
+                    <div style="font-size:0.8em;">Buffer Memoria: ${mbBuffer} MB</div>
                 `;
-                this.ui.chatWindow.appendChild(msgDiv);
-                this.ui.chatWindow.scrollTop = this.ui.chatWindow.scrollHeight;
-                this.messageHistory.push({ sender, content: sanitizedContent, type, timestamp: new Date() });
-            }
-            handleInputKeydown(event) {
-                if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
-                    event.preventDefault();
-                    this.processQuery();
-                }
-            }
-            async processQuery() {
-                const query = this.ui.userInput.value.trim();
-                if (!query) return;
-                if (query.length > 2000) {
-                    this.addMessage('SISTEMA', '❌ Máximo 2000 caracteres', 'msg-error');
-                    return;
-                }
-                if (this.isProcessing) {
-                    this.addMessage('SISTEMA', '⏳ Espera, procesando...', 'msg-error');
-                    return;
-                }
-                this.isProcessing = true;
-                this.addMessage('TÚ', query, 'msg-user');
-                this.ui.userInput.value = '';
-                this.ui.charCount.textContent = '0/2000 caracteres';
-                try {
-                    // Simulación: el orquestador aún no está cargado
-                    await new Promise(r => setTimeout(r, 1000));
-                    this.addMessage('SISTEMA', '⚠️ Activa el ORQUESTADOR (sección 2) para procesar consultas.', 'msg-error');
-                } catch (error) {
-                    this.addMessage('ERROR', `❌ ${this.sanitizeInput(error.message)}`, 'msg-error');
-                } finally {
-                    this.isProcessing = false;
-                }
-            }
-            exportConversation() {
-                const exportData = {
-                    timestamp: new Date().toISOString(),
-                    messages: this.messageHistory.map(msg => ({
-                        sender: msg.sender,
-                        content: msg.content,
-                        type: msg.type,
-                        timestamp: msg.timestamp.toISOString(),
-                        metadata: msg.metadata || {} // ✅ Corrección aplicada aquí
-                    }))
-                };
-                const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `nexus_conversation_${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                this.addMessage('SISTEMA', '✅ Conversación exportada', 'msg-sys');
+
+            } catch (e) {
+                console.error(e);
+                resultDiv.innerHTML = `<span style="color:var(--neon-red)">Error: ${e.message}</span>`;
+                appendMessage('SISTEMA', '❌ Para usar esta IA necesitas activar WebGPU en Chrome/Edge.', 'msg-error');
             }
         }
 
-        const nexus = new NexusHybridSystem();
+        // --- CARGAR CEREBRO ---
+        window.loadOrchestrator = async function() {
+            if (isProcessing) return;
+            const btn = document.getElementById('btn-orchestrator');
+            const status = document.getElementById('orchestrator-status');
+            const model = document.getElementById('orchestrator-model').value;
 
-        window.hardwareDiagnostic = () => {
-            nexus.addMessage('DIAGNÓSTICO', '✅ Diagnóstico completado (simulado)', 'msg-sys');
+            try {
+                btn.disabled = true;
+                btn.innerHTML = "⏳ CARGANDO...";
+                isProcessing = true;
+
+                appendMessage('SISTEMA', `Iniciando descarga de ${model}. Esto puede tardar unos minutos la primera vez...`, 'msg-sys');
+
+                const initProgressCallback = (report) => {
+                    const p = Math.round(report.progress * 100);
+                    document.getElementById('progress-bar').style.width = `${p}%`;
+                    status.innerText = `Cargando: ${report.text} (${p}%)`;
+                };
+
+                engine = await CreateMLCEngine(model, { initProgressCallback });
+
+                status.innerText = "🟢 Cerebro Activo";
+                status.style.color = "var(--neon-green)";
+                btn.innerHTML = "✅ ACTIVO";
+                appendMessage('SISTEMA', '🧠 ¡Cerebro listo! Puedes preguntar.', 'msg-host');
+
+            } catch (err) {
+                appendMessage('ERROR', 'Fallo al cargar: ' + err.message, 'msg-error');
+                btn.disabled = false;
+                btn.innerHTML = "🧠 REINTENTAR";
+                isProcessing = false;
+            }
         };
-        window.loadOrchestrator = () => {
-            nexus.addMessage('ORQUESTADOR', '🔄 Cargando... (versión ligera recomendada en móviles)', 'msg-orchestrator');
+
+        // --- PROCESAR MENSAJE ---
+        window.processQuery = async function() {
+            if (!engine) return alert("¡Activa el cerebro primero!");
+            const input = document.getElementById('user-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            appendMessage('TÚ', text, 'msg-user');
+            input.value = '';
+
+            try {
+                // Respuesta simple directa
+                const chunks = await engine.chat.completions.create({
+                    messages: [{ role: "user", content: text }],
+                    stream: true,
+                });
+
+                let replyDiv = createMessageDiv('IA', '', 'msg-host');
+                let fullReply = "";
+
+                for await (const chunk of chunks) {
+                    const content = chunk.choices[0]?.delta?.content || "";
+                    fullReply += content;
+                    replyDiv.innerHTML = `<strong>NEXUS:</strong><br>${formatText(fullReply)}`;
+                    scrollToBottom();
+                }
+
+            } catch (err) {
+                appendMessage('ERROR', err.message, 'msg-error');
+            }
         };
-        window.processQuery = () => nexus.processQuery();
-        window.handleInputKeydown = (e) => nexus.handleInputKeydown(e);
-        window.optimizeBrainUsage = () => {
-            nexus.addMessage('SISTEMA', '✅ Estrategia optimizada: priorizando cerebros GRATIS', 'msg-sys');
-        };
-        window.clearBrainCache = () => {
-            nexus.brainCache.clear();
-            nexus.addMessage('SISTEMA', '✅ Caché limpiada', 'msg-sys');
-        };
-        window.showAddBrainModal = () => {
-            document.getElementById('add-brain-modal').style.display = 'flex';
-        };
-        window.closeModal = () => {
-            document.getElementById('add-brain-modal').style.display = 'none';
-        };
-        window.saveOrchestratorPreference = () => {
-            nexus.addMessage('SISTEMA', '✅ Preferencia guardada', 'msg-sys');
-        };
+
+        // --- UTILIDADES ---
+        function appendMessage(sender, text, className) {
+            const div = createMessageDiv(sender, text, className);
+        }
+
+        function createMessageDiv(sender, text, className) {
+            const chat = document.getElementById('chat-window');
+            const div = document.createElement('div');
+            div.className = `msg ${className}`;
+            div.innerHTML = sender ? `<strong>${sender}:</strong><br>${formatText(text)}` : formatText(text);
+            chat.appendChild(div);
+            scrollToBottom();
+            return div;
+        }
+
+        function formatText(text) {
+            return text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+        }
+
+        function scrollToBottom() {
+            const chat = document.getElementById('chat-window');
+            chat.scrollTop = chat.scrollHeight;
+        }
+
+        // Enter para enviar
+        document.getElementById('user-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                processQuery();
+            }
+        });
     </script>
 </body>
 </html>
-
