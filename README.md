@@ -1,4 +1,4 @@
-NEXUS HYBRID v10.1 - Sistema de IA Multi-Cerebro
+# NEXUS HYBRID v10.6 - Sistema de IA Multi-Cerebro
 ================================================
 
 ✅ Características:
@@ -10,7 +10,7 @@ NEXUS HYBRID v10.1 - Sistema de IA Multi-Cerebro
 - Caché automático y limpieza inteligente
 
 🚀 Cómo usar:
-1. Abre "nexus-hybrid-v10.1.html" en Chrome o Edge (requiere WebGPU)
+1. Abre "index.html" en Chrome o Edge (requiere WebGPU)
 2. Escanea tu hardware para ver qué modelos soporta tu PC
 3. Activa el Orquestador (puede tardar en la primera carga)
 4. ¡Comienza a hacer consultas!
