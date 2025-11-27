@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS INFINITY v17.4 - Modo Híbrido Avanzado</title>
+    <title>NEXUS INFINITY v17.5 - Modo Nube Puro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -356,7 +356,7 @@
     <div class="header">
         <div class="logo">NEXUS</div>
         <div class="mode-indicator">
-            <div id="mode-status">Modo: Híbrido</div>
+            <div>Modo: Nube Pura</div>
             <div id="avatar-status" style="width: 16px; height: 16px; border-radius: 50%; background: var(--green);"></div>
         </div>
     </div>
@@ -366,45 +366,27 @@
         <!-- SIDEBAR -->
         <div class="sidebar" id="sidebar">
             <div class="menu-section">
-                <div class="menu-header" data-target="hardware-menu">
-                    <span>🔍 Hardware</span>
+                <div class="menu-header" data-target="config-menu">
+                    <span>⚙️ Configuración</span>
                     <span class="arrow">▼</span>
                 </div>
-                <div class="menu-content" id="hardware-menu">
-                    <div id="hardware-info" style="font-size:0.85em; color:#888; line-height:1.5; min-height:100px; margin-bottom:15px;">
-                        <span style="color:var(--yellow)">Haz clic en 'Escanear' para analizar tu sistema</span>
+                <div class="menu-content show" id="config-menu">
+                    <div style="font-size:0.85em; color:#ddd; line-height:1.5; margin-bottom:15px;">
+                        <label style="display:block; margin-bottom:8px; font-size:0.8em;">INTENSIDAD DE PROCESO (1-10):</label>
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span id="rounds-val" style="color:var(--blue); font-weight:bold; min-width:20px;">5</span>
+                            <input type="range" id="rounds-slider" min="1" max="10" value="5" style="flex-grow:1;">
+                        </div>
                     </div>
-                    <button class="btn-warning" id="btn-scan">⚡ ESCANEAR SISTEMA</button>
                     
-                    <!-- Model Selection -->
-                    <div class="model-selection" id="model-selection" style="display:none;">
-                        <div class="model-item" data-model="Llama-3.2-1B-Instruct-q4f16_1-MLC">
-                            <div>
-                                <div>Llama 3.2 1B (Rápido)</div>
-                                <div class="model-specs">1B parámetros | 2GB VRAM</div>
-                            </div>
-                            <div class="btn-success">CARGAR</div>
+                    <div style="font-size:0.85em; color:#ddd; line-height:1.5; margin-top:15px;">
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                            <input type="checkbox" id="show-reasoning" checked>
+                            <label for="show-reasoning">Mostrar razonamiento detallado</label>
                         </div>
-                        <div class="model-item" data-model="TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC">
-                            <div>
-                                <div>TinyLlama (Ligero)</div>
-                                <div class="model-specs">1.1B parámetros | 1.5GB VRAM</div>
-                            </div>
-                            <div class="btn-success">CARGAR</div>
-                        </div>
-                        <div class="model-item" data-model="Phi-3-mini-4k-instruct-q4f16_1-MLC">
-                            <div>
-                                <div>Phi-3 Mini (Potente)</div>
-                                <div class="model-specs">3.8B parámetros | 4GB VRAM</div>
-                            </div>
-                            <div class="btn-success">CARGAR</div>
-                        </div>
-                        <div class="model-item" data-model="Qwen-2.5-7B-Instruct-q4f16_1-MLC">
-                            <div>
-                                <div>Qwen 2.5 7B (Máximo)</div>
-                                <div class="model-specs">7B parámetros | 12GB VRAM</div>
-                            </div>
-                            <div class="btn-success">CARGAR</div>
+                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                            <input type="checkbox" id="auto-execute" checked>
+                            <label for="auto-execute">Ejecutar automáticamente</label>
                         </div>
                     </div>
                 </div>
@@ -412,10 +394,10 @@
             
             <div class="menu-section">
                 <div class="menu-header" data-target="keys-menu">
-                    <span>🔐 Claves API</span>
+                    <span>🔑 Claves API</span>
                     <span class="arrow">▼</span>
                 </div>
-                <div class="menu-content" id="keys-menu">
+                <div class="menu-content show" id="keys-menu">
                     <div class="setting-row">
                         <label for="key-gemini">Gemini API Key</label>
                         <input type="password" id="key-gemini" placeholder="Ingresa tu clave Gemini">
@@ -437,7 +419,7 @@
                     <span>🤖 Agentes</span>
                     <span class="arrow">▼</span>
                 </div>
-                <div class="menu-content" id="agent-menu">
+                <div class="menu-content show" id="agent-menu">
                     <div style="font-size:0.85em; color:#ddd; line-height:1.5; margin-bottom:15px;">
                         <div style="margin-bottom:8px;"><span style="color:var(--orange);">1. 🌐 INVESTIGADOR</span> - Búsqueda Web</div>
                         <div style="margin-bottom:8px;"><span style="color:var(--blue);">2. 🔵 ANALISTA</span> - Procesamiento</div>
@@ -447,51 +429,25 @@
                     </div>
                     
                     <div class="agent-selection">
-                        <div class="agent-item agent-web">
+                        <div class="agent-item agent-web active">
                             <div class="agent-icon">1</div>
                             <div>Investigador</div>
                         </div>
-                        <div class="agent-item agent-analyst">
+                        <div class="agent-item agent-analyst active">
                             <div class="agent-icon">2</div>
                             <div>Analista</div>
                         </div>
-                        <div class="agent-item agent-critic">
+                        <div class="agent-item agent-critic active">
                             <div class="agent-icon">3</div>
                             <div>Crítico</div>
                         </div>
-                        <div class="agent-item agent-creative">
+                        <div class="agent-item agent-creative active">
                             <div class="agent-icon">4</div>
                             <div>Creativo</div>
                         </div>
-                        <div class="agent-item agent-judge">
+                        <div class="agent-item agent-judge active">
                             <div class="agent-icon">5</div>
                             <div>Juez</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="menu-section">
-                <div class="menu-header" data-target="config-menu">
-                    <span>⚙️ Configuración</span>
-                    <span class="arrow">▼</span>
-                </div>
-                <div class="menu-content" id="config-menu">
-                    <div style="font-size:0.85em; color:#ddd; line-height:1.5; margin-bottom:15px;">
-                        <label style="display:block; margin-bottom:8px; font-size:0.8em;">INTENSIDAD DE PROCESO (1-10):</label>
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <span id="rounds-val" style="color:var(--blue); font-weight:bold; min-width:20px;">5</span>
-                            <input type="range" id="rounds-slider" min="1" max="10" value="5" style="flex-grow:1;">
-                        </div>
-                    </div>
-                    <div style="font-size:0.85em; color:#ddd; line-height:1.5; margin-top:15px;">
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                            <input type="checkbox" id="show-reasoning" checked>
-                            <label for="show-reasoning">Mostrar razonamiento detallado</label>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
-                            <input type="checkbox" id="auto-execute" checked>
-                            <label for="auto-execute">Ejecutar automáticamente</label>
                         </div>
                     </div>
                 </div>
@@ -502,9 +458,9 @@
                     <span>❓ Ayuda</span>
                     <span class="arrow">▼</span>
                 </div>
-                <div class="menu-content" id="help-menu">
+                <div class="menu-content show" id="help-menu">
                     <div style="font-size:0.85em; line-height:1.5;">
-                        <p><strong>Modo Híbrido:</strong> Combina modelos locales con APIs externas para mejor rendimiento.</p>
+                        <p><strong>Modo Nube Puro:</strong> Funciona sin WebGPU usando solo APIs externas.</p>
                         <p><strong>Configuración de Agentes:</strong> Activa/desactiva agentes según necesidad.</p>
                         <p><strong>Proceso de Debate:</strong></p>
                         <ol style="margin-left:20px; margin-top:8px;">
@@ -523,13 +479,12 @@
         <div class="chat-area">
             <div id="chat-box">
                 <div class="msg msg-sys">
-                    <strong>🚀 NEXUS INFINITY v17.4 INICIADO</strong><br>
-                    <span style="color:var(--green);">✓</span> Modo Híbrido: Local + Nube<br>
+                    <strong>🚀 NEXUS INFINITY v17.5 INICIADO</strong><br>
+                    <span style="color:var(--green);">✓</span> Modo: Nube Pura (100% funcional en Vercel)<br>
                     <span style="color:var(--green);">✓</span> 5 Agentes en Cadena Secuencial<br>
                     <span style="color:var(--green);">✓</span> Configuración Avanzada de Agentes<br><br>
                     <span style="color:var(--yellow);">💡 CÓMO USAR:</span><br>
                     • Configura tus claves API en la sección "Claves API"<br>
-                    • Escanea tu sistema para ver modelos locales disponibles<br>
                     • Selecciona qué agentes quieres activar<br>
                     • Escribe tu consulta y haz clic en "GO"
                 </div>
@@ -563,7 +518,6 @@
         // Estado global
         let appState = {
             isProcessing: false,
-            currentModel: null,
             activeAgents: {
                 investigator: true,
                 analyst: true,
@@ -573,7 +527,12 @@
             },
             rounds: 5,
             showReasoning: true,
-            autoExecute: true
+            autoExecute: true,
+            apiKeys: {
+                gemini: '',
+                groq: '',
+                tavily: ''
+            }
         };
         
         // DOM Elements
@@ -585,15 +544,14 @@
             btnStop: document.getElementById('btn-stop'),
             btnClear: document.getElementById('btn-clear'),
             btnSave: document.getElementById('btn-save'),
-            btnScan: document.getElementById('btn-scan'),
             btnSaveKeys: document.getElementById('btn-save-keys'),
-            hardwareInfo: document.getElementById('hardware-info'),
-            modelSelection: document.getElementById('model-selection'),
             roundsSlider: document.getElementById('rounds-slider'),
             roundsVal: document.getElementById('rounds-val'),
             showReasoning: document.getElementById('show-reasoning'),
             autoExecute: document.getElementById('auto-execute'),
-            modeStatus: document.getElementById('mode-status'),
+            keyGemini: document.getElementById('key-gemini'),
+            keyGroq: document.getElementById('key-groq'),
+            keyTavily: document.getElementById('key-tavily'),
             avatarStatus: document.getElementById('avatar-status'),
             agentItems: document.querySelectorAll('.agent-item')
         };
@@ -605,7 +563,6 @@
             elements.btnStop.addEventListener('click', stopProcessing);
             elements.btnClear.addEventListener('click', clearChat);
             elements.btnSave.addEventListener('click', saveChat);
-            elements.btnScan.addEventListener('click', scanHardware);
             elements.btnSaveKeys.addEventListener('click', saveKeys);
             elements.roundsSlider.addEventListener('input', updateRoundsValue);
             elements.showReasoning.addEventListener('change', toggleReasoning);
@@ -623,56 +580,6 @@
             
             // Mostrar primer menú
             document.querySelector('.menu-header').click();
-        }
-        
-        // Funciones de hardware
-        function scanHardware() {
-            addSystemMessage('🔍 Escaneando hardware del sistema...');
-            
-            // Simular escaneo
-            setTimeout(() => {
-                const hardwareInfo = `
-                    <div style="font-size:0.9em; line-height:1.6;">
-                        <div><span style="color:var(--blue);">CPU:</span> ${getCPUInfo()}</div>
-                        <div><span style="color:var(--green);">RAM:</span> ${getRAMInfo()} GB</div>
-                        <div><span style="color:var(--purple);">Navegador:</span> ${getBrowserInfo()}</div>
-                        <div><span style="color:var(--orange);">WebGPU:</span> ${checkWebGPU() ? '✅ Disponible' : '❌ No disponible'}</div>
-                        <div style="margin-top:10px; color:var(--yellow);">
-                            ${checkWebGPU() ? 
-                                '🚀 Modo Híbrido recomendado' : 
-                                '💡 Modo Nube recomendado'}
-                        </div>
-                    </div>
-                `;
-                
-                elements.hardwareInfo.innerHTML = hardwareInfo;
-                addSystemMessage('✅ Análisis de hardware completado');
-                
-                // Mostrar selección de modelos si hay WebGPU
-                if (checkWebGPU()) {
-                    elements.modelSelection.style.display = 'block';
-                    addSystemMessage('💡 Modelos locales disponibles. Selecciona uno para cargarlo.');
-                } else {
-                    elements.modelSelection.style.display = 'none';
-                    addSystemMessage('💡 WebGPU no disponible. Usa el modo Nube para mejor rendimiento.');
-                }
-            }, 800);
-        }
-        
-        function getCPUInfo() {
-            return navigator.hardwareConcurrency ? `${navigator.hardwareConcurrency} núcleos` : 'Información no disponible';
-        }
-        
-        function getRAMInfo() {
-            return navigator.deviceMemory || 4;
-        }
-        
-        function getBrowserInfo() {
-            return navigator.userAgent.split(')')[0].split(';')[1].trim() || 'Desconocido';
-        }
-        
-        function checkWebGPU() {
-            return 'gpu' in navigator;
         }
         
         // Funciones de agentes
@@ -714,6 +621,12 @@
             
             if (appState.isProcessing) {
                 addSystemMessage('⚠️ Ya hay un proceso en ejecución. Usa el botón DETENER primero.');
+                return;
+            }
+            
+            // Validar claves API
+            if (!appState.apiKeys.gemini && !appState.apiKeys.groq) {
+                addSystemMessage('⚠️ Advertencia: Necesitas al menos una clave API (Gemini o Groq)');
                 return;
             }
             
@@ -795,7 +708,7 @@
             }
         }
         
-        // Simulaciones realistas
+        // Simulaciones realistas (sin bloqueos)
         function simulateWebSearch(query) {
             return new Promise(resolve => {
                 setTimeout(() => {
@@ -878,13 +791,12 @@
         function clearChat() {
             elements.chatBox.innerHTML = `
                 <div class="msg msg-sys">
-                    <strong>🚀 NEXUS INFINITY v17.4 INICIADO</strong><br>
-                    <span style="color:var(--green);">✓</span> Modo Híbrido: Local + Nube<br>
+                    <strong>🚀 NEXUS INFINITY v17.5 INICIADO</strong><br>
+                    <span style="color:var(--green);">✓</span> Modo: Nube Pura (100% funcional en Vercel)<br>
                     <span style="color:var(--green);">✓</span> 5 Agentes en Cadena Secuencial<br>
                     <span style="color:var(--green);">✓</span> Configuración Avanzada de Agentes<br><br>
                     <span style="color:var(--yellow);">💡 CÓMO USAR:</span><br>
                     • Configura tus claves API en la sección "Claves API"<br>
-                    • Escanea tu sistema para ver modelos locales disponibles<br>
                     • Selecciona qué agentes quieres activar<br>
                     • Escribe tu consulta y haz clic en "GO"
                 </div>
@@ -896,25 +808,38 @@
         }
         
         function saveKeys() {
-            const keys = {
-                gemini: document.getElementById('key-gemini').value.trim(),
-                groq: document.getElementById('key-groq').value.trim(),
-                tavily: document.getElementById('key-tavily').value.trim()
+            appState.apiKeys = {
+                gemini: elements.keyGemini.value.trim(),
+                groq: elements.keyGroq.value.trim(),
+                tavily: elements.keyTavily.value.trim()
             };
             
             // Validación básica
-            if (!keys.gemini && !keys.groq) {
-                addSystemMessage('⚠️ Advertencia: Necesitas al menos una clave API (Gemini o Groq) para el modo nube');
+            if (!appState.apiKeys.gemini && !appState.apiKeys.groq) {
+                addSystemMessage('⚠️ Advertencia: Necesitas al menos una clave API (Gemini o Groq)');
             }
             
-            localStorage.setItem('nexus_keys_v174', JSON.stringify(keys));
+            localStorage.setItem('nexus_keys_v175', JSON.stringify(appState.apiKeys));
             addSystemMessage('✅ Claves API guardadas correctamente');
         }
         
         // Inicializar cuando el DOM esté listo
         document.addEventListener('DOMContentLoaded', () => {
+            // Cargar claves guardadas
+            const savedKeys = localStorage.getItem('nexus_keys_v175');
+            if (savedKeys) {
+                try {
+                    appState.apiKeys = JSON.parse(savedKeys);
+                    elements.keyGemini.value = appState.apiKeys.gemini ? '••••••' + appState.apiKeys.gemini.slice(-4) : '';
+                    elements.keyGroq.value = appState.apiKeys.groq ? '••••••' + appState.apiKeys.groq.slice(-4) : '';
+                    elements.keyTavily.value = appState.apiKeys.tavily ? '••••••' + appState.apiKeys.tavily.slice(-4) : '';
+                } catch (e) {
+                    console.error('Error cargando claves:', e);
+                }
+            }
+            
             initInterface();
-            console.log('✅ NEXUS INFINITY v17.4 inicializado correctamente');
+            console.log('✅ NEXUS INFINITY v17.5 inicializado correctamente');
         });
     </script>
 </body>
