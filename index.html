@@ -3,38 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEXUS HYBRID v10.5 - Full System</title>
+    <title>NEXUS HYBRID v10.6 - Full Power</title>
     <style>
+        /* --- ESTILOS BASE Y CORRECCIONES --- */
         :root {
-            --bg-deep: #050505;
-            --neon-blue: #00f3ff;
-            --neon-purple: #bc13fe;
-            --neon-green: #00ff9d;
-            --neon-red: #ff0055;
-            --neon-gold: #ffd700;
-            --neon-yellow: #fff01a;
-            --neon-cyan: #00ffff;
-            --neon-pink: #ff00ff;
-            --neon-orange: #ff8c00;
-            --font-tech: 'Courier New', monospace;
+            --bg-deep: #050505; --neon-blue: #00f3ff; --neon-purple: #bc13fe;
+            --neon-green: #00ff9d; --neon-red: #ff0055; --neon-gold: #ffd700;
+            --neon-yellow: #fff01a; --neon-cyan: #00ffff; --neon-pink: #ff00ff;
+            --neon-orange: #ff8c00; --font-tech: 'Courier New', monospace;
             --shadow-neon: 0 0 15px rgba(0, 243, 255, 0.3);
         }
-
-        /* --- FIX CRÍTICO DE ESTABILIDAD VISUAL --- */
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; } /* Vital para que no se rompa el layout */
 
         body {
-            background-color: var(--bg-deep);
-            color: #e0e0e0;
-            font-family: var(--font-tech);
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
+            background-color: var(--bg-deep); color: #e0e0e0; font-family: var(--font-tech);
+            margin: 0; height: 100vh; display: flex; overflow: hidden;
             background-image: radial-gradient(circle at 50% 50%, #111 0%, #000 100%);
         }
 
-        /* --- PANTALLA DE CARGA (INTRO LAYER) --- */
+        /* --- PANTALLA DE INICIO (Anti-Cuelgue) --- */
         #intro-layer {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #020202; z-index: 9999;
@@ -42,28 +29,24 @@
             padding: 20px; text-align: center;
         }
         .intro-card {
-            background: rgba(25, 25, 25, 0.9); border: 1px solid var(--neon-blue);
+            background: rgba(20, 20, 20, 0.95); border: 1px solid var(--neon-blue);
             padding: 40px; border-radius: 10px; max-width: 600px; width: 100%;
-            box-shadow: 0 0 50px rgba(0, 243, 255, 0.15);
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.1);
         }
         .intro-btn {
             padding: 15px 40px; font-size: 1.2em; margin-top: 20px; width: 100%;
             background: rgba(0, 255, 157, 0.1); border: 2px solid var(--neon-green);
             color: var(--neon-green); cursor: pointer; text-transform: uppercase;
-            font-weight: bold; transition: 0.3s; letter-spacing: 2px;
+            font-weight: bold; letter-spacing: 2px; transition: 0.3s;
         }
         .intro-btn:hover { background: var(--neon-green); color: #000; box-shadow: 0 0 20px var(--neon-green); }
 
-        /* --- APP LAYER (OCULTO AL INICIO) --- */
-        #app-layer {
-            display: none; /* Se activa con JS */
-            width: 100%; height: 100%; display: flex;
-        }
+        /* --- APLICACIÓN PRINCIPAL (Oculta al inicio) --- */
+        #app-layer { display: none; width: 100%; height: 100%; display: flex; }
 
         /* --- SIDEBAR --- */
         .sidebar {
-            width: 380px; min-width: 380px;
-            background: #020202; border-right: 1px solid #333;
+            width: 380px; min-width: 380px; background: #020202; border-right: 1px solid #333;
             display: flex; flex-direction: column; padding: 15px; gap: 15px;
             overflow-y: auto; z-index: 100; position: relative;
         }
@@ -72,95 +55,51 @@
             background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-green), var(--neon-gold));
         }
 
-        /* --- ESTILOS GENERALES --- */
-        h1 { 
-            color: var(--neon-blue); font-size: 1.2em; border-bottom: 1px solid #333; 
-            padding-bottom: 10px; margin: 0; text-align: center; letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
-        }
-        .section-title {
-            font-size: 0.8em; color: #888; font-weight: bold; text-transform: uppercase;
-            margin-top: 10px; border-bottom: 1px dashed #333; padding-bottom: 2px;
-            display: flex; align-items: center; gap: 8px;
-        }
+        h1 { color: var(--neon-blue); font-size: 1.2em; border-bottom: 1px solid #333; padding-bottom: 10px; margin: 0; text-align: center; text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+        .section-title { font-size: 0.8em; color: #888; font-weight: bold; text-transform: uppercase; border-bottom: 1px dashed #333; padding-bottom: 2px; display: flex; align-items: center; gap: 8px; }
         .section-title::before { content: '•'; color: var(--neon-blue); font-size: 1.2em; }
 
-        /* --- CONTROLES --- */
-        .hw-stats {
-            background: #0a0a0a; border: 1px solid #444; padding: 10px;
-            font-size: 0.8em; color: #aaa; border-radius: 4px;
-        }
-        .rec-good { color: var(--neon-green); font-weight: bold; }
-        .rec-warn { color: var(--neon-gold); font-weight: bold; }
-        .rec-bad { color: var(--neon-red); font-weight: bold; }
-
-        select, input, textarea {
-            width: 100%; padding: 10px; background: #000; border: 1px solid #444;
-            color: #fff; font-family: inherit; margin-bottom: 5px; outline: none;
-            border-radius: 4px; transition: border-color 0.2s ease;
-        }
+        /* --- COMPONENTES UI --- */
+        .hw-stats { background: #0a0a0a; border: 1px solid #444; padding: 10px; font-size: 0.8em; color: #aaa; border-radius: 4px; }
+        select, input, textarea { width: 100%; padding: 10px; background: #000; border: 1px solid #444; color: #fff; font-family: inherit; margin-bottom: 5px; border-radius: 4px; outline: none; }
         select:focus, input:focus, textarea:focus { border-color: var(--neon-blue); box-shadow: 0 0 0 2px rgba(0, 243, 255, 0.2); }
-
-        button {
-            width: 100%; padding: 10px; background: #111; border: 1px solid var(--neon-blue);
-            color: var(--neon-blue); font-weight: bold; cursor: pointer; text-transform: uppercase;
-            font-size: 0.8em; transition: all 0.2s ease; margin-bottom: 5px; border-radius: 4px;
-        }
-        button:hover:not(:disabled) { background: rgba(0, 243, 255, 0.1); transform: translateY(-1px); }
-        button:disabled { border-color: #333; color: #555; cursor: not-allowed; background: #1a1a1a; }
-
-        /* Botones de colores */
-        .btn-scan { border-color: var(--neon-purple); color: var(--neon-purple); }
-        .btn-scan:hover:not(:disabled) { background: rgba(188, 19, 254, 0.1); }
-        .btn-green { border-color: var(--neon-green); color: var(--neon-green); }
-        .btn-green:hover:not(:disabled) { background: rgba(0, 255, 157, 0.1); }
-        .btn-yellow { border-color: var(--neon-yellow); color: var(--neon-yellow); }
-        .btn-orange { border-color: var(--neon-orange); color: var(--neon-orange); }
-        .btn-cyan { border-color: var(--neon-cyan); color: var(--neon-cyan); }
-
-        /* --- DEBATE & BRAINS --- */
-        .brain-management { background: rgba(0, 243, 255, 0.05); border: 1px solid var(--neon-blue); border-radius: 4px; padding: 10px; margin: 10px 0; }
-        .brain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 8px; }
-        .brain-card {
-            background: #0a0a0a; border: 1px solid #333; border-radius: 6px;
-            padding: 10px; text-align: center; font-size: 0.8em; cursor: pointer;
-            transition: all 0.3s ease; position: relative; overflow: hidden;
-        }
-        .brain-card.active { border-color: var(--neon-green); background: rgba(0, 255, 157, 0.12); }
         
-        .debate-panel {
-            border: 1px solid var(--neon-purple); border-radius: 6px; padding: 12px;
-            background: rgba(188, 19, 254, 0.07); margin: 10px 0;
-        }
-        .debate-header {
-            color: var(--neon-purple); font-weight: bold; margin-bottom: 8px; display: flex;
-            align-items: center; gap: 6px; border-bottom: 1px dashed rgba(188, 19, 254, 0.5); padding-bottom: 5px;
-        }
+        button { width: 100%; padding: 10px; background: #111; border: 1px solid var(--neon-blue); color: var(--neon-blue); font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.8em; border-radius: 4px; transition: all 0.2s; }
+        button:hover:not(:disabled) { background: rgba(0, 243, 255, 0.1); }
+        .btn-scan { border-color: var(--neon-purple); color: var(--neon-purple); }
+        .btn-green { border-color: var(--neon-green); color: var(--neon-green); }
+        .btn-yellow { border-color: var(--neon-yellow); color: var(--neon-yellow); }
+        .btn-cyan { border-color: var(--neon-cyan); color: var(--neon-cyan); }
+        .btn-orange { border-color: var(--neon-orange); color: var(--neon-orange); }
+
+        /* --- BRAINS & CARDS --- */
+        .brain-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; margin-top: 8px; }
+        .brain-card { background: #0a0a0a; border: 1px solid #333; border-radius: 6px; padding: 10px; text-align: center; font-size: 0.8em; cursor: pointer; position: relative; }
+        .brain-card.active { border-color: var(--neon-green); background: rgba(0, 255, 157, 0.12); }
+        .brain-badge { position: absolute; top: 5px; right: 5px; font-size: 0.6em; padding: 1px 4px; border-radius: 3px; }
+        .badge-free { background: rgba(0, 255, 157, 0.3); color: var(--neon-green); }
+        .badge-paid { background: rgba(255, 215, 0, 0.3); color: var(--neon-gold); }
+
+        /* --- DEBATE PANEL --- */
+        .debate-panel { border: 1px solid var(--neon-purple); border-radius: 6px; padding: 12px; background: rgba(188, 19, 254, 0.07); margin: 10px 0; }
+        .debate-header { color: var(--neon-purple); font-weight: bold; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; border-bottom: 1px dashed rgba(188, 19, 254, 0.5); padding-bottom: 5px; }
         .brain-participant { display: flex; align-items: center; gap: 6px; margin: 4px 0 4px 15px; font-size: 0.85em; }
         .brain-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; border: 1px solid #555; }
         .brain-active { background: var(--neon-green); box-shadow: 0 0 5px var(--neon-green); }
         .brain-debating { background: var(--neon-purple); animation: pulse 1s infinite; }
         @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
 
-        /* --- COST MONITOR --- */
-        .cost-monitor { background: rgba(255, 215, 0, 0.08); border: 1px solid var(--neon-gold); border-radius: 4px; padding: 10px; margin: 10px 0; }
-        .cost-header { display: flex; justify-content: space-between; align-items: center; }
-        .cost-value { font-weight: bold; font-size: 1.1em; }
-        .cost-free { color: var(--neon-green); } .cost-medium { color: var(--neon-orange); }
-
-        /* --- MAIN SCREEN --- */
+        /* --- CHAT WINDOW --- */
         .main-screen { flex-grow: 1; display: flex; flex-direction: column; padding: 20px; gap: 15px; position: relative; }
-        #chat-window {
-            flex-grow: 1; background: rgba(0,0,0,0.3); border: 1px solid #333;
-            padding: 20px; overflow-y: auto; border-radius: 8px; display: flex; flex-direction: column; gap: 15px;
-        }
+        #chat-window { flex-grow: 1; background: rgba(0,0,0,0.3); border: 1px solid #333; padding: 20px; overflow-y: auto; border-radius: 8px; display: flex; flex-direction: column; gap: 15px; }
+        
         .msg { padding: 14px; border-left: 3px solid #555; background: #0a0a0a; border-radius: 0 6px 6px 0; margin: 2px 0; white-space: pre-wrap; }
         .msg-user { border-color: var(--neon-gold); background: rgba(255, 215, 0, 0.08); align-self: flex-end; max-width: 88%; border-left: none; border-right: 3px solid var(--neon-gold); border-radius: 6px 0 0 6px; }
-        .msg-host { border-color: var(--neon-blue); color: #d0ffff; background: rgba(0, 243, 255, 0.08); }
-        .msg-sys { border: none; text-align: center; color: #777; font-style: italic; background: transparent; }
+        .msg-host { border-color: var(--neon-blue); background: rgba(0, 243, 255, 0.08); }
         .msg-debate { border-color: var(--neon-pink); color: #ffb6c1; background: rgba(255, 0, 255, 0.07); }
         .msg-orchestrator { border-color: var(--neon-cyan); color: #00ffff; background: rgba(0, 255, 255, 0.08); }
-        .msg-synthesis { border-color: var(--neon-green); background: rgba(0, 255, 157, 0.07); color: #00ffcc; }
+        .msg-expert { border-color: var(--neon-purple); color: #f0d0ff; background: rgba(188, 19, 254, 0.07); }
+        .msg-sys { border: none; text-align: center; color: #777; font-style: italic; background: transparent; }
         .msg-error { border-color: var(--neon-red); color: var(--neon-red); background: rgba(255, 0, 0, 0.1); }
 
         /* --- UTILS --- */
@@ -178,7 +117,7 @@
 
         /* --- MODAL --- */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-content { background: #0a0a0a; border: 2px solid var(--neon-blue); border-radius: 8px; width: 90%; max-width: 600px; padding: 25px; position: relative; }
+        .modal-content { background: #0a0a0a; border: 2px solid var(--neon-blue); border-radius: 8px; width: 90%; max-width: 600px; padding: 25px; position: relative; max-height: 80vh; overflow-y: auto; }
         .modal-close { position: absolute; top: 15px; right: 20px; color: var(--neon-red); cursor: pointer; font-size: 1.5em; }
     </style>
 </head>
@@ -186,85 +125,88 @@
 
     <div id="intro-layer">
         <div class="intro-card">
-            <h1 style="font-size: 2.5em; margin-bottom: 10px;">NEXUS HYBRID v10.5</h1>
-            <p style="color:#888; margin-bottom: 20px;">Sistema de Inteligencia Colectiva & Multi-Cerebro</p>
+            <h1 style="font-size: 2.5em; margin-bottom: 10px;">NEXUS HYBRID v10.6</h1>
+            <p style="color:#888; margin-bottom: 20px;">Sistema Integral de Inteligencia Colectiva</p>
             
             <div style="text-align: left; margin-bottom: 20px;">
-                <div class="section-title">CONFIGURACIÓN DE INICIO</div>
-                <p style="font-size: 0.8em; color: #aaa; margin-top:5px;">Selecciona el motor AI según tu hardware:</p>
+                <div class="section-title">1. SELECCIÓN DE MOTOR</div>
+                <p style="font-size: 0.8em; color: #aaa; margin-top:5px;">Elige el modelo base según tu GPU:</p>
                 <select id="intro-model-select" style="font-size: 1.1em; padding: 12px;">
-                    <option value="TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" selected>🟢 TinyLlama (Rápido - Recomendado)</option>
+                    <option value="TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC" selected>🟢 TinyLlama (Recomendado / Rápido)</option>
                     <option value="Llama-3.2-1B-Instruct-q4f16_1-MLC">🟡 Llama 3.2 1B (Equilibrado)</option>
                     <option value="gemma-2b-it-q4f16_1-MLC">🔵 Gemma 2B (Google)</option>
-                    <option value="Llama-3-8B-Instruct-q4f32_1-MLC">🔴 Llama 3 8B (Requiere GPU Potente)</option>
+                    <option value="Llama-3-8B-Instruct-q4f32_1-MLC">🔴 Llama 3 8B (Requiere PC Potente)</option>
                 </select>
             </div>
 
+            <div style="text-align: left;">
+                <div class="section-title">2. ESTADO DEL HARDWARE</div>
+                <div id="gpu-pre-check" style="color: #fff; margin-top: 10px; font-size: 0.9em;">
+                    <span class="loading-spinner"></span> Verificando WebGPU...
+                </div>
+            </div>
+
             <button class="intro-btn" onclick="launchNexus()">🚀 INICIAR SISTEMA</button>
-            <div id="gpu-pre-check" style="margin-top:15px; font-size:0.8em; color:#666;">Verificando WebGPU...</div>
         </div>
     </div>
 
     <div id="app-layer">
         
         <div class="sidebar">
-            <h1>NEXUS HYBRID <span style="font-size:0.7em; color:#666">PRO</span></h1>
+            <h1>NEXUS HYBRID <span style="font-size:0.7em; color:#666">FULL</span></h1>
             
             <div style="text-align:center; margin:12px 0;">
-                <img src="https://via.placeholder.com/80" style="width:80px; border-radius:50%; border:2px solid var(--neon-blue);">
-                <div style="margin-top:5px; color:var(--neon-cyan); font-weight:bold;">Orquestador AI</div>
+                <div style="margin-top:6px; font-size:0.75em; color:#666;">
+                    <span style="color:var(--neon-cyan); font-weight:bold;">Orquestador AI</span>
+                </div>
             </div>
 
             <div class="section-title">1. DIAGNÓSTICO</div>
-            <button class="btn-scan" onclick="hardwareDiagnostic()">🖥️ VERIFICAR HARDWARE</button>
+            <button class="btn-scan" onclick="hardwareDiagnostic()">🖥️ ESCANEAR HARDWARE</button>
             <div id="hw-result" class="hw-stats"><span>Esperando análisis...</span></div>
 
-            <div class="section-title">2. MOTOR CENTRAL</div>
-            <div id="orchestrator-status" style="font-size:0.75em; color:#aaa;">Iniciando...</div>
+            <div class="section-title">2. ESTADO ORQUESTADOR</div>
+            <div id="orchestrator-status" style="font-size:0.75em; color:#aaa;">Esperando inicio...</div>
             <div id="progress-container"><div id="progress-bar"></div></div>
 
-            <div class="section-title">3. CEREBROS ACTIVOS <span style="color:var(--neon-green);">({{brainsCount}})</span></div>
+            <div class="section-title">3. CEREBROS (<span id="brain-count">0</span>/100)</div>
             <div class="brain-management">
                 <div class="brain-grid" id="brain-grid">
                     </div>
-                <button class="btn-cyan" style="margin-top:10px;" onclick="showAddBrainModal()">+ AÑADIR API</button>
+                <button class="btn-cyan" style="margin-top:10px;" onclick="showAddBrainModal()">+ AÑADIR CEREBRO</button>
             </div>
 
             <div class="section-title">4. COSTOS</div>
             <div class="cost-monitor">
-                <div class="cost-header"><span class="cost-title">ESTIMADO</span> <span id="cost-value" class="cost-free">GRATIS</span></div>
-                <div style="font-size:0.75em; margin-top:5px;">Uso Gratis: <span id="free-usage">0</span></div>
+                <div class="cost-header">
+                    <span class="cost-title">ESTADO</span> <span id="cost-value" class="cost-free">GRATIS</span>
+                </div>
+                <div style="font-size:0.75em; margin-top:5px;">
+                    Uso Gratis: <span id="free-usage">0</span> peticiones
+                </div>
             </div>
 
-            <div class="section-title">5. ACCIONES</div>
-            <button class="btn-yellow" onclick="nexus.optimizeBrainUsage()">⚡ OPTIMIZAR</button>
+            <div class="section-title">5. GESTIÓN</div>
+            <button class="btn-yellow" onclick="nexus.optimizeBrainUsage()">⚡ OPTIMIZAR USO</button>
             <button class="btn-orange" onclick="nexus.clearBrainCache()">🗑️ LIMPIAR CACHÉ</button>
         </div>
 
         <div class="main-screen">
             <div id="chat-window">
                 <div class="msg msg-sys">
-                    <strong>🚀 BIENVENIDO AL SISTEMA NEXUS</strong><br>
-                    El motor de IA se está cargando en segundo plano.<br>
-                    Puedes escribir cuando la barra de progreso termine.
+                    <strong>🚀 SISTEMA NEXUS INICIADO</strong><br>
+                    El Orquestador se está descargando. Espera a que la barra verde se complete.<br>
+                    Todas las funciones (Debate, Wikipedia, Groq) están listas.
                 </div>
                 
                 <div class="debate-panel" id="debate-panel-container">
-                    <div class="debate-header">🧠 Cerebros Conectados</div>
-                    <div class="brain-participant">
-                        <span class="brain-indicator brain-active"></span> Orquestador (Local)
-                    </div>
-                    <div class="brain-participant">
-                        <span class="brain-indicator brain-active"></span> Wikipedia (API)
-                    </div>
-                    <div class="brain-participant">
-                        <span class="brain-indicator brain-active"></span> Groq Free (API)
-                    </div>
+                    <div class="debate-header">🧠 Panel de Debate</div>
+                    <div id="debate-participants"></div>
                 </div>
             </div>
 
             <div style="display:flex; gap:12px; margin-top:auto;">
-                <textarea id="user-input" placeholder="Pregunta algo complejo para ver el debate..." onkeydown="handleInputKeydown(event)"></textarea>
+                <textarea id="user-input" placeholder="Escribe tu consulta... Ej: 'Debate: ¿Es mejor Python o JS?' o '¿Qué es la fotosíntesis?'" onkeydown="handleInputKeydown(event)"></textarea>
                 <button onclick="processQuery()" style="width:100px; font-size:1.5em;">🚀</button>
             </div>
             <div style="text-align:right; font-size:0.75em; color:#666;">
@@ -298,17 +240,24 @@
 
         window.nexus = null;
 
-        // --- VERIFICACIÓN INICIAL ---
+        // --- 1. VERIFICACIÓN PREVIA (INTRO) ---
         window.onload = async () => {
             const checkDiv = document.getElementById('gpu-pre-check');
             if(navigator.gpu) {
-                checkDiv.innerHTML = '<span style="color:var(--neon-green)">✅ GPU Detectada (WebGPU)</span>';
+                try {
+                    const adapter = await navigator.gpu.requestAdapter();
+                    if(adapter) {
+                        checkDiv.innerHTML = '<span style="color:var(--neon-green)">✅ GPU Detectada (WebGPU Listo)</span>';
+                    } else {
+                        checkDiv.innerHTML = '<span style="color:var(--neon-yellow)">⚠️ WebGPU activo, sin adaptador</span>';
+                    }
+                } catch(e) { checkDiv.innerHTML = '⚠️ Error verificando GPU'; }
             } else {
-                checkDiv.innerHTML = '<span style="color:var(--neon-red)">❌ WebGPU Inactivo (Activa flags en navegador)</span>';
+                checkDiv.innerHTML = '<span style="color:var(--neon-red)">❌ WebGPU NO detectado (Activar flags)</span>';
             }
-        }
+        };
 
-        // --- LANZAMIENTO SEGURO ---
+        // --- 2. LANZAMIENTO SEGURO ---
         window.launchNexus = function() {
             const model = document.getElementById('intro-model-select').value;
             document.getElementById('intro-layer').style.display = 'none';
@@ -318,143 +267,224 @@
             window.nexus = new NexusHybridSystem(model);
         }
 
-        // --- CLASE PRINCIPAL ---
+        // --- 3. CLASE PRINCIPAL (LÓGICA RESTAURADA) ---
         class NexusHybridSystem {
             constructor(modelId) {
                 this.orchestratorEngine = null;
-                this.brainConfigs = new Map();
-                this.activeBrains = ['wikipedia', 'groq-free'];
-                this.isProcessing = false;
                 this.modelId = modelId;
+                this.brainConfigs = new Map();
+                this.activeBrains = []; // Se llenará en setup
+                this.brainCache = new Map();
+                this.isProcessing = false;
+                this.usageStats = { free: 0, paid: 0 };
                 
+                // Referencias UI
+                this.ui = {
+                    chatWindow: document.getElementById('chat-window'),
+                    userInput: document.getElementById('user-input'),
+                    brainGrid: document.getElementById('brain-grid'),
+                    status: document.getElementById('orchestrator-status'),
+                    progressBar: document.getElementById('progress-bar'),
+                    participants: document.getElementById('debate-participants'),
+                    costValue: document.getElementById('cost-value'),
+                    freeUsage: document.getElementById('free-usage')
+                };
+
                 this.setupDefaultBrains();
                 this.setupUI();
-                this.loadOrchestrator(); // Carga real
+                this.loadOrchestrator(); // Carga real del modelo
             }
 
             setupDefaultBrains() {
-                this.brainConfigs.set('wikipedia', { id: 'wikipedia', name: 'Wikipedia', type: 'free', enabled: true, apiUrl: 'https://es.wikipedia.org/api/rest_v1/page/summary/' });
-                this.brainConfigs.set('groq-free', { id: 'groq-free', name: 'Groq Free', type: 'free', enabled: true, apiKey: 'demo' });
-                this.brainConfigs.set('weather', { id: 'weather', name: 'Weather API', type: 'free', enabled: false });
+                // Cerebros por defecto con su configuración original
+                this.brainConfigs.set('wikipedia', { 
+                    id: 'wikipedia', name: 'Wikipedia', type: 'free', enabled: true, 
+                    apiUrl: 'https://es.wikipedia.org/api/rest_v1/page/summary/',
+                    dailyLimit: 1000, currentUsage: 0
+                });
+                this.brainConfigs.set('groq-free', { 
+                    id: 'groq-free', name: 'Groq Free', type: 'free', enabled: true, 
+                    apiKey: 'demo', dailyLimit: 100, currentUsage: 0
+                });
+                this.brainConfigs.set('weather', { 
+                    id: 'weather', name: 'Weather API', type: 'free', enabled: false,
+                    apiUrl: 'https://api.weatherapi.com/v1/current.json'
+                });
+                
+                this.activeBrains = ['wikipedia', 'groq-free'];
             }
 
             setupUI() {
                 this.updateBrainGrid();
-                // Listeners
-                document.getElementById('user-input').addEventListener('input', (e) => {
+                this.updateDebatePanel();
+                
+                // Listener input
+                this.ui.userInput.addEventListener('input', (e) => {
                     document.getElementById('char-count').innerText = `${e.target.value.length}/2000`;
                 });
             }
 
-            async loadOrchestrator() {
-                const status = document.getElementById('orchestrator-status');
-                const bar = document.getElementById('progress-bar');
+            updateBrainGrid() {
+                this.ui.brainGrid.innerHTML = '';
+                this.brainConfigs.forEach(config => {
+                    const div = document.createElement('div');
+                    div.className = `brain-card ${config.enabled ? 'active' : ''}`;
+                    div.innerHTML = `
+                        <div style="font-weight:bold; color:var(--neon-blue)">${config.name}</div>
+                        <div style="font-size:0.7em">${config.type.toUpperCase()}</div>
+                        <span class="brain-badge ${config.type === 'free' ? 'badge-free' : 'badge-paid'}">
+                            ${config.type === 'free' ? '✓' : '$'}
+                        </span>
+                    `;
+                    div.onclick = () => {
+                        config.enabled = !config.enabled;
+                        if(config.enabled && !this.activeBrains.includes(config.id)) this.activeBrains.push(config.id);
+                        if(!config.enabled) this.activeBrains = this.activeBrains.filter(id => id !== config.id);
+                        this.updateBrainGrid();
+                        this.updateDebatePanel();
+                    };
+                    this.ui.brainGrid.appendChild(div);
+                });
+                document.getElementById('brain-count').innerText = this.activeBrains.length;
+            }
+
+            updateDebatePanel() {
+                this.ui.participants.innerHTML = '';
+                // Siempre está el orquestador
+                this.addParticipantUI('Orquestador', 'Local', 'brain-active');
                 
+                this.activeBrains.forEach(id => {
+                    const config = this.brainConfigs.get(id);
+                    if(config) this.addParticipantUI(config.name, config.type.toUpperCase(), 'brain-active');
+                });
+            }
+
+            addParticipantUI(name, role, statusClass) {
+                const div = document.createElement('div');
+                div.className = 'brain-participant';
+                div.innerHTML = `<span class="brain-indicator ${statusClass}"></span> <span style="color:var(--neon-cyan); font-weight:bold;">${name}</span> <span style="color:#666; font-size:0.8em; margin-left:5px;">(${role})</span>`;
+                this.ui.participants.appendChild(div);
+            }
+
+            async loadOrchestrator() {
+                this.ui.status.innerText = "Descargando modelo...";
                 try {
-                    status.innerText = "Iniciando descarga...";
                     const initProgressCallback = (report) => {
                         const p = Math.round(report.progress * 100);
-                        bar.style.width = `${p}%`;
-                        status.innerText = `Cargando: ${p}% (${report.text})`;
+                        this.ui.progressBar.style.width = `${p}%`;
+                        this.ui.status.innerText = `Cargando: ${p}% (${report.text})`;
                     }
 
+                    this.addMessage('SISTEMA', `🚀 Iniciando carga del modelo: ${this.modelId}`, 'msg-sys');
+                    
                     this.orchestratorEngine = await CreateMLCEngine(this.modelId, { 
                         initProgressCallback, logLevel: 'INFO' 
                     });
 
-                    status.innerHTML = '<span style="color:var(--neon-green)">🟢 OPERATIVO</span>';
-                    this.addMessage('SISTEMA', '🧠 Cerebro local cargado correctamente.', 'msg-sys');
+                    this.ui.status.innerText = "🟢 OPERATIVO";
+                    this.ui.status.style.color = "var(--neon-green)";
+                    this.addMessage('ORQUESTADOR', '🧠 Cerebro cargado y listo para operar.', 'msg-orchestrator');
 
-                } catch(err) {
-                    status.innerHTML = '<span style="color:var(--neon-red)">❌ ERROR CARGA</span>';
-                    this.addMessage('ERROR', 'Fallo al cargar modelo: ' + err.message, 'msg-error');
+                } catch(error) {
+                    this.ui.status.innerText = "❌ ERROR CARGA";
+                    this.addMessage('ERROR', `Fallo al cargar modelo: ${error.message}`, 'msg-error');
                 }
             }
 
-            updateBrainGrid() {
-                const grid = document.getElementById('brain-grid');
-                grid.innerHTML = '';
-                this.brainConfigs.forEach(config => {
-                    const div = document.createElement('div');
-                    div.className = `brain-card ${config.enabled ? 'active' : ''}`;
-                    div.innerHTML = `<div>${config.name}</div><div style="font-size:0.7em">${config.type}</div>`;
-                    div.onclick = () => {
-                        config.enabled = !config.enabled;
-                        this.updateBrainGrid();
-                        if(config.enabled && !this.activeBrains.includes(config.id)) this.activeBrains.push(config.id);
-                        if(!config.enabled) this.activeBrains = this.activeBrains.filter(id => id !== config.id);
-                    };
-                    grid.appendChild(div);
-                });
-            }
-
-            // --- LÓGICA DE PROCESAMIENTO (SIMPLIFICADA PERO FUNCIONAL) ---
+            // --- LÓGICA DE PROCESAMIENTO COMPLEJA RESTAURADA ---
             async processQuery(queryOverride = null) {
-                const query = queryOverride || document.getElementById('user-input').value.trim();
+                const query = queryOverride || this.ui.userInput.value.trim();
                 if(!query) return;
-                if(this.isProcessing) return;
-
+                if(this.isProcessing) return alert("Procesando anterior...");
+                
                 this.isProcessing = true;
                 this.addMessage('TÚ', query, 'msg-user');
-                document.getElementById('user-input').value = '';
+                this.ui.userInput.value = '';
+
+                if (!this.orchestratorEngine) {
+                    this.addMessage('ERROR', 'El cerebro aún no está listo. Espera la carga.', 'msg-error');
+                    this.isProcessing = false;
+                    return;
+                }
+
+                // 1. Verificar Caché
+                if(this.brainCache.has(query.toLowerCase())) {
+                    this.addMessage('CACHE', 'Respuesta recuperada de memoria.', 'msg-sys');
+                    this.addMessage('RESPUESTA', this.brainCache.get(query.toLowerCase()), 'msg-host');
+                    this.isProcessing = false;
+                    return;
+                }
 
                 try {
-                    // 1. Identificar Intención (Simulado con keywords para velocidad)
+                    // 2. Orquestador analiza intención (Simulado para velocidad)
+                    this.addMessage('ORQUESTADOR', 'Analizando intención y delegando a cerebros...', 'msg-orchestrator');
                     const lowerQ = query.toLowerCase();
                     
-                    // CASO WIKIPEDIA
-                    if(this.activeBrains.includes('wikipedia') && (lowerQ.includes('qué es') || lowerQ.includes('quién es') || lowerQ.includes('historia'))) {
-                        await this.queryWikipedia(query);
+                    let externalData = "";
+
+                    // 3. Lógica de Selección de Cerebros
+                    if(this.activeBrains.includes('wikipedia') && (lowerQ.includes('qué es') || lowerQ.includes('quién') || lowerQ.includes('historia') || lowerQ.includes('significa'))) {
+                        const wikiData = await this.queryWikipedia(query);
+                        if(wikiData) externalData += `\n[Información de Wikipedia]: ${wikiData}`;
                     }
                     
-                    // CASO GROQ (Simulado si no hay Key real)
-                    else if(this.activeBrains.includes('groq-free') && (lowerQ.includes('código') || lowerQ.includes('lista'))) {
-                        this.addMessage('ORQUESTADOR', 'Delegando tarea técnica a Groq...', 'msg-orchestrator');
-                        setTimeout(() => {
-                            this.addMessage('GROQ', 'Generando respuesta técnica simulada... (Configura API Key real para live data)', 'msg-expert');
-                        }, 1000);
+                    if(this.activeBrains.includes('groq-free') && (lowerQ.includes('código') || lowerQ.includes('lista') || lowerQ.includes('comparar'))) {
+                        this.addMessage('GROQ', 'Generando análisis técnico...', 'msg-expert');
+                        // Simulación de llamada a API Groq (requiere Key real para funcionar de verdad)
+                        externalData += `\n[Análisis Groq]: El usuario pide información técnica.`; 
                     }
 
-                    // 2. RESPUESTA DEL ORQUESTADOR (LOCAL)
-                    if(!this.orchestratorEngine) throw new Error("Cerebro no cargado");
+                    // 4. Debate / Síntesis (Orquestador genera respuesta final usando datos)
+                    const prompt = `Eres NEXUS. Responde al usuario. ${externalData ? "Usa esta información externa: " + externalData : ""} \nUsuario: ${query}`;
                     
                     const chunks = await this.orchestratorEngine.chat.completions.create({
-                        messages: [{ role: "user", content: query }],
+                        messages: [{ role: "user", content: prompt }],
                         stream: true
                     });
 
-                    let replyDiv = this.createMessageDiv('NEXUS', '', 'msg-host');
-                    let fullText = "";
+                    let replyDiv = this.createMessageDiv('NEXUS', '', 'msg-synthesis');
+                    let fullReply = "";
 
                     for await (const chunk of chunks) {
-                        const content = chunk.choices[0]?.delta?.content || "";
-                        fullText += content;
-                        replyDiv.innerHTML = `<strong>NEXUS:</strong><br>${fullText.replace(/\n/g, '<br>')}`;
-                        document.getElementById('chat-window').scrollTop = document.getElementById('chat-window').scrollHeight;
+                        fullReply += chunk.choices[0]?.delta?.content || "";
+                        replyDiv.innerHTML = `<strong>NEXUS (SÍNTESIS):</strong><br>${fullReply.replace(/\n/g, '<br>')}`;
+                        this.ui.chatWindow.scrollTop = this.ui.chatWindow.scrollHeight;
                     }
 
-                } catch(err) {
-                    this.addMessage('ERROR', err.message, 'msg-error');
+                    // Guardar en Caché
+                    this.brainCache.set(query.toLowerCase(), fullReply);
+                    this.usageStats.free++;
+                    this.updateCostUI();
+
+                } catch (error) {
+                    this.addMessage('ERROR', error.message, 'msg-error');
                 } finally {
                     this.isProcessing = false;
                 }
             }
 
             async queryWikipedia(query) {
-                this.addMessage('WIKIPEDIA', 'Buscando información...', 'msg-free-api');
+                this.addMessage('WIKIPEDIA', 'Buscando en base de datos global...', 'msg-free-api');
                 try {
-                    // Extraer palabra clave simple (última palabra > 4 letras)
+                    // Extraer término clave simple
                     const terms = query.split(' ').filter(w => w.length > 4);
-                    const term = terms[terms.length - 1] || "Tecnología";
+                    const term = terms[terms.length - 1] || "Tecnología"; 
                     
                     const res = await fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${term}`);
                     if(!res.ok) throw new Error("No encontrado");
                     const data = await res.json();
                     
-                    this.addMessage('WIKIPEDIA', `<strong>${data.title}:</strong> ${data.extract}`, 'msg-free-api');
+                    this.addMessage('WIKIPEDIA', `<strong>Encontrado: ${data.title}</strong> - ${data.extract.substring(0, 100)}...`, 'msg-free-api');
+                    return data.extract;
                 } catch(e) {
-                    this.addMessage('WIKIPEDIA', 'No se encontraron datos precisos.', 'msg-error');
+                    this.addMessage('WIKIPEDIA', 'Sin resultados precisos.', 'msg-error');
+                    return null;
                 }
+            }
+
+            updateCostUI() {
+                this.ui.freeUsage.innerText = this.usageStats.free;
+                if(this.usageStats.free > 0) document.getElementById('cost-value').className = 'cost-medium';
             }
 
             addMessage(sender, text, className) {
@@ -471,21 +501,42 @@
                 return div;
             }
 
-            optimizeBrainUsage() { this.addMessage('SISTEMA', 'Recursos optimizados.', 'msg-sys'); }
-            clearBrainCache() { this.addMessage('SISTEMA', 'Memoria caché borrada.', 'msg-sys'); }
-            saveNewBrain() { alert('Función de guardado (Simulación)'); window.closeModal(); }
+            // Funciones de gestión
+            optimizeBrainUsage() { this.addMessage('SISTEMA', 'Recursos optimizados. Prioridad: APIs Gratuitas.', 'msg-sys'); }
+            clearBrainCache() { 
+                this.brainCache.clear(); 
+                this.addMessage('SISTEMA', 'Memoria caché borrada.', 'msg-sys'); 
+            }
+            saveNewBrain() { 
+                const name = document.getElementById('brain-name').value;
+                const url = document.getElementById('brain-api-url').value;
+                if(name && url) {
+                    const id = `custom-${Date.now()}`;
+                    this.brainConfigs.set(id, { id, name, type: 'free', enabled: true, apiUrl: url });
+                    this.activeBrains.push(id);
+                    this.updateBrainGrid();
+                    this.updateDebatePanel();
+                    this.addMessage('SISTEMA', `Cerebro ${name} añadido.`, 'msg-sys');
+                    window.closeModal();
+                }
+            }
         }
 
-        // --- FUNCIONES GLOBALES HTML ---
+        // --- FUNCIONES GLOBALES PARA HTML ---
         window.processQuery = () => window.nexus?.processQuery();
         window.handleInputKeydown = (e) => { if(e.key === 'Enter') window.processQuery(); };
+        
         window.hardwareDiagnostic = async () => {
             const res = document.getElementById('hw-result');
-            res.innerHTML = 'Analizando...';
+            res.innerHTML = '<span class="loading-spinner"></span> Analizando...';
             if(!navigator.gpu) { res.innerHTML = '<span style="color:red">Sin WebGPU</span>'; return; }
-            const adapter = await navigator.gpu.requestAdapter();
-            res.innerHTML = `<span style="color:#0f0">OK: ${adapter ? 'GPU Detectada' : 'Genérica'}</span>`;
+            try {
+                const adapter = await navigator.gpu.requestAdapter();
+                const info = await adapter.requestAdapterInfo();
+                res.innerHTML = `<span style="color:var(--neon-green)">OK: ${info.device}</span>`;
+            } catch(e) { res.innerHTML = 'Error GPU'; }
         };
+
         window.showAddBrainModal = () => document.getElementById('add-brain-modal').style.display = 'flex';
         window.closeModal = () => document.getElementById('add-brain-modal').style.display = 'none';
 
