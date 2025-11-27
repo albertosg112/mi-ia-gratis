@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEXUS HYBRID v10.3 - High Contrast</title>
+    <title>NEXUS HYBRID v10.4 - Cloud Orchestrator</title>
     <script type="importmap">
     {
         "imports": {
@@ -13,18 +13,16 @@
     </script>
     <style>
         :root {
-            --bg-deep: #000000; /* Negro puro para máximo contraste */
+            --bg-deep: #000000;
             --panel-bg: #0a0a0a;
             --neon-blue: #00f3ff;
-            --neon-purple: #d45eff; /* Púrpura más brillante */
+            --neon-purple: #d45eff;
             --neon-green: #00ff9d;
             --neon-red: #ff3366;
             --neon-gold: #ffd700;
             --neon-cyan: #00ffff;
-            --text-main: #ffffff; /* Texto blanco puro */
-            --text-dim: #bbbbbb; /* Texto secundario más claro */
+            --text-main: #ffffff;
             --font-tech: 'Courier New', monospace;
-            --shadow-neon: 0 0 10px rgba(0, 243, 255, 0.4);
         }
 
         body {
@@ -35,14 +33,13 @@
             height: 100vh;
             display: flex;
             overflow: hidden;
-            /* Fondo sutil para no distraer */
             background-image: 
                 linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
         }
 
-        /* --- SIDEBAR (CONFIGURACIÓN) --- */
+        /* --- SIDEBAR --- */
         .sidebar {
             width: 380px;
             background: #050505;
@@ -70,7 +67,7 @@
 
         .section-title {
             font-size: 0.9em;
-            color: var(--neon-cyan); /* Títulos en cyan brillante */
+            color: var(--neon-cyan);
             font-weight: bold;
             text-transform: uppercase;
             margin-top: 15px;
@@ -79,61 +76,57 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
         }
 
-        /* Hardware Stats Box */
-        .hw-stats {
-            background: #111; 
-            border: 1px solid #555; 
-            padding: 12px; 
-            font-size: 0.85em;
-            color: #fff; /* Texto blanco */
-            border-radius: 6px;
-            transition: border-color 0.3s ease;
-        }
-        .rec-good { color: var(--neon-green); font-weight: bold; }
-        .rec-warn { color: var(--neon-gold); font-weight: bold; }
-        
         /* Controles */
         select, input {
             width: 100%; padding: 12px; 
-            background: #151515; /* Fondo más claro para inputs */
-            border: 1px solid #666; /* Borde más visible */
+            background: #151515; 
+            border: 1px solid #666; 
             color: #fff; font-family: inherit; font-weight: bold;
             margin-bottom: 8px; box-sizing: border-box; outline: none;
             border-radius: 6px;
         }
         select:focus, input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 243, 255, 0.3); }
+        
+        /* Estilos específicos para optgroup */
+        optgroup { color: var(--neon-gold); background: #222; font-style: normal; }
+        option { color: #fff; background: #000; padding: 5px; }
+
+        /* Input de API Key (Oculto por defecto) */
+        #api-input-container {
+            display: none;
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px dashed var(--neon-gold);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            animation: fadeIn 0.3s ease;
+        }
 
         button {
             width: 100%; padding: 12px;
             background: #111; 
             border: 2px solid var(--neon-blue);
             color: var(--neon-blue); 
-            font-weight: 900; /* Letra más gruesa */
+            font-weight: 900; 
             cursor: pointer; 
             text-transform: uppercase;
             font-size: 0.85em; 
             transition: all 0.2s ease;
             margin-bottom: 8px;
             border-radius: 6px;
-            text-shadow: 0 0 2px rgba(0,0,0,0.8);
         }
-        button:hover:not(:disabled) { 
-            background: var(--neon-blue); 
-            color: #000; 
-            box-shadow: 0 0 20px var(--neon-blue);
-        }
-        button:disabled { 
-            border-color: #444; color: #666; cursor: not-allowed; background: #0a0a0a; 
-        }
-        
-        .btn-scan { border-color: var(--neon-purple); color: var(--neon-purple); }
-        .btn-scan:hover:not(:disabled) { background: var(--neon-purple); color: #fff; }
+        button:hover:not(:disabled) { background: var(--neon-blue); color: #000; box-shadow: 0 0 20px var(--neon-blue); }
+        button:disabled { border-color: #444; color: #666; cursor: not-allowed; background: #0a0a0a; }
         
         .btn-green { border-color: var(--neon-green); color: var(--neon-green); }
         .btn-green:hover:not(:disabled) { background: var(--neon-green); color: #000; }
+        
+        .btn-scan { border-color: var(--neon-purple); color: var(--neon-purple); }
+        .btn-scan:hover:not(:disabled) { background: var(--neon-purple); color: #fff; }
+
+        .btn-yellow { border-color: var(--neon-gold); color: var(--neon-gold); }
 
         /* Brain Grid */
         .brain-management { background: rgba(255, 255, 255, 0.03); border: 1px solid #444; border-radius: 6px; padding: 10px; margin: 10px 0; }
@@ -144,113 +137,92 @@
         }
         .brain-card.active { border-color: var(--neon-green); background: rgba(0, 255, 157, 0.1); box-shadow: 0 0 10px rgba(0, 255, 157, 0.2); }
         .brain-name { font-weight: bold; margin-bottom: 3px; color: #fff; }
-        .brain-type { font-size: 0.7em; color: #aaa; }
-
+        
         /* Main Screen */
         .main-screen { flex-grow: 1; display: flex; flex-direction: column; padding: 25px; gap: 20px; position: relative; }
         
         #chat-window {
             flex-grow: 1; 
-            background: #000; /* Fondo negro puro para contraste */
+            background: #000; 
             border: 2px solid #333; 
             padding: 25px;
             overflow-y: auto; 
             border-radius: 12px; 
-            display: flex; flex-direction: column; gap: 15px; position: relative;
+            display: flex; flex-direction: column; gap: 15px;
             box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
         }
 
-        /* Mensajes - Corrección de visibilidad */
-        .msg { 
-            padding: 15px; 
-            border-left: 4px solid #555; 
-            background: #111; /* Fondo más claro que el negro puro */
-            animation: slideIn 0.25s ease-out; 
-            white-space: pre-wrap; 
-            border-radius: 0 8px 8px 0; 
-            margin: 5px 0; 
-            color: #eee; /* Texto casi blanco */
-            line-height: 1.5;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        }
-        
-        .msg-sys { 
-            border: 1px solid #444; 
-            text-align: center; 
-            color: #fff; /* Blanco brillante */
-            font-style: normal; 
-            font-size: 0.9em; 
-            background: #1a1a1a; 
-            padding: 20px;
-            border-radius: 8px;
-        }
-        
+        /* Mensajes */
+        .msg { padding: 15px; border-left: 4px solid #555; background: #111; animation: slideIn 0.25s ease-out; white-space: pre-wrap; border-radius: 0 8px 8px 0; color: #eee; line-height: 1.5; }
         .msg-user { border-color: var(--neon-gold); background: rgba(255, 215, 0, 0.1); align-self: flex-end; max-width: 85%; border-left: none; border-right: 4px solid var(--neon-gold); border-radius: 8px 0 0 8px; text-align: right; }
         .msg-host { border-color: var(--neon-blue); color: #d0ffff; background: rgba(0, 243, 255, 0.05); }
         .msg-expert { border-color: var(--neon-purple); color: #f0d0ff; background: rgba(188, 19, 254, 0.05); }
-        .msg-orchestrator { border-color: var(--neon-cyan); color: #fff; background: rgba(0, 255, 255, 0.1); font-weight: bold; border: 1px solid var(--neon-cyan); }
+        .msg-sys { border: 1px solid #444; text-align: center; color: #fff; background: #1a1a1a; padding: 20px; border-radius: 8px; }
         
         .msg-sender { font-weight: bold; color: var(--neon-cyan); font-size: 0.85em; margin-bottom: 8px; display: block; letter-spacing: 1px; }
         
         /* Input */
-        textarea { 
-            width: 100%; padding: 15px; 
-            background: #111; /* Fondo gris muy oscuro */
-            border: 2px solid #555; 
-            color: #fff; /* Texto blanco brillante */
-            font-family: inherit; font-size: 1.1em;
-            border-radius: 8px; resize: vertical; min-height: 80px; outline: none; 
-        }
-        textarea::placeholder { color: #888; }
+        textarea { width: 100%; padding: 15px; background: #111; border: 2px solid #555; color: #fff; font-family: inherit; font-size: 1.1em; border-radius: 8px; resize: vertical; min-height: 80px; outline: none; }
         textarea:focus { border-color: var(--neon-blue); background: #151515; }
 
-        /* Progress Bar */
-        #progress-container { width: 100%; height: 8px; background: #333; margin-top: 10px; border-radius: 4px; overflow: hidden; }
-        #progress-bar { width: 0%; height: 100%; background: linear-gradient(90deg, var(--neon-green), var(--neon-blue)); transition: width 0.3s ease; }
+        #progress-bar { width: 0%; height: 8px; background: linear-gradient(90deg, var(--neon-green), var(--neon-blue)); transition: width 0.3s ease; }
+        
+        /* Spinner */
+        .loading-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(0, 243, 255, 0.4); border-radius: 50%; border-top-color: var(--neon-blue); animation: spin 1s linear infinite; margin-right: 10px; vertical-align: middle; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* Mobile */
         @media (max-width: 900px) {
             body { flex-direction: column; overflow-y: auto; }
-            .sidebar { width: 100%; height: auto; border-right: none; border-bottom: 2px solid #333; padding-bottom: 20px; }
-            .main-screen { height: auto; min-height: 60vh; flex-grow: 1; }
+            .sidebar { width: 100%; height: auto; position: sticky; top: 0; border-bottom: 2px solid #333; }
+            .main-screen { min-height: 60vh; }
         }
-
-        .loading-spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(0, 243, 255, 0.4); border-radius: 50%; border-top-color: var(--neon-blue); animation: spin 1s linear infinite; margin-right: 10px; vertical-align: middle; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <h1>NEXUS HYBRID <span style="font-size:0.7em; color:#888">v10.3</span></h1>
+        <h1>NEXUS HYBRID <span style="font-size:0.7em; color:#888">v10.4</span></h1>
         
         <div style="text-align:center; margin:15px 0;">
             <img src="orquestador.jpg" id="avatar-img" style="width:100px; height:100px; border-radius:50%; border:3px solid var(--neon-blue); object-fit:cover; box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);" onerror="this.style.display='none'">
-            <div style="margin-top:10px; font-size:0.9em; color:#fff; font-weight:bold;">
-                ORQUESTADOR AI
-            </div>
+            <div style="margin-top:10px; font-size:0.9em; color:#fff; font-weight:bold;">ORQUESTADOR AI</div>
         </div>
 
         <div class="section-title">1. DIAGNÓSTICO</div>
         <button class="btn-scan" onclick="app.hardwareDiagnostic()">🖥️ ESCANEAR MI EQUIPO</button>
-        <div id="hw-result" class="hw-stats">
-            <span style="color:#888">Esperando análisis...</span>
+        <div id="hw-result" class="hw-stats" style="color:#888; font-size:0.8em; margin-bottom:10px; text-align:center;">Esperando análisis...</div>
+
+        <div class="section-title">2. SELECCIONAR JEFE (ORQUESTADOR)</div>
+        <select id="orchestrator-selector" onchange="app.toggleApiInput()">
+            <optgroup label="🏠 LOCAL (Privado / Gratis / WebGPU)">
+                <option value="local:Llama-3.2-1B-Instruct-q4f16_1-MLC" selected>Llama 3.2 1B (Equilibrado)</option>
+                <option value="local:TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC">TinyLlama 1.1B (Muy Ligero)</option>
+                <option value="local:gemma-2b-it-q4f16_1-MLC">Gemma 2B (Google)</option>
+                <option value="local:Phi-3-mini-4k-instruct-q4f16_1-MLC">Phi-3 Mini (Potente)</option>
+            </optgroup>
+            <optgroup label="☁️ NUBE (Requiere API Key / Potente)">
+                <option value="cloud:gemini">Google Gemini 1.5 Flash</option>
+                <option value="cloud:groq">Groq (Llama 3 70B)</option>
+                <option value="cloud:huggingface">Hugging Face (Inference)</option>
+            </optgroup>
+        </select>
+
+        <div id="api-input-container">
+            <label style="color:var(--neon-gold); font-size:0.7em;">🔑 API KEY REQUERIDA:</label>
+            <input type="password" id="orch-api-key" placeholder="Pega tu clave aquí (sk-... / AIza...)">
         </div>
 
-        <div class="section-title">2. MOTOR LOCAL</div>
-        <select id="orchestrator-model" onchange="app.savePreference()">
-            <option value="TinyLlama-1.1B-Chat-v1.0-q4f16_1-MLC">TinyLlama 1.1B (Muy Ligero)</option>
-            <option value="Llama-3.2-1B-Instruct-q4f16_1-MLC" selected>Llama 3.2 1B (Equilibrado)</option>
-            <option value="gemma-2b-it-q4f16_1-MLC">Gemma 2B (Preciso)</option>
-            <option value="Phi-3-mini-4k-instruct-q4f16_1-MLC">Phi-3 Mini (Potente)</option>
-        </select>
         <button class="btn-green" id="btn-load" onclick="app.loadOrchestrator()">⚡ ACTIVAR MOTOR</button>
         
-        <div id="orchestrator-status" style="font-size:0.8em; color:#ccc; margin-top:8px; font-weight:bold;">Motor Apagado</div>
-        <div id="progress-container"><div id="progress-bar"></div></div>
+        <div id="orchestrator-status" style="font-size:0.8em; color:#ccc; margin-top:8px; font-weight:bold; text-align:center;">Motor Apagado</div>
+        <div style="width:100%; height:8px; background:#333; margin-top:10px; border-radius:4px; overflow:hidden;">
+            <div id="progress-bar"></div>
+        </div>
 
-        <div class="section-title">3. CEREBROS (SQUAD)</div>
+        <div class="section-title">3. EXPERTOS (SQUAD)</div>
         <div class="brain-management">
             <div class="brain-grid" id="brain-grid">
                 </div>
@@ -263,12 +235,11 @@
     <div class="main-screen">
         <div id="chat-window">
             <div class="msg msg-sys">
-                <strong style="font-size:1.2em; color:var(--neon-blue)">🚀 NEXUS HYBRID v10.3 LISTO</strong><br><br>
-                <div style="text-align:left; display:inline-block; padding:10px;">
-                    1. Pulsa <strong>ESCANEAR MI EQUIPO</strong>.<br>
-                    2. Pulsa <strong>ACTIVAR MOTOR</strong> para cargar el cerebro local.<br>
-                    3. Escribe tu pregunta abajo.
-                </div>
+                <strong style="font-size:1.2em; color:var(--neon-blue)">🚀 NEXUS HYBRID v10.4 LISTO</strong><br><br>
+                1. Elige tu <strong>JEFE</strong> (Local o Nube).<br>
+                2. Si eliges Nube (ej. Gemini), pega tu API Key.<br>
+                3. Dale a <strong>ACTIVAR MOTOR</strong>.<br>
+                4. Escribe abajo. El Jefe decidirá si responde él o convoca al equipo.
             </div>
         </div>
 
@@ -283,14 +254,14 @@
 
         class NexusSystem {
             constructor() {
-                this.engine = null;
+                this.engine = null; // Puede ser LocalEngine o CloudEngine
+                this.engineType = 'local'; 
                 this.activeBrains = new Set(['wikipedia']); 
-                this.isProcessing = false;
                 
                 this.brains = {
                     'wikipedia': { name: 'Wikipedia', type: 'free', desc: 'Info General', active: true },
-                    'groq': { name: 'Groq API', type: 'free', desc: 'Ultra Rápido', active: false },
-                    'openai': { name: 'OpenAI', type: 'paid', desc: 'GPT-4', active: false }
+                    'duckduckgo': { name: 'DuckDuckGo', type: 'free', desc: 'Búsqueda Web', active: false },
+                    'arxiv': { name: 'ArXiv', type: 'free', desc: 'Papers Ciencia', active: false }
                 };
 
                 this.ui = {
@@ -300,14 +271,26 @@
                     bar: document.getElementById('progress-bar'),
                     hw: document.getElementById('hw-result'),
                     grid: document.getElementById('brain-grid'),
-                    btnLoad: document.getElementById('btn-load')
+                    btnLoad: document.getElementById('btn-load'),
+                    selector: document.getElementById('orchestrator-selector'),
+                    apiContainer: document.getElementById('api-input-container'),
+                    apiKeyInput: document.getElementById('orch-api-key')
                 };
 
                 this.renderBrainGrid();
-                this.loadPreferences();
             }
 
-            // --- 1. GESTIÓN DE HARDWARE Y MOTOR LOCAL ---
+            // --- UI LOGIC ---
+            toggleApiInput() {
+                const val = this.ui.selector.value;
+                if (val.startsWith('cloud:')) {
+                    this.ui.apiContainer.style.display = 'block';
+                } else {
+                    this.ui.apiContainer.style.display = 'none';
+                }
+            }
+
+            // --- 1. HARDWARE ---
             async hardwareDiagnostic() {
                 this.ui.hw.innerHTML = "<span class='loading-spinner'></span> Analizando...";
                 if(!navigator.gpu) { this.ui.hw.innerHTML = "<span class='rec-bad'>❌ Sin WebGPU</span>"; return; }
@@ -315,101 +298,107 @@
                 try {
                     const adapter = await navigator.gpu.requestAdapter();
                     const mb = Math.round(adapter.limits.maxBufferSize / (1024 * 1024));
-                    let rec = "TinyLlama";
-                    if(mb > 2000) rec = "Llama 3.2 / Gemma";
-                    if(mb > 4000) rec = "Phi-3";
-                    
-                    this.ui.hw.innerHTML = `<span style="color:#fff">GPU: <strong>${mb}MB</strong></span><br><span class='rec-good'>Recomendado: ${rec}</span>`;
+                    this.ui.hw.innerHTML = `<span style="color:#fff">GPU: <strong>${mb}MB</strong></span><br><span class='rec-good'>Local OK</span>`;
                 } catch(e) {
                     this.ui.hw.innerHTML = "Error al leer GPU";
                 }
             }
 
+            // --- 2. ACTIVAR MOTOR (LOCAL O NUBE) ---
             async loadOrchestrator() {
-                const modelId = document.getElementById('orchestrator-model').value;
+                const selection = this.ui.selector.value;
+                const [type, modelId] = selection.split(':');
+                this.engineType = type;
+
                 this.ui.btnLoad.disabled = true;
                 
-                if(this.engine) await this.engine.unload();
-
-                try {
-                    if (navigator.storage && navigator.storage.persist) await navigator.storage.persist();
-
-                    this.engine = await CreateMLCEngine(modelId, {
-                        initProgressCallback: (rep) => {
-                            this.ui.bar.style.width = `${rep.progress * 100}%`;
-                            this.ui.status.innerText = rep.text;
-                        }
-                    });
-
-                    this.ui.status.innerText = "✅ ORQUESTADOR ONLINE";
-                    this.ui.status.style.color = "var(--neon-green)";
-                    this.ui.btnLoad.innerText = "REINICIAR";
-                    this.ui.btnLoad.disabled = false;
-                    this.addMsg("SISTEMA", "Cerebro Local cargado. Listo para orquestar.", "msg-sys");
-
-                } catch(e) {
-                    this.ui.status.innerText = "Error: " + e.message;
-                    this.ui.btnLoad.disabled = false;
+                // Limpiar motor anterior
+                if(this.engine && typeof this.engine.unload === 'function') {
+                    await this.engine.unload();
                 }
-            }
+                this.engine = null;
 
-            // --- 2. GESTIÓN DE CEREBROS (GRID) ---
-            renderBrainGrid() {
-                this.ui.grid.innerHTML = "";
-                for (const [id, data] of Object.entries(this.brains)) {
-                    const card = document.createElement('div');
-                    card.className = `brain-card ${data.active ? 'active' : ''}`;
-                    card.onclick = () => this.toggleBrain(id);
-                    card.innerHTML = `
-                        <div class="brain-name">${data.name}</div>
-                        <div class="brain-type">${data.desc}</div>
-                    `;
-                    this.ui.grid.appendChild(card);
+                if (type === 'local') {
+                    // --- CARGA LOCAL (WebLLM) ---
+                    try {
+                        if (navigator.storage && navigator.storage.persist) await navigator.storage.persist();
+                        this.engine = await CreateMLCEngine(modelId, {
+                            initProgressCallback: (rep) => {
+                                this.ui.bar.style.width = `${rep.progress * 100}%`;
+                                this.ui.status.innerText = rep.text;
+                            }
+                        });
+                        this.ui.status.innerText = "✅ ORQUESTADOR LOCAL ONLINE";
+                        this.addMsg("SISTEMA", "Motor Local cargado en GPU.", "msg-sys");
+                    } catch(e) {
+                        this.ui.status.innerText = "Error: " + e.message;
+                    }
+                } else {
+                    // --- CARGA NUBE (Virtual Engine) ---
+                    const key = this.ui.apiKeyInput.value.trim();
+                    if (!key) { alert("¡Necesitas una API Key para usar la nube!"); this.ui.btnLoad.disabled = false; return; }
+                    
+                    this.engine = new CloudEngine(modelId, key); // Clase auxiliar abajo
+                    this.ui.bar.style.width = "100%";
+                    this.ui.status.innerText = `✅ CONECTADO A ${modelId.toUpperCase()}`;
+                    this.addMsg("SISTEMA", `Conexión establecida con ${modelId.toUpperCase()}.`, "msg-sys");
                 }
+                
+                this.ui.status.style.color = "var(--neon-green)";
+                this.ui.btnLoad.innerText = "REINICIAR";
+                this.ui.btnLoad.disabled = false;
             }
 
-            toggleBrain(id) {
-                this.brains[id].active = !this.brains[id].active;
-                this.renderBrainGrid();
-                this.savePreferences();
-            }
-
-            // --- 3. LÓGICA DE ORQUESTACIÓN ---
+            // --- 3. PROCESAMIENTO ---
             async processQuery() {
                 const text = this.ui.input.value;
                 if(!text) return;
-                if(!this.engine) return alert("¡Dale a ACTIVAR MOTOR primero!");
+                if(!this.engine) return alert("¡Activa el Motor primero!");
 
                 this.ui.input.value = "";
                 this.addMsg("TÚ", text, "msg-user");
-                this.isProcessing = true;
 
                 try {
-                    // PASO 1: ANÁLISIS
-                    this.addMsg("ORQUESTADOR", "Analizando solicitud...", "msg-host");
+                    // PASO 1: Análisis
+                    this.addMsg("ORQUESTADOR", "Analizando...", "msg-host");
                     
-                    const decisionPrompt = `
+                    // Prompt universal para cualquier motor
+                    const prompt = `
                         Eres el Orquestador. Usuario dice: "${text}".
-                        Si es simple, responde tú mismo.
-                        Si requiere debate, escribe "DEBATE".
+                        
+                        Si es algo simple, responde directamente.
+                        Si requiere datos externos, dime "NECESITO EXPERTOS".
                     `;
+
+                    // Unificamos la llamada sea local o nube
+                    let responseText = "";
                     
-                    const decision = await this.engine.chat.completions.create({
-                        messages: [{ role: "user", content: decisionPrompt }]
-                    });
-                    
-                    const action = decision.choices[0].message.content;
-                    
-                    // PASO 2: EJECUCIÓN
-                    this.addMsg("ORQUESTADOR", action, "msg-host");
+                    if (this.engineType === 'local') {
+                        const resp = await this.engine.chat.completions.create({ messages: [{ role: "user", content: prompt }] });
+                        responseText = resp.choices[0].message.content;
+                    } else {
+                        // Cloud Engine Wrapper
+                        responseText = await this.engine.generate(prompt);
+                    }
+
+                    // PASO 2: Respuesta
+                    if (responseText.includes("NECESITO EXPERTOS")) {
+                        this.addMsg("ORQUESTADOR", "Convocando expertos (Simulación)...", "msg-host");
+                        // Aquí iría la lógica de llamada a APIs externas secundarias
+                        setTimeout(() => {
+                            this.addMsg("WIKIPEDIA", "Buscando información relacionada...", "msg-expert");
+                            this.addMsg("ORQUESTADOR", "Aquí tienes un resumen basado en el conocimiento general...", "msg-host");
+                        }, 1000);
+                    } else {
+                        this.addMsg("ORQUESTADOR", responseText, "msg-host");
+                    }
 
                 } catch(e) {
                     this.addMsg("ERROR", e.message, "msg-error");
-                } finally {
-                    this.isProcessing = false;
                 }
             }
 
+            // --- UTILS ---
             addMsg(sender, text, css) {
                 const div = document.createElement('div');
                 div.className = `msg ${css}`;
@@ -418,10 +407,69 @@
                 this.ui.chat.scrollTop = this.ui.chat.scrollHeight;
             }
 
-            savePreferences() { localStorage.setItem('nexus_brains', JSON.stringify(this.brains)); }
-            loadPreferences() {
-                const saved = localStorage.getItem('nexus_brains');
-                if(saved) { this.brains = JSON.parse(saved); this.renderBrainGrid(); }
+            renderBrainGrid() {
+                this.ui.grid.innerHTML = "";
+                for (const [id, data] of Object.entries(this.brains)) {
+                    const card = document.createElement('div');
+                    card.className = `brain-card ${data.active ? 'active' : ''}`;
+                    card.onclick = () => { data.active = !data.active; this.renderBrainGrid(); };
+                    card.innerHTML = `<div class="brain-name">${data.name}</div><div class="brain-type">${data.desc}</div>`;
+                    this.ui.grid.appendChild(card);
+                }
+            }
+        }
+
+        // --- CLASE SIMULADA PARA MOTORES NUBE ---
+        class CloudEngine {
+            constructor(provider, apiKey) {
+                this.provider = provider;
+                this.apiKey = apiKey;
+            }
+
+            async generate(prompt) {
+                // GEMINI IMPLEMENTATION (REST API simple para evitar SDK pesado)
+                if (this.provider === 'gemini') {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${this.apiKey}`;
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                    });
+                    const data = await response.json();
+                    if(data.error) throw new Error(data.error.message);
+                    return data.candidates[0].content.parts[0].text;
+                }
+                
+                // GROQ IMPLEMENTATION
+                if (this.provider === 'groq') {
+                    const url = "https://api.groq.com/openai/v1/chat/completions";
+                    const response = await fetch(url, {
+                        method: "POST",
+                        headers: { "Authorization": `Bearer ${this.apiKey}`, "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            model: "llama3-70b-8192",
+                            messages: [{ role: "user", content: prompt }]
+                        })
+                    });
+                    const data = await response.json();
+                    if(data.error) throw new Error(data.error.message);
+                    return data.choices[0].message.content;
+                }
+
+                // HUGGING FACE (Inference API)
+                if (this.provider === 'huggingface') {
+                     const url = "https://api-inference.huggingface.co/models/mistralai/Mistral-7B-Instruct-v0.2";
+                     const response = await fetch(url, {
+                        method: "POST",
+                        headers: { "Authorization": `Bearer ${this.apiKey}`, "Content-Type": "application/json" },
+                        body: JSON.stringify({ inputs: prompt })
+                    });
+                    const data = await response.json();
+                    if(data.error) throw new Error(data.error);
+                    return data[0].generated_text;
+                }
+
+                return "Proveedor no reconocido";
             }
         }
 
